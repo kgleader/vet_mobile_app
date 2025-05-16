@@ -1,0 +1,82 @@
+{
+  "project_info": {
+    "project_number": "207573665237",
+    "project_id": "vetapp-f8230",
+    "storage_bucket": "vetapp-f8230.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:207573665237:android:5d9da5b5d23df723d0295c",
+        "android_client_info": {
+          "package_name": "com.android.application"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "207573665237-sai9f1l1or6hhqc6kchj5dg5seklur2g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAE7qS90fhr5AcHx_hR-VUD0ranoqhM0vM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "207573665237-sai9f1l1or6hhqc6kchj5dg5seklur2g.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "207573665237-705bq7r1nre1p7508f3n9602o2ecpvbj.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.vetMobileApp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:207573665237:android:b93a11c7f9c633c5d0295c",
+        "android_client_info": {
+          "package_name": "com.example.vet_mobile_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "207573665237-sai9f1l1or6hhqc6kchj5dg5seklur2g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAE7qS90fhr5AcHx_hR-VUD0ranoqhM0vM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "207573665237-sai9f1l1or6hhqc6kchj5dg5seklur2g.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "207573665237-705bq7r1nre1p7508f3n9602o2ecpvbj.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.vetMobileApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
