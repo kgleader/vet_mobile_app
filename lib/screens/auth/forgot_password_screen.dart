@@ -5,6 +5,8 @@ import 'package:vet_mobile_app/config/router/route_names.dart';
 import 'package:vet_mobile_app/core/app_colors.dart';
 import 'package:vet_mobile_app/core/app_text_styles.dart';
 import 'package:vet_mobile_app/core/custom_button.dart';
+import 'package:vet_mobile_app/data/firebase/auth_service.dart'; // AuthService'ти импорттоо
+import 'package:firebase_auth/firebase_auth.dart'; // FirebaseAuthException үчүн
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});
@@ -16,14 +18,12 @@ class ForgotPasswordScreen extends StatefulWidget {
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
-  final _codeController = TextEditingController();
   bool _isLoading = false;
-  bool _emailSent = false;
+  final AuthService _authService = AuthService(); // AuthService инстанциясы
 
   @override
   void dispose() {
     _emailController.dispose();
-    _codeController.dispose();
     super.dispose();
   }
 
@@ -31,30 +31,49 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     if (_formKey.currentState!.validate()) {
       setState(() => _isLoading = true);
       try {
-        // TODO: Добавить логику сброса пароля
-        await Future.delayed(const Duration(seconds: 2));
+        await _authService.sendPasswordResetEmail(email: _emailController.text.trim());
+        // Бул жерге, кат ийгиликтүү жөнөтүлгөндөн кийинки логика жылдырылат
         if (mounted) {
-          setState(() => _emailSent = true);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: const Text(
+                'Электрондук почтаңызга сыр сөздү калыбына келтирүү боюнча нускамалар жөнөтүлдү. Сураныч, почтаңызды текшерип, ал жактагы шилтеме аркылуу сыр сөзүңүздү алмаштырыңыз.',
+                style: TextStyle(fontSize: 15),
+              ),
+              backgroundColor: Colors.green,
+              duration: const Duration(seconds: 7),
+            ),
+          );
+          // SnackBar көрсөтүлүп бүткөндөн кийин кирүү экранына өтүү
+          await Future.delayed(const Duration(seconds: 7));
+          if (mounted) {
+            context.go(RouteNames.login);
+          }
+        }
+      } on FirebaseAuthException catch (e) {
+        String errorMessage = 'Кат жөнөтүүдө ката кетти. Кайра аракет кылыңыз.';
+        // 'user-not-found' шарты sendPasswordResetEmail үчүн иштебейт.
+        if (e.code == 'invalid-email') {
+          errorMessage = 'Электрондук почта форматы туура эмес.';
+        } else if (e.code == 'too-many-requests') {
+          errorMessage = 'Өтө көп аракет жасалды. Бир аздан кийин кайра аракет кылыңыз.';
+        }
+        // Башка FirebaseAuthException коддорун да ушул жерден кармасаңыз болот
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(errorMessage), backgroundColor: Colors.red),
+          );
+        }
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Күтүлбөгөн ката кетти: $e'), backgroundColor: Colors.red),
+          );
         }
       } finally {
         if (mounted) {
           setState(() => _isLoading = false);
         }
-      }
-    }
-  }
-
-  Future<void> _verifyCode() async {
-    setState(() => _isLoading = true);
-    try {
-      // TODO: Добавить проверку кода через API
-      await Future.delayed(const Duration(seconds: 2));
-      if (mounted) {
-        context.go(RouteNames.resetPassword); // Перенаправляем на экран смены пароля
-      }
-    } finally {
-      if (mounted) {
-        setState(() => _isLoading = false);
       }
     }
   }
@@ -67,7 +86,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24.0),
-          child: _emailSent ? _buildVerificationCodeScreen() : _buildResetForm(),
+          child: _buildResetForm(),
         ),
       ),
     );
@@ -89,7 +108,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         Padding(
           padding: const EdgeInsets.only(right: Sizes.padding),
           child: InkWell(
-            onTap: () => context.go(RouteNames.profile),
+            // Профильге өтүү бул жерде мааниге ээ эмес, анткени колдонуучу кире элек
+            // onTap: () => context.go(RouteNames.profile), 
             child: Image.asset(
               'assets/icons/common/logo.png',
               width: Sizes.logoWidth,
@@ -108,10 +128,12 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         children: [
           const SizedBox(height: 100),
           Text(
-            'Сураныч, катталган электрондук дарегинизди же телефон номеринизди киргизиңиз',
+            // 'Сураныч, катталган электрондук дарегинизди же телефон номеринизди киргизиңиз',
+            'Сыр сөздү калыбына келтирүү үчүн катталган электрондук дарегиңизди киргизиңиз. Биз сизге сыр сөздү алмаштыруу боюнча нускамаларды жөнөтөбүз.',
             style: AppTextStyles.bodyMedium.copyWith(
               color: AppColors.textSecondary,
             ),
+            textAlign: TextAlign.center,
           ),
           const SizedBox(height: 32),
           _buildEmailField(),
@@ -184,77 +206,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         }
         return null;
       },
-    );
-  }
-  
-  Widget _buildVerificationCodeScreen() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(height: 100),
-        Text(
-          'Биз озгортуу кодун жибердик',
-          style: AppTextStyles.heading2,
-        ),
-        const SizedBox(height: 20),
-        Text(
-          'Сиздин киргизген электрондук почтаңыз же телефон номериңизге активдештирүү жиберилди.',
-          style: AppTextStyles.bodyMedium.copyWith(
-            color: AppColors.textSecondary,
-          ),
-        ),
-        const SizedBox(height: 32),
-        _buildVerificationCodeInput(),
-        const SizedBox(height: 40),
-        CustomButton(
-          text: 'Аткарылды',
-          isLoading: _isLoading,
-          onPressed: _verifyCode,
-        ),
-        const SizedBox(height: 300),
-        Center(
-          child: Text(
-            '© МаралАкгул.Баардык укуктар корголгон',
-            style: AppTextStyles.captionText.copyWith(
-              color: AppColors.textSecondary,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-  
-  Widget _buildVerificationCodeInput() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: List.generate(
-        6,
-        (index) => SizedBox(
-          width: 40,
-          height: 48,
-          child: TextField(
-            textAlign: TextAlign.center,
-            keyboardType: TextInputType.number,
-            maxLength: 1,
-            decoration: InputDecoration(
-              counterText: '',
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: const BorderSide(color: AppColors.border),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: const BorderSide(color: AppColors.primary, width: 2),
-              ),
-            ),
-            onChanged: (value) {
-              if (value.isNotEmpty && index < 5) {
-                FocusScope.of(context).nextFocus();
-              }
-            },
-          ),
-        ),
-      ),
     );
   }
 }

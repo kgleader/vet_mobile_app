@@ -21,6 +21,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
   final _fullNameController = TextEditingController();
   final _phoneController = TextEditingController();
+  final _emailController = TextEditingController(); // Кошулду
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   bool _obscurePassword = true;
@@ -33,6 +34,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   void dispose() {
     _fullNameController.dispose();
     _phoneController.dispose();
+    _emailController.dispose(); // Кошулду
     _passwordController.dispose();
     _confirmPasswordController.dispose();
     super.dispose();
@@ -71,14 +73,33 @@ class _RegisterScreenState extends State<RegisterScreen> {
     if (_formKey.currentState!.validate()) {
       setState(() => _isLoading = true);
       try {
-        // TODO: Implement registration logic
-        await Future.delayed(const Duration(seconds: 2));
-        if (mounted) context.go(RouteNames.menu);
+        final UserCredential? userCredential = await _authService.signUpWithEmailPasswordAndSaveData(
+          email: _emailController.text.trim(),
+          password: _passwordController.text,
+          fullName: _fullNameController.text.trim(),
+          phoneNumber: _phoneController.text.trim(),
+        );
+
+        if (userCredential != null && mounted) {
+          context.go(RouteNames.menu);
+        }
+      } on FirebaseAuthException catch (e) {
+        if (mounted) {
+          String errorMessage = 'Каттоодо ката кетти.';
+          if (e.code == 'email-already-in-use') {
+            errorMessage = 'Бул электрондук почта мурунтан эле катталган.';
+          } else if (e.code == 'weak-password') {
+            errorMessage = 'Сыр сөз өтө жөнөкөй.';
+          }
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(errorMessage)),
+          );
+        }
       } catch (e) {
         if (mounted) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text('Ката: $e')));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Каттоодо белгисиз ката кетти: $e')),
+          );
         }
       } finally {
         if (mounted) setState(() => _isLoading = false);
@@ -174,6 +195,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
               validator: (value) {
                 if (value?.isEmpty ?? true) {
                   return 'Телефон номериңизди киргизиңиз';
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: Sizes.spacingS),
+            _buildInputField(
+              label: 'Электрондук почта',
+              controller: _emailController,
+              hintText: 'email@example.com',
+              prefixIcon: Icons.email_outlined,
+              keyboardType: TextInputType.emailAddress,
+              validator: (value) {
+                if (value?.isEmpty ?? true) {
+                  return 'Электрондук почтаңызды киргизиңиз';
+                }
+                if (!value!.contains('@') || !value.contains('.')) {
+                  return 'Туура электрондук почта дарегин киргизиңиз';
                 }
                 return null;
               },

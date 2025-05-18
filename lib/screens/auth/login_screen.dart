@@ -20,7 +20,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController(); // _phoneController ордуна
   final TextEditingController _passwordController = TextEditingController();
 
   final GoogleSignIn _googleSignIn = GoogleSignIn();
@@ -33,23 +33,60 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void dispose() {
-    _phoneController.dispose();
+    _emailController.dispose(); // _phoneController ордуна
     _passwordController.dispose();
     super.dispose();
   }
 
   Future<void> _login() async {
-  if (_formKey.currentState!.validate()) {
-    setState(() => _isLoading = true);
-    try {
-      // TODO: Добавить логику входа через API
-      await Future.delayed(const Duration(seconds: 2));
-      if (mounted) context.go('/profile'); // Переход на экран профиля
-    } finally {
-      if (mounted) setState(() => _isLoading = false);
+    if (_formKey.currentState!.validate()) {
+      setState(() => _isLoading = true);
+      try {
+        // Электрондук почта жана сыр сөз менен кирүү
+        final userCredential = await _authService.signInWithEmailPassword(
+          email: _emailController.text.trim(), // _phoneController ордуна _emailController
+          password: _passwordController.text.trim(),
+        );
+
+        if (userCredential != null && mounted) {
+          // Ийгиликтүү киргенден кийин профиль экранына өтүү
+          context.go(RouteNames.profile); 
+        } else {
+          // Бул учур сейрек кездешет, анткени ката болсо exception ыргытылат
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Кирүүдө белгисиз ката кетти.')),
+            );
+          }
+        }
+      } on FirebaseAuthException catch (e) {
+        String errorMessage = 'Кирүүдө ката кетти.';
+        if (e.code == 'user-not-found') {
+          errorMessage = 'Мындай колдонуучу табылган жок.';
+        } else if (e.code == 'wrong-password') {
+          errorMessage = 'Сыр сөз туура эмес.';
+        } else if (e.code == 'invalid-email') {
+          errorMessage = 'Электрондук почта форматы туура эмес.';
+        }
+        // Башка ката коддорун да ушул жерден кармасаңыз болот, мис., 'too-many-requests'
+        debugPrint("LoginScreen: FirebaseAuthException: ${e.code} - ${e.message}");
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(errorMessage)),
+          );
+        }
+      } catch (e) {
+        debugPrint("LoginScreen: Жалпы ката: $e");
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Күтүлбөгөн ката кетти. Кайра аракет кылыңыз.')),
+          );
+        }
+      } finally {
+        if (mounted) setState(() => _isLoading = false);
+      }
     }
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -61,12 +98,12 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Form(
             key: _formKey,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch, // Changed from CrossAxisAlignment.start
+              crossAxisAlignment: CrossAxisAlignment.stretch, 
               children: [
                 const SizedBox(height: 24),
                 _buildHeader(),
                 const SizedBox(height: 30),
-                _buildPhoneInput(), // Removed Align wrapper
+                _buildEmailInput(), // _buildPhoneInput ордуна
                 const SizedBox(height: 20),
                 _buildPasswordInput(), // Removed Align wrapper
                 const SizedBox(height: Sizes.spacingM), // Кошулду
@@ -131,21 +168,21 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _buildPhoneInput() {
+  Widget _buildEmailInput() { // _buildPhoneInput ордуна _buildEmailInput
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: const EdgeInsets.only(left: (Sizes.inputPadding * 1) + Sizes.iconSize),
           child: Text(
-            'Сиздин номериңиз',
+            'Электрондук почта', // "Сиздин номериңиз" ордуна
             style: AppTextStyles.bodyMedium.copyWith(
               color: AppColors.textSecondary,
             ),
           ),
         ),
         const SizedBox(height: 8),
-        PhoneField(controller: _phoneController),
+        EmailField(controller: _emailController), // PhoneField ордуна EmailField
       ],
     );
   }
