@@ -25,7 +25,7 @@ class Sizes {
   //
   static const double loaderSize = 24.0;
   static const double loaderWidth = 2.0;
-  static const double borderRadius = 4.0;
+  static const double borderRadius = 30.0;
   static const double borderRadiusS = 4.0;
 
 

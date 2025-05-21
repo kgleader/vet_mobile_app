@@ -16,12 +16,12 @@ class MenuConstants {
     MenuItemModel(
       title: 'Уруктандыруу',
       iconPath: 'male.svg',
-      route: RouteNames.male,
+      route: RouteNames.insemination,
     ),
     MenuItemModel(
       title: 'Оорулар',
       iconPath: 'vaccines.svg',
-      route: RouteNames.vaccines,
+      route: RouteNames.diseases,
     ),
     MenuItemModel(
       title: 'Бодо мал',

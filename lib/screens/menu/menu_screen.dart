@@ -17,61 +17,57 @@ class MenuScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: _buildAppBar(context),
-     body: Padding(
-  padding: const EdgeInsets.symmetric(
-    horizontal: Sizes.paddingL, // было Sizes.paddingXL, стало меньше
-    vertical: Sizes.paddingL,
-  ),
-  child: GridView.builder(
-    itemCount: MenuConstants.menuItems.length,
-    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-      crossAxisCount: 2,
-      mainAxisSpacing: Sizes.menuCardSpacing,
-      crossAxisSpacing: Sizes.menuCardSpacing,
-      childAspectRatio: 1,
-    ),
-    itemBuilder: (context, index) {
-      return _MenuCard(item: MenuConstants.menuItems[index]);
-    },
-  ),
-),
-      bottomNavigationBar: const BottomBar(currentIndex: 1),
+      body: GridView.builder(
+        padding: const EdgeInsets.all(Sizes.paddingL),
+        itemCount: MenuConstants.menuItems.length,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          mainAxisSpacing: Sizes.menuCardSpacing,
+          crossAxisSpacing: Sizes.menuCardSpacing,
+          childAspectRatio: 1,
+        ),
+        itemBuilder: (context, index) {
+          return _MenuCard(item: MenuConstants.menuItems[index]);
+        },
+      ),
+      bottomNavigationBar: const BottomBar(currentIndex: 0),
     );
   }
 
- PreferredSizeWidget _buildAppBar(BuildContext context) {
-  return AppBar(
-    leading: IconButton(
-      icon: const Icon(Icons.arrow_back, color: AppColors.primary),
-      // Заменяем context.pop() на навигацию на конкретный экран
-      onPressed: () => context.go(RouteNames.register), // или используйте RouteNames.splash
-    ),
-    title: Text(
-      'Меню',
-      style: AppTextStyles.heading2.copyWith(color: AppColors.textPrimary),
-    ),
-    centerTitle: true,
-    backgroundColor: Colors.white,
-    elevation: 0,
-    actions: [
-  Padding(
-    padding: const EdgeInsets.only(right: Sizes.paddingL),
-    child: GestureDetector(
-      onTap: () {
-        context.go(RouteNames.profile);
-      },
-      child: Image.asset(
-        'assets/icons/common/logo.png',
-        width: Sizes.logoWidth,
-        height: Sizes.logoWidth,
-        fit: BoxFit.contain,
+  PreferredSizeWidget _buildAppBar(BuildContext context) {
+    return AppBar(
+      leading: IconButton(
+        icon: const Icon(Icons.arrow_back, color: AppColors.primary),
+        // Заменяем context.pop() на навигацию на конкретный экран
+        onPressed: () => context.go(RouteNames.register), // или используйте RouteNames.splash
       ),
-    ),
-  ),
-],
-  );
+      title: Text(
+        'Меню',
+        style: AppTextStyles.heading2.copyWith(color: AppColors.textPrimary),
+      ),
+      centerTitle: true,
+      backgroundColor: Colors.white,
+      elevation: 0,
+      actions: [
+        Padding(
+          padding: const EdgeInsets.only(right: Sizes.paddingL),
+          child: GestureDetector(
+            onTap: () {
+              context.go(RouteNames.profile);
+            },
+            child: Image.asset(
+              'assets/icons/common/logo.png',
+              width: Sizes.logoWidth,
+              height: Sizes.logoWidth,
+              fit: BoxFit.contain,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 }
-}
+
 class _MenuCard extends StatelessWidget {
   final MenuItemModel item;
 
@@ -81,8 +77,8 @@ class _MenuCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-                context.go(item.route);
-},
+        context.go(item.route);
+      },
       child: Container(
         width: Sizes.menuCardSize,
         height: Sizes.menuCardSize,
@@ -98,7 +94,7 @@ class _MenuCard extends StatelessWidget {
               width: Sizes.menuIconSize,
               height: Sizes.menuIconSize,
               fit: BoxFit.contain,
-            ),  
+            ),
           ],
         ),
       ),

@@ -209,6 +209,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       final XFile? pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
       if (pickedFile != null) {
+        if (!mounted) return; // Added check
         setState(() {
           _pickedImageFile = File(pickedFile.path);
         });
@@ -216,6 +217,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         // User canceled the picker
       }
     } catch (e) {
+      if (!mounted) return; // Added check
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Сүрөт тандоодо ката кетти: $e")),
       );
@@ -232,6 +234,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       final String downloadUrl = await snapshot.ref.getDownloadURL();
       return downloadUrl;
     } catch (e) {
+      if (!mounted) return null; // Added check
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Сүрөттү жүктөөдө ката кетти: $e")),
       );
@@ -250,26 +253,29 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     if (!_formKey.currentState!.validate()) {
       return;
     }
+    // Ensure mounted before initial setState
+    if (!mounted) return;
     setState(() {
       _isLoading = true;
       _errorMessage = null;
     });
 
     if (_currentUser == null) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Колдонуучу табылган жок. Сактоо мүмкүн эмес.")),
       );
+      if (!mounted) return; // Check again before setState
       setState(() => _isLoading = false);
       return;
     }
 
     try {
-      String? newAvatarUrl = _avatarUrl; // Keep old URL by default
+      String? newAvatarUrl = _avatarUrl;
       if (_pickedImageFile != null) {
-        // Upload new image if one was picked
-        newAvatarUrl = await _uploadImage(_pickedImageFile!); 
+        newAvatarUrl = await _uploadImage(_pickedImageFile!);
         if (newAvatarUrl == null) {
-          // Handle upload failure (error message is shown in _uploadImage)
+          if (!mounted) return;
           setState(() => _isLoading = false);
           return;
         }
@@ -277,7 +283,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
       final Map<String, dynamic> updatedData = {
         'fullName': _nameController.text.trim(),
-        if (newAvatarUrl != null) 'avatarUrl': newAvatarUrl, // Add avatarUrl to updatedData
+        if (newAvatarUrl != null) 'avatarUrl': newAvatarUrl,
       };
 
       if (_dateController.text.isNotEmpty) {
@@ -286,9 +292,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           final DateTime parsedDate = inputFormat.parseLoose(_dateController.text);
           updatedData['dateOfBirth'] = Timestamp.fromDate(parsedDate);
         } catch (e) {
+           if (!mounted) return;
            ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text("Туулган дата форматы туура эмес: ${_dateController.text}")),
           );
+           if (!mounted) return;
           setState(() => _isLoading = false);
           return;
         }
@@ -298,13 +306,16 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
       await _firestore.collection('users').doc(_currentUser!.uid).update(updatedData);
 
+      if (!mounted) return; // Added check
+
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Профиль ийгиликтүү сакталды!")),
       );
-      if (mounted) {
+      if (mounted) { // This check is fine
         context.pop();
       }
     } catch (e) {
+      if (!mounted) return; // Added check
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Профилди сактоодо ката кетти: $e")),
       );
@@ -342,8 +353,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               primary: AppColors.primary,
               onPrimary: Colors.white,
               onSurface: AppColors.textPrimary,
-            ),
-            dialogBackgroundColor: Colors.white,
+            ), dialogTheme: DialogThemeData(backgroundColor: Colors.white),
           ),
           child: child!,
         );

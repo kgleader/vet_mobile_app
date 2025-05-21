@@ -1,24 +1,22 @@
-
 class RouteNames {
-  static const String splash = '/';
+  static const String splash = '/splash';
   static const String login = '/login';
   static const String register = '/register';
-  static const String forgotPassword = '/forgot-password';
+  static const String forgotPassword = '/forgotPassword';
   static const String menu = '/menu';
+  static const String about = '/about';
+  static const String feed = '/feed';
+  static const String diseases = '/diseases'; 
+  static const String insemination = '/insemination';
+  static const String cattle = '/cattle';
+  static const String goats = '/goats';
+  static const String horses = '/horses';
+  static const String chicken = '/chicken';
   static const String profile = '/profile';
-  static const String home = '/home';
-  static const String resetPassword = '/reset-password';
+  static const String resetPassword = '/resetPassword';
   static const String settings = '/settings';
-  static const String editProfileScreen = '/edit-profile';
-
-
-  static const about = '/about';
-  static const feed = '/feed';
-  static const male = '/male'; 
-  static const vaccines = '/vaccines';
-  static const cattle = '/cattle';
-  static const goats = '/goats';
-  static const horses = '/horses';
-  static const chicken = '/chicken';
-  static const news = '/news';  
+  static const String editProfileScreen = '/editProfile';
+  static const String news = '/news';
+  static const String topicDetail = '/topicDetail';
+  static const String home = '/menu';  
 }

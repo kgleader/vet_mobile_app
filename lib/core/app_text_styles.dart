@@ -21,7 +21,7 @@ abstract class AppTextStyles {
 
   static const bodyMedium = TextStyle(
     fontSize: 14,
-    fontWeight: FontWeight.w400,
+    fontWeight: FontWeight.normal,
     color: AppColors.textPrimary,
   );
 
@@ -85,5 +85,15 @@ abstract class AppTextStyles {
     fontWeight: FontWeight.w400,
     height: 1.4,
     letterSpacing: 0.4,
+  );
+  static const TextStyle errorText = TextStyle(
+    fontSize: 12,
+    fontWeight: FontWeight.w400,
+    color: AppColors.error,
+  );
+  static const TextStyle titleSmall = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
+    color: AppColors.textPrimary,
   );
 }

@@ -5,168 +5,90 @@ import 'package:vet_mobile_app/config/constants/sizes.dart';
 import 'package:vet_mobile_app/config/router/route_names.dart';
 import 'package:vet_mobile_app/core/app_colors.dart';
 import 'package:vet_mobile_app/core/app_logo.dart';
-import 'package:vet_mobile_app/core/bottom_bar.dart'; 
+import 'package:vet_mobile_app/core/app_text_styles.dart';
+import 'package:vet_mobile_app/core/bottom_bar.dart'; // Added BottomBar import
 import 'package:vet_mobile_app/data/models/topic_list_item_model.dart';
-import 'package:vet_mobile_app/widgets/custom_bottom_sheet.dart'; // ADDED: Import for custom bottom sheet
-
-class _TopicListItem extends StatelessWidget {
-  final TopicListItemModel item;
-  final Function(String, {double? width, double? height, BoxFit? fit}) buildImage;
-
-  const _TopicListItem({
-    required this.item,
-    required this.buildImage,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-          horizontal: Sizes.paddingL, vertical: Sizes.paddingS),
-      child: Card(
-        elevation: 2,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(Sizes.borderRadius),
-        ),
-        child: InkWell(
-          onTap: () {
-            showCustomBottomSheet(
-              context,
-              title: item.title,
-              content: Text(
-                item.description, // Full description for the bottom sheet
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: AppColors.textSecondary,
-                ),
-              ),
-            );
-          },
-          borderRadius: BorderRadius.circular(Sizes.borderRadius),
-          child: Padding(
-            padding: const EdgeInsets.all(Sizes.paddingM),
-            child: Row(
-              children: [
-                ClipRRect(
-                  borderRadius:
-                      BorderRadius.circular(Sizes.borderRadiusS),
-                  child: buildImage(
-                    item.imagePath,
-                    width: 70,
-                    height: 70,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                const SizedBox(width: Sizes.spacingM),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        item.title,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.textPrimary,
-                        ),
-                      ),
-                      const SizedBox(height: Sizes.spacingS),
-                      Text(
-                        item.description, // Short description for the list item
-                        style: const TextStyle(
-                          fontSize: 12,
-                          color: AppColors.textSecondary,
-                        ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
 
 class CategoryScreen extends StatelessWidget {
-  final String title; // AppBar аталышы
-  final String bannerImagePath; // Негизги баннер сүрөтүнүн жолу
-  final List<TopicListItemModel> topicItems; // Тема пункттарынын тизмеси
+  final String title;
+  final String bannerImagePath;
+  final String? bannerDescription;
+  final List<TopicListItemModel> topics;
 
   const CategoryScreen({
     super.key,
     required this.title,
-    required this.bannerImagePath, // REVERTED: Made required again
-    required this.topicItems,
+    required this.bannerImagePath,
+    this.bannerDescription,
+    required this.topics,
   });
 
-  Widget _buildImage(String imagePath,
-      {double? width, double? height, BoxFit? fit}) {
-    if (imagePath.toLowerCase().endsWith('.svg')) {
-      return SvgPicture.asset(
-        imagePath,
-        width: width,
-        height: height,
-        fit: fit ?? BoxFit.contain,
-      );
-    } else {
-      return Image.asset(
-        imagePath,
-        width: width,
-        height: height,
-        fit: fit,
-      );
-    }
-  }
-
-  Widget _buildHeaderSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Padding(
-          padding: EdgeInsets.all(Sizes.paddingL),
-          child: Text(
-            "Тема",
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w700,
-              color: AppColors.textPrimary,
-            ),
-          ),
+  Widget _buildHeaderSection(BuildContext context) {
+    return Container( // This is the card container
+      width: double.infinity,
+      // NO internal padding here; padding for the card itself is handled by the parent Padding widget in CategoryScreen.build
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(Sizes.borderRadius),
+        border: Border.all(
+          color: AppColors.primary.withOpacity(0.5),
+          width: 1.0,
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: Sizes.paddingL),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(Sizes.borderRadius),
-            child: _buildImage(
-              bannerImagePath, // Негизги баннер сүрөтү
-              width: double.infinity,
-              height: 180, // Бийиктигин тууралаңыз
-              fit: BoxFit.cover,
-            ),
+      ),
+      clipBehavior: Clip.antiAlias, // Ensures children are clipped to the borderRadius
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Banner Image
+          SizedBox(
+            height: 150, // Adjust height as needed
+            width: double.infinity, // Takes full width of the card
+            child: bannerImagePath.toLowerCase().endsWith('.svg')
+                ? SvgPicture.asset(
+                    bannerImagePath,
+                    fit: BoxFit.cover,
+                    placeholderBuilder: (BuildContext context) => Container(
+                      color: Colors.grey[300],
+                      child: const Center(child: CircularProgressIndicator()),
+                    ),
+                  )
+                : Image.asset(
+                    bannerImagePath,
+                    fit: BoxFit.cover,
+                    cacheHeight: (150 * MediaQuery.of(context).devicePixelRatio).round(),
+                    errorBuilder: (context, error, stackTrace) => Container(
+                      color: Colors.grey[300],
+                      child: const Center(child: Icon(Icons.error)),
+                    ),
+                  ),
           ),
-        ),
-        const SizedBox(height: Sizes.spacingM),
-      ],
+          // Banner Description Text (if it exists)
+          if (bannerDescription != null && bannerDescription!.isNotEmpty) ...[
+            Padding(
+              padding: const EdgeInsets.all(Sizes.paddingM), // Padding for the text within the card
+              child: Text(
+                bannerDescription!,
+                style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textPrimary),
+              ),
+            ),
+          ],
+        ],
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white, // Added background color for consistency
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: AppColors.primary),
-          onPressed: () => context.pop(), // Же context.go(RouteNames.menu)
+          onPressed: () => context.go(RouteNames.menu), // Navigate to main menu
         ),
         title: Text(
-          title,
+          title, // Category title
           style: const TextStyle(
             color: AppColors.textPrimary,
             fontSize: 16,
@@ -181,25 +103,121 @@ class CategoryScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildHeaderSection(), // Extracted header and banner
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: topicItems.length,
+      body: Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(Sizes.paddingL),
+            child: _buildHeaderSection(context),
+          ),
+          Expanded(
+            child: ListView.builder(
+              padding: const EdgeInsets.symmetric(horizontal: Sizes.paddingL),
+              itemCount: topics.length,
               itemBuilder: (context, index) {
-                final item = topicItems[index];
-                return _TopicListItem(item: item, buildImage: _buildImage);
+                final topic = topics[index];
+                return _TopicListItem(
+                  topic: topic,
+                  // Pass the current menu index for the bottom bar when navigating to topic detail
+                  // Assuming 'Menu' tab is index 1
+                  currentBottomBarIndexForDetail: 1,
+                );
               },
             ),
-            const SizedBox(height: Sizes.paddingL),
-          ],
+          ),
+        ],
+      ),
+      bottomNavigationBar: const BottomBar(
+        // Assuming the "Menu" tab (where these categories are listed) is index 1
+        currentIndex: 1,
+      ),
+    );
+  }
+}
+
+class _TopicListItem extends StatelessWidget {
+  final TopicListItemModel topic;
+  final int currentBottomBarIndexForDetail;
+
+  const _TopicListItem({
+    required this.topic,
+    required this.currentBottomBarIndexForDetail,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      color: Colors.white, // Ensure card background is white
+      margin: const EdgeInsets.only(bottom: Sizes.spacingM),
+      elevation: 0, // Remove shadow, rely on border
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(Sizes.borderRadius),
+        side: BorderSide(color: AppColors.primary.withOpacity(0.5), width: 1.0), // Add border
+      ),
+      child: InkWell(
+        onTap: () {
+          context.pushNamed(
+            RouteNames.topicDetail,
+            extra: {
+              'topic': topic,
+              'currentIndex': currentBottomBarIndexForDetail,
+            },
+          );
+        },
+        borderRadius: BorderRadius.circular(Sizes.borderRadius),
+        child: Padding(
+          padding: const EdgeInsets.all(Sizes.paddingM),
+          child: Row(
+            children: [
+              SizedBox(
+                width: 80,
+                height: 80,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(Sizes.borderRadiusS),
+                  child: topic.imagePath.toLowerCase().endsWith('.svg')
+                      ? SvgPicture.asset(
+                          topic.imagePath,
+                          fit: BoxFit.cover,
+                          placeholderBuilder: (BuildContext context) => Container(
+                            color: Colors.grey[200],
+                            child: const Icon(Icons.image, color: Colors.grey),
+                          ),
+                        )
+                      : Image.asset(
+                          topic.imagePath,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) => Container(
+                            color: Colors.grey[200],
+                            child: const Icon(Icons.error, color: Colors.grey),
+                          ),
+                        ),
+                ),
+              ),
+              const SizedBox(width: Sizes.spacingM),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      topic.title,
+                      style: AppTextStyles.titleSmall.copyWith(color: AppColors.textPrimary),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: Sizes.spacingS),
+                    Text(
+                      topic.description,
+                      style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textSecondary),
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ),
+              const Icon(Icons.arrow_forward_ios, color: AppColors.primary, size: 16),
+            ],
+          ),
         ),
       ),
-      bottomNavigationBar: const BottomBar(currentIndex: 1), // ADDED: BottomBar, assuming 'Menu' is index 1
     );
   }
 }

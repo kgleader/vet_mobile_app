@@ -1,16 +1,15 @@
 class TopicListItemModel {
+  final String id;
   final String imagePath;
   final String title;
   final String description;
-  // You might add other properties here if needed, e.g., a route to navigate to
-  // final String? routeName;
+  final String fullDescription;
 
   const TopicListItemModel({
+    required this.id, // 'required' keyword makes it mandatory
     required this.imagePath,
     required this.title,
     required this.description,
-    // this.routeName,
+    required this.fullDescription, // 'required' keyword makes it mandatory
   });
-
-  get routeName => null;
 }

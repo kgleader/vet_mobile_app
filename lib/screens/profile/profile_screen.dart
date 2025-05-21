@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vet_mobile_app/core/app_colors.dart';
 import 'package:vet_mobile_app/config/router/route_names.dart'; // Бул импорт бар экенин текшериңиз
-import 'package:intl/intl.dart'; // For date formatting and age calculation
+// For date formatting and age calculation
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});

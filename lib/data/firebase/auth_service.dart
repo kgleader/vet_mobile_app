@@ -102,7 +102,7 @@ class AuthService {
       // Сиз UI катмарында кармоо үчүн исключени кайра ыргытсаңыз болот,
       // же эгер керек болсо, бул жерде белгилүү бир каталарды иштетсеңиз болот.
       print('AuthService: FirebaseAuthException кирүү учурунда: ${e.code} - ${e.message}');
-      throw e; // Исключени кайра ыргытуу UI'га белгилүү бир ката коддорун иштетүүгө мүмкүнчүлүк берет
+      rethrow; // Исключени кайра ыргытуу UI'га белгилүү бир ката коддорун иштетүүгө мүмкүнчүлүк берет
     } catch (e) {
       print('AuthService: Кирүү учурунда жалпы ката: $e');
       // Башка каталарды иштетүү же кайра ыргытуу
@@ -113,9 +113,9 @@ class AuthService {
   Future<void> sendPasswordResetEmail({required String email}) async {
     try {
       await _auth.sendPasswordResetEmail(email: email);
-    } on FirebaseAuthException catch (e) {
+    } on FirebaseAuthException {
       // UI катмарына катаны жеткирүү үчүн кайра ыргытуу
-      throw e;
+      rethrow;
     } catch (e) {
       // Башка күтүлбөгөн каталар
       throw Exception('Сыр сөздү калыбына келтирүү катын жөнөтүүдө ката кетти.');

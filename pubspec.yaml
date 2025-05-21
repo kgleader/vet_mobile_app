@@ -38,7 +38,19 @@ flutter:
     - assets/images/
     - assets/icons/common/logo.svg
     - assets/icons/common/google_button.svg
-    - assets/images/grass_banner.svg
-    - assets/images/feed_topic1.svg
-    - assets/images/feed_topic2.svg
-    - assets/images/feed_topic3.svg
+    - assets/images/grass_banner.jpg
+    - assets/images/feed_topic1.jpg
+    - assets/images/feed_topic2.jpg
+    - assets/images/feed_topic3.jpg
+    - assets/images/muzoo_banner.png
+    - assets/images/insemination1.png
+    - assets/images/insemination2.png
+    - assets/images/insemination3.png
+    - assets/images/disease_topic1.jpg
+    - assets/images/disease_topic2.jpg
+    - assets/images/disease_topic3.jpg
+    - assets/images/bodomal_banner.png
+    - assets/images/horses_banner.png
+    - assets/images/horse_topic1.png
+    - assets/images/horse_topic2.png
+    - assets/images/horse_topic3.png
