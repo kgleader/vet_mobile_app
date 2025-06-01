@@ -1,42 +1,160 @@
-// /Users/meerimakmatova/vet_mobile_app/lib/screens/menu/insemination_screen.dart
 import 'package:flutter/material.dart';
-import 'package:vet_mobile_app/data/models/topic_list_item_model.dart';
-import 'package:vet_mobile_app/screens/menu/category_screen.dart';
+import 'package:go_router/go_router.dart';
+import 'package:vet_mobile_app/config/constants/sizes.dart';
+import 'package:vet_mobile_app/config/router/route_names.dart';
+import 'package:vet_mobile_app/core/app_logo.dart';
 
 class InseminationScreen extends StatelessWidget {
   const InseminationScreen({super.key});
 
+  Widget _buildTopicItem(String imagePath, String title, String description, BuildContext context) {
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(16),
+        onTap: () {
+          // Навигация к деталям подтемы
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Row(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image.asset(
+                  imagePath,
+                  width: 80,
+                  height: 80,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      description,
+                      style: const TextStyle(fontSize: 14),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final List<TopicListItemModel> inseminationTopics = [
-      TopicListItemModel(
-        id: 'insemination_topic_1',
-        imagePath: 'assets/images/insemination1.png',
-        title: 'Табигый уруктандыруу',
-        description: 'Малды табигый жол менен уруктандыруу ыкмалары.',
-        fullDescription: 'Табигый уруктандыруу – бул малды көбөйтүүнүн салттуу жана кеңири таралган ыкмасы. Бул бөлүмдө табигый уруктандыруунун артыкчылыктары (жөнөкөйлүгү, атайын жабдуулардын кереги жоктугу) жана кемчиликтери (тукумдук малдын сапатын көзөмөлдөөнүн татаалдыгы, оорулардын жугуу коркунучу) каралат. Ошондой эле, ар кандай мал түрлөрүндө (уй, кой, жылкы) табигый уруктандырууну ийгиликтүү өткөрүү үчүн оптималдуу шарттар, кунаажынга келүү белгилери жана уруктандыруу убактысын туура аныктоо боюнча кеңештер берилет.',
-      ),
-      TopicListItemModel(
-        id: 'insemination_topic_2',
-        imagePath: 'assets/images/insemination2.png',
-        title: 'Жасалма уруктандыруу',
-        description: 'Заманбап технологияларды колдонуу.',
-        fullDescription: 'Жасалма уруктандыруу – мал чарбасындагы тукум жакшыртуунун жана продуктуулукту жогорулатуунун негизги ыкмаларынын бири. Бул жерде жасалма уруктандыруунун негизги принциптери, анын артыкчылыктары (мыкты тукумдук малдын генетикасын кеңири колдонуу, оорулардын жугуу коркунучун азайтуу, экономикалык натыйжалуулук) жана кемчиликтери (атайын билимди, жабдууларды жана шарттарды талап кылуусу) талкууланат. Урукту алуу, сактоо, эритүү жана кунаажынга куюу технологиялары боюнча маалымат берилет.',
-      ),
-      TopicListItemModel(
-        id: 'insemination_topic_3',
-        imagePath: 'assets/images/insemination3.png',
-        title: 'Тукум тандоо',
-        description: 'Малдын тукумун жакшыртуу жолдору.',
-        fullDescription: 'Тукум тандоо – бул мал чарбасындагы селекциялык иштин маанилүү бөлүгү. Бул бөлүмдө малдын тукумдук сапаттарын жакшыртууда тукум тандоонун негизги максаттары жана милдеттери каралат. Мыкты тукумдук эркек жана ургаачы малды тандоо критерийлери (экстерьери, продуктуулугу, ден соолугу, тукумдук сапаттары) жана аларды баалоо ыкмалары жөнүндө сөз болот. Ошондой эле, генетикалык потенциалды жогорулатуу, инбридингди болтурбоо жана малдын тукумдук курамын жакшыртуу боюнча практикалык сунуштар берилет.',
-      ),
-    ];
 
-    return CategoryScreen(
-      title: 'Уруктандыруу',
-      bannerImagePath: 'assets/images/muzoo_banner.png',
-      bannerDescription: 'Малды уруктандыруунун заманбап ыкмалары.',
-      topics: inseminationTopics,
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'Уруктандыруу',
+          style: TextStyle(fontWeight: FontWeight.w400,),
+        ),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        centerTitle: true,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios, color: Colors.black),
+          onPressed: () {
+            context.go(RouteNames.menu);
+          },
+        ),
+        actions: const [
+          Padding(
+            padding: EdgeInsets.only(right: Sizes.paddingL),
+            child: AppLogo(),  // Simple clickable logo
+          ),
+        ],
+      ),
+      backgroundColor: const Color(0xFFF3F0EB),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Тема',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 13),
+              
+              // Основное изображение с описанием
+              Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ClipRRect(
+                      borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+                      child: Image.asset(
+                        'assets/images/muzoo_banner.png',
+                        width: double.infinity,
+                        height: 200,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Text(
+                        'Lorem Ipsum is simply dummy text of the printing',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              
+              const SizedBox(height: 20),
+              
+              // Список подтем
+              _buildTopicItem(
+                'assets/images/insemination1.png',
+                'Уруктандыруу',
+                'Lorem Ipsum is simply dummy text of the',
+                context,
+              ),
+              const SizedBox(height: 12),
+              
+              _buildTopicItem(
+                'assets/images/insemination2.png',
+                'Уруктандыруу',
+                'Lorem Ipsum is simply dummy text of the',
+                context,
+              ),
+              const SizedBox(height: 12),
+              
+              _buildTopicItem(
+                'assets/images/insemination3.png',
+                'Уруктандыруу',
+                'Lorem Ipsum is simply dummy text of the',
+                context,
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

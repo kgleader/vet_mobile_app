@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:vet_mobile_app/core/bottom_bar.dart';
 import 'package:vet_mobile_app/data/models/topic_list_item_model.dart';
+import 'package:vet_mobile_app/widgets/main_scaffold.dart';
+import 'package:vet_mobile_app/core/app_logo.dart';
 
 class TopicDetailScreen extends StatelessWidget {
   final TopicListItemModel topic;
@@ -14,10 +15,26 @@ class TopicDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(topic.title),
+    return MainScaffold(
+      currentIndex: bottomBarCurrentIndex,
+      title: topic.title,
+      leading: IconButton(
+        icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black),
+        onPressed: () => Navigator.pop(context),
       ),
+      actions: [
+        Padding(
+          padding: const EdgeInsets.only(right: 16.0),
+          child: CircleAvatar(
+            backgroundColor: const Color(0xFF38A169), // figmaGreen
+            radius: 18,
+            child: AppLogo(
+              width: 24,
+              // Use standard onTap to navigate to profile
+            ),
+          ),
+        ),
+      ],
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
@@ -49,7 +66,6 @@ class TopicDetailScreen extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: BottomBar(currentIndex: bottomBarCurrentIndex),
     );
   }
 }

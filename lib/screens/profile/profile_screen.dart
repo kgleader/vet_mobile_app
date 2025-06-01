@@ -4,8 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vet_mobile_app/core/app_colors.dart';
 import 'package:vet_mobile_app/config/router/route_names.dart'; // Бул импорт бар экенин текшериңиз
-// For date formatting and age calculation
+import 'package:vet_mobile_app/data/firebase/auth_service.dart'; // AuthService импорту
 
+// For date formatting and age calculation
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
@@ -29,6 +30,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _loadUserData() async {
+    // Check if mounted at the beginning of the async operation
+    if (!mounted) return;
+
     setState(() {
       _isLoading = true;
       _errorMessage = null;
@@ -50,6 +54,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
       DocumentSnapshot<Map<String, dynamic>> userDoc =
           await _firestore.collection('users').doc(_currentUser!.uid).get();
 
+      // Check if mounted after the await call before setState
+      if (!mounted) return;
+
       if (userDoc.exists) {
         setState(() {
           _userData = userDoc.data();
@@ -62,6 +69,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         });
       }
     } catch (e) {
+      // Check if mounted after the await call (implicitly, as part of catch) before setState
+      if (!mounted) return;
       setState(() {
         _errorMessage = "Маалыматтарды жүктөөдө ката кетти: $e";
         _isLoading = false;
@@ -205,6 +214,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                           ),
                           const SizedBox(height: 32),
+                          Center(
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                try {
+                                  AuthService authService = AuthService();
+                                  await authService.signOut();
+                                  // Ийгиликтүү чыккандан кийин кирүү экранына багыттоо
+                                  // GoRouter'дун контексти жеткиликтүү экенин текшериңиз
+                                  if (context.mounted) {
+                                    context.go(RouteNames.login);
+                                  }
+                                } catch (e) {
+                                  // Ката кетсе, колдонуучуга билдирүү көрсөтүү
+                                  if (context.mounted) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(content: Text('Чыгууда ката кетти: $e')),
+                                    );
+                                  }
+                                }
+                              },
+                              child: const Text('Чыгуу (Log Out)'),
+                            ),
+                          ),
                         ],
                       ),
                     ),

@@ -6,7 +6,6 @@ import 'package:vet_mobile_app/core/app_colors.dart';
 import 'package:vet_mobile_app/core/app_text_styles.dart';
 import 'package:vet_mobile_app/core/app_strings.dart';
 import 'package:vet_mobile_app/core/custom_button.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
@@ -49,15 +48,6 @@ class SplashScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height: height * 0.05),
-                // Логотип
-                Padding(
-                  padding: const EdgeInsets.only(left: 40),
-                  child: SvgPicture.asset(
-                    'assets/icons/common/logo.svg',
-                    width: 40, // Увеличил размер для лучшей видимости
-                    height: 40,
-                  ),
-                ),
                 SizedBox(height: height * 0.04),
                 // Кош келдиңиз текст
                 Center(

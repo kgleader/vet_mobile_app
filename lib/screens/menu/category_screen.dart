@@ -4,9 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:vet_mobile_app/config/constants/sizes.dart';
 import 'package:vet_mobile_app/config/router/route_names.dart';
 import 'package:vet_mobile_app/core/app_colors.dart';
-import 'package:vet_mobile_app/core/app_logo.dart';
 import 'package:vet_mobile_app/core/app_text_styles.dart';
-import 'package:vet_mobile_app/core/bottom_bar.dart'; // Added BottomBar import
 import 'package:vet_mobile_app/data/models/topic_list_item_model.dart';
 
 class CategoryScreen extends StatelessWidget {
@@ -14,6 +12,7 @@ class CategoryScreen extends StatelessWidget {
   final String bannerImagePath;
   final String? bannerDescription;
   final List<TopicListItemModel> topics;
+  final List<Widget>? actions; // New parameter for additional actions
 
   const CategoryScreen({
     super.key,
@@ -21,6 +20,7 @@ class CategoryScreen extends StatelessWidget {
     required this.bannerImagePath,
     this.bannerDescription,
     required this.topics,
+    this.actions, // Initialize the new parameter
   });
 
   Widget _buildHeaderSection(BuildContext context) {
@@ -96,12 +96,7 @@ class CategoryScreen extends StatelessWidget {
           ),
         ),
         centerTitle: true,
-        actions: const [
-          Padding(
-            padding: EdgeInsets.only(right: Sizes.paddingL),
-            child: AppLogo(),
-          ),
-        ],
+        actions: actions, // Используем переданные actions
       ),
       body: Column(
         children: <Widget>[
@@ -126,10 +121,9 @@ class CategoryScreen extends StatelessWidget {
           ),
         ],
       ),
-      bottomNavigationBar: const BottomBar(
-        // Assuming the "Menu" tab (where these categories are listed) is index 1
-        currentIndex: 1,
-      ),
+      // bottomNavigationBar: const BottomBar( // Removed as MainLayout provides it
+      //   currentIndex: 1,
+      // ),
     );
   }
 }

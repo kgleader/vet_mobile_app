@@ -1,46 +1,165 @@
 import 'package:flutter/material.dart';
-
-import 'package:vet_mobile_app/data/models/topic_list_item_model.dart';
-import 'package:vet_mobile_app/screens/menu/category_screen.dart';
+import 'package:go_router/go_router.dart';
+import 'package:vet_mobile_app/config/constants/sizes.dart';
+import 'package:vet_mobile_app/config/router/route_names.dart';
+import 'package:vet_mobile_app/core/app_logo.dart';
 
 class SheepGoatsScreen extends StatelessWidget {
-  const SheepGoatsScreen({super.key});
+  final int bottomBarCurrentIndex;
+  
+  const SheepGoatsScreen({super.key, this.bottomBarCurrentIndex = 0});
 
   @override
   Widget build(BuildContext context) {
-    final String categoryTitle = "Кой эчки";
-    final String bannerImagePath = "assets/images/sheep_banner.png";
-    final String bannerDescription = "Кой жана эчки чарбасы, аларды багуу жана продукция алуу.";
+    final String bannerImagePath = "assets/images/sheep_banner.jpg";
+    final String bannerDescription = "Кой жана эчки чарбачылыгы";
 
-    final List<TopicListItemModel> topics = [
-      TopicListItemModel(
-        id: 'sheep_topic_1',
-        imagePath: 'assets/images/sheep_topic1.png',
-        title: 'Породалары',
-        description: 'Кой-эчкилердин популярдуу породалары жана аларды тандоо.',
-        fullDescription: 'Кыргызстанда жана дүйнөдө кеңири таралган кой жана эчки породалары (мисалы, меринос, алай, романов койлору; заанен, нубия эчкилери) жөнүндө маалымат. Ар бир породанын эт, жүн, сүт багытындагы продуктуулук көрсөткүчтөрү, климаттык шарттарга ыңгайлуулугу, ооруларга туруктуулугу жана чарбалык мааниси боюнча кеңири баяндама. Чарбанын максатына жараша порода тандоо боюнча сунуштар.'
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
+          onPressed: () => GoRouter.of(context).go(RouteNames.menu),
+        ),
+        title: const Text(
+          "Кой эчки",
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        centerTitle: true,
+        actions: const [
+          Padding(
+            padding: EdgeInsets.only(right: Sizes.paddingL),
+            child: AppLogo(),
+          ),
+        ],
       ),
-      TopicListItemModel(
-        id: 'sheep_topic_2',
-        imagePath: 'assets/images/sheep_topic2.png',
-        title: 'Багуу жана кармоо',
-        description: 'Кой-эчкилерди багуунун өзгөчөлүктөрү, жайыт жана тоюттандыруу.',
-        fullDescription: 'Кой жана эчкилерди багуунун жана кармоонун негизги аспектилери. Алар үчүн ыңгайлуу короо-сарайларды куруу, жайыттарды туура пайдалануу жана которуштуруу, суу менен камсыздоо. Жыл мезгилдерине жараша тоюттандыруу рациондорун түзүү (жайкы жайыт, кышкы тоют – чөп, сенаж, силос, концентраттар). Козуларды жана улактарды багуу, кыркым алуу, туягын тазалоо сыяктуу маанилүү зоотехникалык иш-чаралар.'
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+          child: Column(
+            children: [
+              // Стандарттык баннердик сүрөт
+              Container(
+                margin: const EdgeInsets.all(16),
+                height: 200,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  image: DecorationImage(
+                    image: AssetImage(bannerImagePath),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                child: Container(
+                  padding: const EdgeInsets.all(16),
+                  alignment: Alignment.bottomLeft,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.transparent,
+                        Colors.black.withOpacity(0.7),
+                      ],
+                    ),
+                  ),
+                  child: Text(
+                    bannerDescription,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+              
+              const SizedBox(height: 24),
+              
+              // Кнопка "Тыштангыруу"
+              _buildActionButton(
+                title: 'Тыштангыруу',
+                icon: Icons.grass_outlined,
+                isActive: false,
+                onTap: () => GoRouter.of(context).go(RouteNames.feed),
+              ),
+              
+              const SizedBox(height: 16),
+              
+              // Кнопка "Ооруусу"
+              _buildActionButton(
+                title: 'Ооруусу',
+                icon: Icons.medical_services_outlined,
+                isActive: true,
+                onTap: () => GoRouter.of(context).go(RouteNames.diseases),
+              ),
+              
+              const SizedBox(height: 16),
+              
+              // Кнопка "Уруктандыруу"
+              _buildActionButton(
+                title: 'Уруктандыруу',
+                icon: Icons.spa_outlined,
+                isActive: false,
+                onTap: () => GoRouter.of(context).go(RouteNames.insemination),
+              ),
+            ],
+          ),
+        ),
       ),
-      TopicListItemModel(
-        id: 'sheep_topic_3',
-        imagePath: 'assets/images/sheep_topic3.png',
-        title: 'Продукциясы',
-        description: 'Кой-эчкиден алынуучу продукциялар: эт, жүн, сүт.',
-        fullDescription: 'Кой жана эчки чарбасынан алынуучу негизги продукциялар жана алардын сапаттык көрсөткүчтөрү. Эт (козу эти, эчки эти), жүн (меринос жүнү, кылчык жүн), сүт (эчки сүтү жана андан жасалган азыктар – быштак, сыр) жана кошумча продукциялар (тери, мүйүз). Продукцияны алгачкы иштетүү, сактоо жана сатууга даярдоо боюнча маалыматтар. Рыноктогу баалар жана продукциянын атаандаштыкка жөндөмдүүлүгүн арттыруу жолдору.'
+    );
+  }
+  
+  Widget _buildActionButton({
+    required String title,
+    required IconData icon,  // Changed from String iconPath to IconData icon
+    required bool isActive,
+    required VoidCallback onTap,
+  }) {
+    return Container(
+      width: double.infinity,
+      height: 60,
+      decoration: BoxDecoration(
+        color: isActive ? const Color(0xFF38A169) : Colors.white,
+        borderRadius: BorderRadius.circular(30),
+        border: Border.all(
+          color: const Color(0xFFEDF2F7),
+          width: 1,
+        ),
       ),
-    ];
-
-    return CategoryScreen(
-      title: categoryTitle,
-      bannerImagePath: bannerImagePath,
-      bannerDescription: bannerDescription,
-      topics: topics,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(30),
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: Row(
+              children: [
+                Icon(
+                  icon,  // Using Icon widget instead of SvgPicture
+                  size: 24,
+                  color: isActive ? Colors.white : const Color(0xFF38A169),
+                ),
+                const SizedBox(width: 12),
+                Text(
+                  title,
+                  style: TextStyle(
+                    color: isActive ? Colors.white : Colors.black,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

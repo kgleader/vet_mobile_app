@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:vet_mobile_app/config/constants/sizes.dart';
+import 'package:vet_mobile_app/core/app_logo.dart';
 import 'package:vet_mobile_app/data/models/topic_list_item_model.dart';
 import 'package:vet_mobile_app/screens/menu/category_screen.dart';
 
@@ -41,6 +43,12 @@ class FeedScreen extends StatelessWidget { // Renamed class
       bannerImagePath: bannerImagePath,
       bannerDescription: bannerDescription,
       topics: feedTopics, // "topics" колдонулат, "topicItems" эмес
+      actions: const [
+        Padding(
+          padding: EdgeInsets.only(right: Sizes.paddingL),
+          child: AppLogo(),  // Simple clickable logo
+        ),
+      ],
     );
   }
 }

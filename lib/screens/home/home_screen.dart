@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:vet_mobile_app/core/app_colors.dart';
 import 'package:vet_mobile_app/screens/menu/menu_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -10,7 +9,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _selectedIndex = 0;
+  final int _selectedIndex = 0;
 
   final List<Widget> _screens = [
     const MenuScreen(),
@@ -18,45 +17,11 @@ class _HomeScreenState extends State<HomeScreen> {
     const ProfileScreen(),
   ];
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
-  Widget _buildFooterItem(int index, IconData icon) {
-    return InkWell(
-      onTap: () => _onItemTapped(index),
-      child: Icon(
-        icon,
-        color: Colors.white,
-        size: 32,
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: _screens[_selectedIndex],
-      bottomNavigationBar: Container(
-        height: 70,
-        decoration: BoxDecoration(
-          color: AppColors.primary,
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(30),
-            topRight: Radius.circular(30),
-          ),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            _buildFooterItem(0, Icons.home),
-            _buildFooterItem(1, Icons.article),
-            _buildFooterItem(2, Icons.person),
-          ],
-        ),
-      ),
+      // bottomNavigationBar removed - MainLayout provides it
     );
   }
 }

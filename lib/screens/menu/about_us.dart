@@ -7,14 +7,13 @@ import 'package:vet_mobile_app/config/constants/sizes.dart';
 import 'package:vet_mobile_app/core/app_text_styles.dart';
 import 'package:vet_mobile_app/core/app_strings.dart';
 import 'package:vet_mobile_app/widgets/custom_bottom_sheet.dart';
-import 'package:vet_mobile_app/core/bottom_bar.dart';
 
 class AboutUsScreen extends StatelessWidget {
   final String title;
 
   const AboutUsScreen({
     super.key,
-    required this.title,
+    this.title = 'Биз жөнүндө',
   });
 
   @override
@@ -93,7 +92,6 @@ class AboutUsScreen extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: const BottomBar(currentIndex: 1), // ADDED: BottomBar, assuming 'Menu' is index 1
     );
   }
 }

@@ -43,7 +43,7 @@ class _EditableAvatarWidget extends StatelessWidget {
               radius: 50,
               backgroundColor: Colors.grey.shade200,
               backgroundImage: imageFile != null
-                  ? FileImage(imageFile!)
+                  ? FileImage(imageFile!) // Бул жер туура
                   : (avatarUrl != null && avatarUrl!.isNotEmpty ? NetworkImage(avatarUrl!) : null) as ImageProvider?,
               child: imageFile == null && (avatarUrl == null || avatarUrl!.isEmpty)
                   ? const Icon(Icons.person, size: 50, color: AppColors.primary)
@@ -166,6 +166,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     });
 
     if (_currentUser == null) {
+      if (!mounted) return; // Add mounted check
       setState(() {
         _isLoading = false;
         _errorMessage = "Колдонуучу табылган жок. Сураныч, кайра кириңиз.";
@@ -179,12 +180,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
       if (userDoc.exists) {
         final userData = userDoc.data()!;
+        if (!mounted) return; // Add mounted check
         _nameController.text = userData['fullName'] ?? '';
         
         if (userData['dateOfBirth'] != null && userData['dateOfBirth'] is Timestamp) {
           final Timestamp dobTimestamp = userData['dateOfBirth'];
           final DateTime dobDate = dobTimestamp.toDate();
-          final DateFormat formatter = DateFormat('d MMMM, yyyy', 'ru');
+          final DateFormat formatter = DateFormat('d MMMM, yyyy', 'ru'); // Кыргызча үчүн 'ky' колдонсоңуз болот
           _dateController.text = formatter.format(dobDate);
         } else {
           _dateController.text = '';
@@ -192,11 +194,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         _avatarUrl = userData['avatarUrl']; 
         
       } else {
+        if (!mounted) return; // Add mounted check
         _errorMessage = "Колдонуучунун маалыматтары табылган жок.";
       }
     } catch (e) {
+      if (!mounted) return; // Add mounted check
       _errorMessage = "Маалыматтарды жүктөөдө ката кетти: $e";
     } finally {
+      if (!mounted) return; // Add mounted check
       setState(() {
         _isLoading = false;
       });
@@ -209,15 +214,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       final XFile? pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
       if (pickedFile != null) {
-        if (!mounted) return; // Added check
+        if (!mounted) return;
         setState(() {
           _pickedImageFile = File(pickedFile.path);
+          // _avatarUrl = null; // Эски URL'ди тазалоо, жаңы сүрөт тандалганда
         });
-      } else {
-        // User canceled the picker
       }
     } catch (e) {
-      if (!mounted) return; // Added check
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Сүрөт тандоодо ката кетти: $e")),
       );
@@ -227,14 +231,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Future<String?> _uploadImage(File imageFile) async {
     if (_currentUser == null) return null;
     try {
-      final String fileName = 'profile_pictures/${_currentUser!.uid}/${DateTime.now().millisecondsSinceEpoch}.png';
+      final String fileName = 'profile_pictures/${_currentUser!.uid}/${DateTime.now().millisecondsSinceEpoch}.${imageFile.path.split('.').last}';
       final Reference storageRef = _storage.ref().child(fileName);
       final UploadTask uploadTask = storageRef.putFile(imageFile);
       final TaskSnapshot snapshot = await uploadTask;
       final String downloadUrl = await snapshot.ref.getDownloadURL();
       return downloadUrl;
     } catch (e) {
-      if (!mounted) return null; // Added check
+      if (!mounted) return null;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Сүрөттү жүктөөдө ката кетти: $e")),
       );
@@ -271,10 +275,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     }
 
     try {
-      String? newAvatarUrl = _avatarUrl;
+      String? newAvatarUrl = _avatarUrl; // Учурдагы URL менен баштоо
       if (_pickedImageFile != null) {
         newAvatarUrl = await _uploadImage(_pickedImageFile!);
         if (newAvatarUrl == null) {
+          // Ката _uploadImage ичинде көрсөтүлөт
           if (!mounted) return;
           setState(() => _isLoading = false);
           return;
@@ -283,7 +288,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
       final Map<String, dynamic> updatedData = {
         'fullName': _nameController.text.trim(),
-        if (newAvatarUrl != null) 'avatarUrl': newAvatarUrl,
+        // newAvatarUrl null болсо да, эгер мурда _avatarUrl бар болсо, ошол калат.
+        // Эгер жаңы сүрөт жүктөлсө, newAvatarUrl жаңы маанини алат.
+        // Эгер сүрөт өчүрүлсө, анда 'avatarUrl': FieldValue.delete() колдонсо болот.
+        // Азыркы логикада, эгер жаңы сүрөт тандалбаса, эски URL сакталат.
+        // Эгер жаңы сүрөт тандалып, жүктөлсө, жаңы URL сакталат.
+        'avatarUrl': newAvatarUrl, 
       };
 
       if (_dateController.text.isNotEmpty) {
@@ -301,7 +311,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           return;
         }
       } else {
-        updatedData['dateOfBirth'] = null;
+        // Эгер дата талаасы бош болсо, Firestore'догу маанини null кылуу
+        updatedData['dateOfBirth'] = null; 
       }
 
       await _firestore.collection('users').doc(_currentUser!.uid).update(updatedData);
@@ -327,25 +338,24 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       }
     }
   }
-
   Future<void> _selectDate(BuildContext context) async {
-    FocusScope.of(context).requestFocus(FocusNode());
+    FocusScope.of(context).requestFocus(FocusNode()); 
     DateTime initialDate = DateTime.now();
     if (_dateController.text.isNotEmpty) {
       try {
-        final DateFormat inputFormat = DateFormat('d MMMM, yyyy', 'ru');
+        final DateFormat inputFormat = DateFormat('d MMMM, yyyy', 'ru'); 
         initialDate = inputFormat.parseLoose(_dateController.text);
       } catch (e) {
-        // Keep default initialDate if parsing fails
+        // Ката кетсе, демейки датаны колдонуу
       }
     }
 
-    final picked = await showDatePicker(
+    final DateTime? picked = await showDatePicker( // picked өзгөрмөсүн DateTime? кылуу
       context: context,
       initialDate: initialDate,
       firstDate: DateTime(1900),
       lastDate: DateTime.now(),
-      locale: const Locale('ru', ''),
+      locale: const Locale('ru', ''), // Же 'ky'
       builder: (context, child) {
         return Theme(
           data: ThemeData.light().copyWith(
@@ -353,15 +363,18 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               primary: AppColors.primary,
               onPrimary: Colors.white,
               onSurface: AppColors.textPrimary,
-            ), dialogTheme: DialogThemeData(backgroundColor: Colors.white),
+            ), dialogTheme: DialogThemeData(backgroundColor: Colors.white), // dialogTheme ордуна
           ),
           child: child!,
         );
       },
     );
     if (picked != null) {
-      final DateFormat formatter = DateFormat('d MMMM, yyyy', 'ru');
-      _dateController.text = formatter.format(picked);
+      if (!mounted) return; // mounted текшерүүсү
+      final DateFormat formatter = DateFormat('d MMMM, yyyy', 'ru'); // Же 'ky'
+      setState(() { // setState ичинде _dateController.text'ти жаңыртуу
+        _dateController.text = formatter.format(picked);
+      });
     }
   }
 
@@ -372,11 +385,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: BackButton(
-          color: AppColors.primary,
+        leading: IconButton( // BackButton ордуна IconButton, себеби onPressed'ти так көзөмөлдөө үчүн
+          icon: const Icon(Icons.arrow_back_ios, color: AppColors.primary),
           onPressed: () {
             if (context.canPop()) {
               context.pop();
+            } else {
+              // Эгер артка кайтуу мүмкүн болбосо, мисалы, профиль экранына өтүү
+              // GoRouter.of(context).go(RouteNames.profile); // Же тиешелүү башка жол
             }
           },
         ),
@@ -413,8 +429,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       const SizedBox(height: 30),
                       _EditableAvatarWidget(
                         avatarUrl: _avatarUrl,
-                        imageFile: _pickedImageFile, // Pass the picked image file
-                        onEditPressed: _pickImage, // Call _pickImage on edit pressed
+                        imageFile: _pickedImageFile,
+                        onEditPressed: _pickImage,
                       ),
                       const SizedBox(height: 16),
                       Center(
@@ -422,7 +438,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           valueListenable: _nameController,
                           builder: (context, value, child) {
                             return Text(
-                              value.text.isNotEmpty ? value.text : 'Аты-жөнү',
+                              value.text.isNotEmpty ? value.text : (_currentUser?.displayName ?? 'Аты-жөнү'), // Firebase'ден алынган displayName'ди да көрсөтүү
                               style: const TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold,
@@ -449,10 +465,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       _ProfileTextFieldWidget(
                         controller: _dateController,
                         labelText: 'Туулган датасы',
-                        hintText: 'кк.aaaa.жжжж',
+                        hintText: 'кк.aaaa.жжжж', // Форматты тактоо
                         readOnly: true,
                         suffixIcon: const Icon(Icons.calendar_today, color: AppColors.primary),
-                        onTap: () => _selectDate(context), // Call the extracted method
+                        onTap: () => _selectDate(context),
                       ),
                       const SizedBox(height: 32),
                       SizedBox(

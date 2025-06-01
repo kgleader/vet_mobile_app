@@ -1,3 +1,4 @@
+// filepath: /Users/meerimakmatova/vet_mobile_app/lib/screens/menu/menu_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
@@ -5,9 +6,9 @@ import 'package:vet_mobile_app/config/constants/sizes.dart';
 import 'package:vet_mobile_app/config/constants/menu_constants.dart';
 import 'package:vet_mobile_app/config/router/route_names.dart';
 import 'package:vet_mobile_app/core/app_colors.dart';
+import 'package:vet_mobile_app/core/app_logo.dart';
 import 'package:vet_mobile_app/core/app_text_styles.dart';
 import 'package:vet_mobile_app/data/models/menu_item_model.dart';
-import 'package:vet_mobile_app/core/bottom_bar.dart';
 
 class MenuScreen extends StatelessWidget {
   const MenuScreen({super.key});
@@ -17,8 +18,14 @@ class MenuScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: _buildAppBar(context),
+      // Removed SafeArea since we're handling padding in the GridView
       body: GridView.builder(
-        padding: const EdgeInsets.all(Sizes.paddingL),
+        padding: EdgeInsets.fromLTRB(
+          Sizes.paddingL,
+          Sizes.paddingL,
+          Sizes.paddingL,
+          100, // Extra bottom padding to avoid content being hidden by navigation bar
+        ),
         itemCount: MenuConstants.menuItems.length,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
@@ -30,7 +37,6 @@ class MenuScreen extends StatelessWidget {
           return _MenuCard(item: MenuConstants.menuItems[index]);
         },
       ),
-      bottomNavigationBar: const BottomBar(currentIndex: 0),
     );
   }
 
@@ -48,20 +54,10 @@ class MenuScreen extends StatelessWidget {
       centerTitle: true,
       backgroundColor: Colors.white,
       elevation: 0,
-      actions: [
+      actions: const [
         Padding(
-          padding: const EdgeInsets.only(right: Sizes.paddingL),
-          child: GestureDetector(
-            onTap: () {
-              context.go(RouteNames.profile);
-            },
-            child: Image.asset(
-              'assets/icons/common/logo.png',
-              width: Sizes.logoWidth,
-              height: Sizes.logoWidth,
-              fit: BoxFit.contain,
-            ),
-          ),
+          padding: EdgeInsets.only(right: Sizes.paddingL),
+          child: AppLogo(), // Simple clickable logo
         ),
       ],
     );
@@ -101,3 +97,5 @@ class _MenuCard extends StatelessWidget {
     );
   }
 }
+
+// AppLogo moved to shared widgets

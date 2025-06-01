@@ -96,4 +96,15 @@ abstract class AppTextStyles {
     fontWeight: FontWeight.w500,
     color: AppColors.textPrimary,
   );
+  static const TextStyle caption = TextStyle(
+    fontSize: 12,
+    fontWeight: FontWeight.w400,
+    height: 1.2,
+    color: AppColors.textSecondary,
+  );
+  static const TextStyle bodyBold = TextStyle(
+    fontFamily: 'Montserrat',
+    fontWeight: FontWeight.bold,
+    fontSize: 14,
+  );
 }
