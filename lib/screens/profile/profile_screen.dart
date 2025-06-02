@@ -234,7 +234,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   }
                                 }
                               },
-                              child: const Text('Чыгуу (Log Out)'),
+                              child: const Text('Чыгуу'),
                             ),
                           ),
                         ],

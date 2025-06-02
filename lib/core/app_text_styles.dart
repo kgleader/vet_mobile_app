@@ -107,4 +107,12 @@ abstract class AppTextStyles {
     fontWeight: FontWeight.bold,
     fontSize: 14,
   );
+
+  static TextStyle get link => const TextStyle(
+        fontSize: 14, // Же башка өлчөм
+        fontWeight: FontWeight.normal, // Же башка калыңдык
+        color: AppColors.primary, // Шилтеме түсү
+        decoration: TextDecoration.underline,
+        // Башка керектүү касиеттер
+      );
 }

@@ -5,11 +5,11 @@ import 'package:vet_mobile_app/core/app_text_styles.dart';
 import 'package:vet_mobile_app/config/router/route_names.dart';
 
 class VetMessageFailureScreen extends StatelessWidget {
-  final Exception? error; // GoRouter'дан катаны алуу үчүн (милдеттүү эмес)
+  final Exception? error;  
   final String? title;
   final String? message;
   final String? buttonText;
-  final VoidCallback? onRetry; // "Try Again" үчүн атайын аракет
+  final VoidCallback? onRetry;  
 
   const VetMessageFailureScreen({
     super.key,

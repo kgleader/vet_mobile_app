@@ -60,5 +60,6 @@ flutter:
     - assets/images/horse_topic1.png
     - assets/images/horse_topic2.png
     - assets/images/horse_topic3.png
-    - assets/images/sheep_banner.svg
+    - assets/images/sheep_banner.png
+    - assets/images/sheep_toyut_banner.png
     - assets/images/vet_profile.png

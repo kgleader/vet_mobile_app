@@ -11,7 +11,18 @@ class RouteNames {
   static const String cattle = '/menu/cattle';
   static const String goats = '/menu/goats';
   static const String horses = '/menu/horses';
-  static const String chicken = '/menu/chicken';
+  static const String chicken = '/chicken';
+  static const String sheepFeeding = '/sheep-feeding';
+  static const String sheepDiseases = '/sheep-diseases';
+  static const String sheepInsemination = '/sheep-insemination';
+  static const String horseFeeding = '/horse-feeding';
+  static const String horseDiseases = '/horse-diseases';
+  static const String horseInsemination = '/horse-insemination';
+
+  static const String chickenScreen = '/menu/chicken';
+  static const String chickenFeeding = '/chicken/feeding';
+  static const String chickenDiseases = '/chicken/diseases';
+
   static const String profile = '/profile';
   static const String resetPassword = '/resetPassword';
   static const String settings = '/settings';

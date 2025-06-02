@@ -1,4 +1,6 @@
-import 'package:equatable/equatable.dart';
+part of 'navigation_bloc.dart'; // Негизги BLoC файлына шилтеме
+
+// import 'package:equatable/equatable.dart'; // Бул сап негизги bloc файлында болушу керек
 
 abstract class NavigationEvent extends Equatable {
   const NavigationEvent();
@@ -7,10 +9,10 @@ abstract class NavigationEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class NavigateToTab extends NavigationEvent {
+class NavigateTo extends NavigationEvent {
   final int index;
 
-  const NavigateToTab(this.index);
+  const NavigateTo(this.index);
 
   @override
   List<Object> get props => [index];
