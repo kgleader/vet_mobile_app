@@ -4,15 +4,15 @@
 
 ---
 
-## 📱 Screenshots
-
-> Replace with your real screenshots in the `screenshots/` folder
+## 📸 Screenshots
 
 <p float="left">
-  <img src="screenshots/splash.png" width="200"/>
-  <img src="screenshots/home.png" width="200"/>
-  <img src="screenshots/profile.png" width="200"/>
+  <img src="screenshots/login page.png" width="200"/>
+  <img src="screenshots/menu page.png" width="200"/>
+  <img src="screenshots/user profile page.png" width="200"/>
+  <img src="screenshots/splash screen page.png" width="200"/>
 </p>
+
 
 ---
 
