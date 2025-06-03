@@ -1,16 +1,66 @@
-# vet_mobile_app
+# 🐾 VetMobileApp
 
-A new Flutter project.
+**VetMobileApp** is a mobile application developed using Flutter, designed to help users manage pet profiles and book veterinary appointments. The project is being built as part of my ongoing internship at AppIT.
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+## 📱 Screenshots
 
-A few resources to get you started if this is your first Flutter project:
+> Replace with your real screenshots in the `screenshots/` folder
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+<p float="left">
+  <img src="screenshots/splash.png" width="200"/>
+  <img src="screenshots/home.png" width="200"/>
+  <img src="screenshots/profile.png" width="200"/>
+</p>
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+---
+
+## 🚀 Features
+
+- 🔐 Firebase Authentication
+- 🐶 Pet profile creation and management
+- 📅 Appointment booking with vets
+- 🧭 Bottom navigation using BLoC pattern
+- 🌐 REST API integration
+- 📥 Messaging to veterinary clinics (optional/coming soon)
+
+---
+
+## 🧰 Tech Stack
+
+- Flutter & Dart
+- Firebase (Auth & Firestore)
+- BLoC state management
+- REST APIs
+- UI based on Figma design
+
+---
+
+## 🛠️ Installation
+
+To run this project locally:
+
+```bash
+git clone https://github.com/kgleader/vet_mobile_app.git
+cd vet_mobile_app
+flutter pub get
+flutter run
+
+
+Make sure Flutter is installed and configured on your machine.
+
+---
+
+## 📌 Future Plans
+
+- 🔔 Push notifications  
+- 💬 In-app chat with veterinarians  
+- 🖼️ Profile image upload  
+- 🛠️ Admin interface for clinics  
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more info.
