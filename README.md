@@ -7,10 +7,10 @@
 ## 📸 Screenshots
 
 <p float="left">
-  <img src="screenshots/login page.png" width="200"/>
-  <img src="screenshots/menu page.png" width="200"/>
-  <img src="screenshots/user registration page.png" width="200"/>
   <img src="screenshots/splash screen page.png" width="200"/>
+  <img src="screenshots/login page.png" width="200"/>
+  <img src="screenshots/registration page.png" width="200"/>
+  <img src="screenshots/menu page.png" width="200"/> 
 </p>
 
 
