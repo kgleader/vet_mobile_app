@@ -61,8 +61,6 @@ Make sure Flutter is installed and configured on your machine.
 
 ---
 
----
-
 ## 📄 License
 
 This project is licensed under the MIT License.  
