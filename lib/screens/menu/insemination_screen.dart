@@ -1,160 +1,74 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:vet_mobile_app/config/constants/sizes.dart';
-import 'package:vet_mobile_app/config/router/route_names.dart';
-import 'package:vet_mobile_app/core/app_logo.dart';
+import 'package:vet_mobile_app/config/constants/sizes.dart'; // AppBar actions үчүн
+import 'package:vet_mobile_app/core/app_logo.dart';      // AppBar actions үчүн
+import 'package:vet_mobile_app/data/models/topic_list_item_model.dart';
+import 'package:vet_mobile_app/screens/menu/category_screen.dart'; // CategoryScreen'ди импорттойбуз
 
 class InseminationScreen extends StatelessWidget {
   const InseminationScreen({super.key});
 
-  Widget _buildTopicItem(String imagePath, String title, String description, BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(16),
-        onTap: () {
-          // Навигация к деталям подтемы
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Row(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: Image.asset(
-                  imagePath,
-                  width: 80,
-                  height: 80,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      description,
-                      style: const TextStyle(fontSize: 14),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
+    final String categoryTitle = "Уруктандыруу";
+    // Баннердин сүрөтүнүн туура жолун жана чыныгы сүрөттөмөсүн коюңуз
+    final String bannerImagePath = "assets/images/muzoo_banner.png"; // Мисалы, туура жолду коюңуз
+    final String bannerDescription = "Малды жасалма жол менен уруктандыруунун негиздери жана артыкчылыктары."; // Маанилүү сүрөттөмө
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Уруктандыруу',
-          style: TextStyle(fontWeight: FontWeight.w400,),
-        ),
-        backgroundColor: Colors.white,
-        elevation: 0,
-        centerTitle: true,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: Colors.black),
-          onPressed: () {
-            context.go(RouteNames.menu);
-          },
-        ),
-        actions: const [
-          Padding(
-            padding: EdgeInsets.only(right: Sizes.paddingL),
-            child: AppLogo(),  // Simple clickable logo
-          ),
-        ],
+    // Уруктандыруу темаларынын тизмесин түзүңүз
+    final List<TopicListItemModel> inseminationTopics = [
+      TopicListItemModel(
+        id: 'insemination_topic_1',
+        title: "Уйларды уруктандыруу",
+        description: "Уйларды жасалма уруктандыруунун өзгөчөлүктөрү жана ыкмалары.",
+        imagePath: "assets/images/insemination1.png", // Туура сүрөт жолун коюңуз
+        fullDescription: "Уйларды жасалма уруктандыруу боюнча толук маалымат. "
+                       "Бул бөлүмдө уйлардын жыныстык цикли, уруктандыруу үчүн оптималдуу убакытты аныктоо, "
+                       + "урукту сактоо жана колдонуу эрежелери, ошондой эле процедуранын өзү кеңири баяндалат. "
+                       + "Экономикалык жактан натыйжалуулугу жана тукумдун сапатын жакшыртуудагы ролу. "
+                       + "Бул текст жылдырууну текшерүү үчүн атайын узартылды. " * 10
+                       + "\n\nКошумча кеңештер жана эскертүүлөр. "
+                       + "Practice makes perfect. " * 8
       ),
-      backgroundColor: const Color(0xFFF3F0EB),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Тема',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 13),
-              
-              // Основное изображение с описанием
-              Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ClipRRect(
-                      borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-                      child: Image.asset(
-                        'assets/images/muzoo_banner.png',
-                        width: double.infinity,
-                        height: 200,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Text(
-                        'Lorem Ipsum is simply dummy text of the printing',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              
-              const SizedBox(height: 20),
-              
-              // Список подтем
-              _buildTopicItem(
-                'assets/images/insemination1.png',
-                'Уруктандыруу',
-                'Lorem Ipsum is simply dummy text of the',
-                context,
-              ),
-              const SizedBox(height: 12),
-              
-              _buildTopicItem(
-                'assets/images/insemination2.png',
-                'Уруктандыруу',
-                'Lorem Ipsum is simply dummy text of the',
-                context,
-              ),
-              const SizedBox(height: 12),
-              
-              _buildTopicItem(
-                'assets/images/insemination3.png',
-                'Уруктандыруу',
-                'Lorem Ipsum is simply dummy text of the',
-                context,
-              ),
-            ],
-          ),
-        ),
+      TopicListItemModel(
+        id: 'insemination_topic_2',
+        title: "Койлорду уруктандыруу",
+        description: "Койлорду жасалма уруктандыруунун негизги аспекттери.",
+        imagePath: "assets/images/insemination2.png", // Туура сүрөт жолун коюңуз
+        fullDescription: "Койлорду жасалма уруктандыруу технологиясы. "
+                       "Бул жерде койлордун физиологиялык өзгөчөлүктөрүн эске алуу менен уруктандыруу процесси, "
+                       + "колдонулуучу аспаптар жана уруктун сапатына коюлуучу талаптар жөнүндө маалымат берилет. "
+                       + "Майда малды уруктандыруунун артыкчылыктары жана мүмкүн болгон кыйынчылыктар. "
+                       + "Бул текст дагы жылдырууну камсыз кылуу максатында узартылды. " * 11
+                       + "\n\nИйгиликтүү уруктандыруу үчүн маанилүү факторлор. "
+                       + "A stitch in time saves nine. " * 9
       ),
+      TopicListItemModel(
+        id: 'insemination_topic_3',
+        title: "Жылкыларды уруктандыруу",
+        description: "Жылкыларды жасалма уруктандыруу жана анын мааниси.",
+        imagePath: "assets/images/insemination3.png", // Туура сүрөт жолун коюңуз
+        fullDescription: "Жылкыларды жасалма уруктандыруунун заманбап ыкмалары. "
+                       "Бээлердин жыныстык циклин көзөмөлдөө, урукту алуу, баалоо, суюлтуу жана сактоо. "
+                       + "Уруктандыруу техникалары жана процедурадан кийинки байкоо. "
+                       + "Асыл тукум жылкы чарбасында жасалма уруктандыруунун ролу. "
+                       + "Экранга батпай, жылдырууга мүмкүнчүлүк түзүү үчүн бул текст да атайылап узартылды. " * 10
+                       + "\n\nВетеринардык көзөмөлдүн маанилүүлүгү. "
+                       + "Knowledge is power. " * 8
+      ),
+      // Керек болсо дагы темаларды кошобуз
+    ];
+
+    return CategoryScreen(
+      title: categoryTitle,
+      bannerImagePath: bannerImagePath,
+      bannerDescription: bannerDescription,
+      topics: inseminationTopics,
+      actions: const [ // AppBar'га AppLogo кошуу (CategoryScreen'де бар болсо да, бул жерде да калтырсаңыз болот)
+        Padding(
+          padding: EdgeInsets.only(right: Sizes.paddingL),
+          child: AppLogo(),
+        ),
+      ],
     );
   }
 }

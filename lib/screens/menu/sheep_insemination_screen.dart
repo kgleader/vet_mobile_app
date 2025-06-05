@@ -1,9 +1,82 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:go_router/go_router.dart'; // Бул эми _navigateToTopic үчүн керек болбой калышы мүмкүн
 import 'package:vet_mobile_app/config/constants/sizes.dart';
-import 'package:vet_mobile_app/config/router/route_names.dart';
+import 'package:vet_mobile_app/config/router/route_names.dart'; // Бул эми _navigateToTopic үчүн керек болбой калышы мүмкүн
+import 'package:vet_mobile_app/core/app_colors.dart'; // Артка кайтуу баскычы үчүн керек болбой калышы мүмкүн
+import 'package:vet_mobile_app/core/app_decorations.dart'; // Түздөн-түз бул экранда колдонулбайт
 import 'package:vet_mobile_app/data/models/topic_list_item_model.dart';
 import 'package:vet_mobile_app/core/app_logo.dart';
+import 'package:vet_mobile_app/screens/menu/category_screen.dart'; // CategoryScreen импорту
+
+// _inseminationTopics тизмеси өзгөрүүсүз калат
+final List<TopicListItemModel> _inseminationTopics = [
+  TopicListItemModel(
+    id: 'insemination_large_topic',
+    imagePath: 'assets/images/uruk_sheep_banner.png',
+    title: 'Уруктандыруу негиздери',
+    description: 'Койлорду жасалма уруктандыруунун негиздери жана артыкчылыктары.',
+    fullDescription: '''
+Койлорду жасалма уруктандыруу – бул мал чарбасындагы заманбап жана натыйжалуу ыкмалардын бири. 
+Бул ыкма тукумдук койлордун генетикалык потенциалын жакшыртууга, оорулардын жайылышын алдын алууга жана чарбанын экономикалык натыйжалуулугун жогорулатууга мүмкүндүк берет. 
+Жасалма уруктандыруу процесси атайын даярдалган адистер тарабынан, стерилдик шарттарда жүргүзүлөт. 
+Урукту тандоодо койдун породасы, жашы, ден соолугу жана башка факторлор эске алынат. 
+Бул ыкманы колдонуу менен, чарба ээлери аз убакыттын ичинде сапаттуу тукум алып, малдын санын жана сапатын жакшырта алышат. 
+Ошондой эле, табигый уруктандырууга караганда, жасалма уруктандыруу бир топ артыкчылыктарга ээ, мисалы, алыскы аймактардан мыкты тукумдук кочкорлордун уругун колдонуу мүмкүнчүлүгү.
+Бул кой чарбасын өнүктүрүүдөгү маанилүү кадам болуп саналат.
+Келечекте бул технология дагы да өркүндөтүлүп, кеңири жайылышы күтүлүүдө.
+Ар бир фермер бул ыкманын негиздерин жана артыкчылыктарын билиши зарыл.
+'''
+  ),
+  TopicListItemModel(
+    id: 'insemination_small_topic_1',
+    imagePath: 'assets/images/sheep_topic1.png',
+    title: 'Уруктандыруу ыкмалары',
+    description: 'Койлорду жасалма уруктандыруу ыкмалары жана алардын өзгөчөлүктөрү.',
+    fullDescription: '''
+Койлорду жасалма уруктандыруунун бир нече негизги ыкмалары бар. 
+Алардын эң кеңири таралганы – бул кын аркылуу уруктандыруу (вагиналдык), жатын моюнчасы аркылуу уруктандыруу (цервикалдык) жана лапароскопиялык ыкма.
+Вагиналдык ыкма эң жөнөкөй, бирок натыйжалуулугу төмөнүрөөк болушу мүмкүн. 
+Цервикалдык ыкма татаалыраак, бирок уруктун жатынга түз жеткирилишин камсыздайт, бул уруктануу пайызын жогорулатат. 
+Лапароскопиялык ыкма эң татаал жана кымбат, бирок эң жогорку натыйжалуулукту берет, анткени урук түздөн-түз жатын түтүктөрүнө киргизилет. 
+Ар бир ыкманын өзүнүн артыкчылыктары жана кемчиликтери бар, ошондуктан чарбанын шартына, койлордун абалына жана финансылык мүмкүнчүлүктөргө жараша тандалат. 
+Адис менен кеңешүү туура ыкманы тандоого жардам берет.
+Жаңы технологиялар тынымсыз өнүгүп, жаңы ыкмалар пайда болууда.
+'''
+  ),
+  TopicListItemModel(
+    id: 'insemination_small_topic_2',
+    imagePath: 'assets/images/sheep_topic2.png',
+    title: 'Урук тандоо',
+    description: 'Урукту тандоо жана анын сапаты',
+    fullDescription: '''
+Жасалма уруктандыруу үчүн урукту туура тандоо – бул ийгиликтин негизги факторлорунун бири. 
+Урук таза, сапаттуу жана жогорку генетикалык потенциалга ээ кочкорлордон алынышы керек. 
+Уруктун сапаты анын кыймылдуулугу, концентрациясы жана морфологиялык көрсөткүчтөрү боюнча бааланат. 
+Урукту атайын сертификацияланган борборлордон же ишенимдүү жеткирүүчүлөрдөн алуу сунушталат. 
+Тандалган урук койдун породасына, чарбанын максаттарына (эт, жүн, сүт багыты) жана жергиликтүү шарттарга ылайык келиши керек. 
+Ошондой эле, уруктун сакталуу шарттарына жана ташуу эрежелерине көңүл буруу зарыл, анткени бул анын сапатына түздөн-түз таасир этет. 
+Генетикалык ар түрдүүлүктү сактоо үчүн ар кандай линиядагы кочкорлордун уругун колдонуу маанилүү.
+Уруктун баасы анын сапатына жана тукумуна жараша өзгөрүшү мүмкүн.
+'''
+  ),
+  TopicListItemModel(
+    id: 'insemination_small_topic_3',
+    imagePath: 'assets/images/sheep_topic3.png',
+    title: 'Бооз мезгили',
+    description: 'Кой эчкилердин уруктануусу', // Бул description мурда бош болчу, эми мааниси бар
+    fullDescription: '''
+Койлордун бооз мезгили, адатта, 145 күндөн 155 күнгө чейин созулат. Бул мөөнөт койдун породасына, жашына жана физиологиялык өзгөчөлүктөрүнө жараша бир аз өзгөрүшү мүмкүн. Бул мезгил койдун жашоосундагы эң маанилүү жана жоопкерчиликтүү этаптардын бири болуп саналат, андыктан аларга өзгөчө кылдаттык менен мамиле кылуу жана тийиштүү шарттарды түзүү зарыл.
+
+Бооз койлордун рациону жогорку сапаттагы, толук кандуу жана тең салмактуу болушу шарт. Азыктын курамында протеин, углевод, май, ошондой эле керектүү витаминдер (A, D, E) жана минералдар (кальций, фосфор, селен ж.б.) жетиштүү өлчөмдө болушу керек. Айрыкча, бооз мезгилдин акыркы үчтөн бир бөлүгүндө, түйүлдүктүн интенсивдүү өсүшүнө байланыштуу, койдун азык заттарга болгон муктаждыгы кыйла жогорулайт. Бул учурда кошумча тоюттандыруу жана атайын кошулмаларды берүү максатка ылайыктуу.
+
+Бооз койлорду ар кандай стресстик факторлордон – катуу үндөрдөн, чукул кыймылдардан, башка жаныбарлар менен кагылышуудан жана жагымсыз аба ырайы шарттарынан (өтө ысык же суук) сактоо өтө маанилүү. Алар кенен, кургак, таза жана жакшы желдетилген жайларда багылышы керек.
+
+Туут жакындаганда (болжол менен 1-2 жума калганда), койлорду өзүнчө, алдын ала даярдалган, дезинфекцияланган жана жылууланган туут бөлмөлөрүнө которуу сунушталат. Бул жерде аларга тынч шарт түзүлүп, туут процессин көзөмөлдөө жеңилдейт.
+
+Ветеринардык адистин үзгүлтүксүз көзөмөлү жана кеңеши ар кандай кыйынчылыктарды, ооруларды өз убагында аныктоого жана алдын алууга жардам берет. Бооз койлорду туура жана кылдат багуу – бул дени сак, чыйрак козулардын төрөлүшүн, койдун сүттүүлүгүнүн жогору болушун жана жалпы чарбанын кирешелүүлүгүн камсыз кылуунун негизги шарты. Бул мезгилде койлорго көрсөтүлгөн кошумча камкордук жана көңүл буруу келечектеги үзүрүн сөзсүз берет.
+'''
+  ),
+];
 
 class SheepInseminationScreen extends StatefulWidget {
   final int bottomBarCurrentIndex;
@@ -15,204 +88,44 @@ class SheepInseminationScreen extends StatefulWidget {
 }
 
 class _SheepInseminationScreenState extends State<SheepInseminationScreen> {
-  @override
-  Widget build(BuildContext context) {
-    const String categoryTitle = "Уруктандыруу";
-
-    final List<TopicListItemModel> inseminationTopics = [
-      TopicListItemModel(
-        id: 'insemination_large_topic',
-        imagePath: 'assets/images/uruk_sheep_banner.png', 
-        title: '', 
-        description: 'Lorem Ipsum is simply dummy text of the printing', 
-        fullDescription: 'Толук сүрөттөмөсү бул жерде болот...'
-      ),
-      TopicListItemModel(
-        id: 'insemination_small_topic_1',
-        imagePath: 'assets/images/insemination_topic_small1.png', 
-        title: 'Уруктандыруу ыкмалары', 
-        description: 'Lorem Ipsum is simply dummy text of the',
-        fullDescription: 'Толук сүрөттөмөсү...'
-      ),
-      TopicListItemModel(
-        id: 'insemination_small_topic_2',
-        imagePath: 'assets/images/insemination_topic_small2.png', 
-        title: 'Урук тандоо',
-        description: 'Lorem Ipsum is simply dummy text of the',
-        fullDescription: 'Толук сүрөттөмөсү...'
-      ),
-      TopicListItemModel(
-        id: 'insemination_small_topic_3',
-        imagePath: 'assets/images/insemination_topic_small3.png', 
-        title: 'Бооз мезгили',
-        description: 'Lorem Ipsum is simply dummy text of the',
-        fullDescription: 'Толук сүрөттөмөсү...'
-      ),
-    ];
-
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black),
-          onPressed: () => GoRouter.of(context).go(RouteNames.goats), 
-        ),
-        title: Text(
-          categoryTitle,
-          style: const TextStyle(
-            color: Colors.black,
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        centerTitle: true,
-        actions: const [
-          Padding(
-            padding: EdgeInsets.only(right: Sizes.paddingL),
-            child: AppLogo(),
-          ),
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: Sizes.paddingL),
-        child: ListView( 
-          children: [
-            const SizedBox(height: 24),
-            const Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                "Тема",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-            ),
-            const SizedBox(height: 12),
-            if (inseminationTopics.isNotEmpty)
-              _buildLargeTopicCard(context, inseminationTopics.first),
-            
-            const SizedBox(height: 16),
-            if (inseminationTopics.length > 1)
-              ...inseminationTopics.skip(1).map((topic) => _buildSmallTopicCard(context, topic)),
-            const SizedBox(height: 20),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildLargeTopicCard(BuildContext context, TopicListItemModel topic) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12.0),
-      ),
-      elevation: 2,
-      margin: const EdgeInsets.only(bottom: 16.0),
-      child: InkWell(
-        onTap: () => _navigateToTopic(context, topic),
-        borderRadius: BorderRadius.circular(12.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ClipRRect(
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(12.0),
-                topRight: Radius.circular(12.0),
-              ),
-              child: Image.asset( 
-                topic.imagePath, 
-                width: double.infinity,
-                height: 180, 
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) => Container(
-                  height: 180,
-                  color: Colors.grey[200],
-                  child: const Center(child: Icon(Icons.broken_image, size: 50)),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Text(
-                topic.description, 
-                style: TextStyle(fontSize: 14, color: Colors.grey[700]),
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSmallTopicCard(BuildContext context, TopicListItemModel topic) {
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: 8.0),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12.0),
-      ),
-      elevation: 2,
-      child: InkWell(
-        onTap: () => _navigateToTopic(context, topic),
-        borderRadius: BorderRadius.circular(12.0),
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Row(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8.0),
-                child: Image.asset( 
-                  topic.imagePath,
-                  width: 60, 
-                  height: 60,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) => Container(
-                    width: 60, height: 60, color: Colors.grey[200],
-                    child: Icon(Icons.broken_image, size: 30, color: Colors.grey[400]),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      topic.title,
-                      style: const TextStyle(
-                        fontSize: 15, 
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      topic.description,
-                      style: TextStyle(
-                        fontSize: 13, 
-                        color: Colors.grey[700],
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
   void _navigateToTopic(BuildContext context, TopicListItemModel topic) {
     GoRouter.of(context).pushNamed(
-      RouteNames.topicDetail, 
+      RouteNames.topicDetail,
       extra: {'topic': topic, 'currentIndex': widget.bottomBarCurrentIndex},
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_inseminationTopics.isEmpty) {
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text("Уруктандыруу"),
+          actions: const [
+            Padding(
+              padding: EdgeInsets.only(right: Sizes.paddingL),
+              child: AppLogo(),
+            ),
+          ],
+        ),
+        body: const Center(child: Text("Бул бөлүм боюнча маалымат азырынча жок.")),
+      );
+    }
+
+    final bannerTopic = _inseminationTopics.first;
+    final listTopics = _inseminationTopics.skip(1).toList();
+
+    return CategoryScreen(
+      title: "Уруктандыруу",
+      bannerImagePath: bannerTopic.imagePath,
+      bannerDescription: bannerTopic.description,
+      topics: listTopics,
+      actions: const [
+        Padding(
+          padding: EdgeInsets.only(right: Sizes.paddingL),
+          child: AppLogo(),
+        ),
+      ],
+      );
   }
 }

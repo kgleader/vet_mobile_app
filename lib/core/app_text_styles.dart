@@ -92,9 +92,12 @@ abstract class AppTextStyles {
     color: AppColors.error,
   );
   static const TextStyle titleSmall = TextStyle(
-    fontSize: 16,
+    fontSize: 16.0,
     fontWeight: FontWeight.w500,
-    color: AppColors.textPrimary,
+  );
+  static const TextStyle titleMedium = TextStyle(
+    fontSize: 18.0,
+    fontWeight: FontWeight.w600,
   );
   static const TextStyle caption = TextStyle(
     fontSize: 12,
@@ -115,4 +118,8 @@ abstract class AppTextStyles {
         decoration: TextDecoration.underline,
         // Башка керектүү касиеттер
       );
+  static const TextStyle titleLarge = TextStyle(
+    fontSize: 22.0,
+    fontWeight: FontWeight.bold,
+  );
 }

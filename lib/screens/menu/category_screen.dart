@@ -4,8 +4,10 @@ import 'package:go_router/go_router.dart';
 import 'package:vet_mobile_app/config/constants/sizes.dart';
 import 'package:vet_mobile_app/config/router/route_names.dart';
 import 'package:vet_mobile_app/core/app_colors.dart';
+import 'package:vet_mobile_app/core/app_decorations.dart'; // Бул импорт бар экенин текшериңиз
 import 'package:vet_mobile_app/core/app_text_styles.dart';
 import 'package:vet_mobile_app/data/models/topic_list_item_model.dart';
+import 'package:vet_mobile_app/widgets/custom_topic_item.dart'; // Импорттоо
 
 class CategoryScreen extends StatelessWidget {
   final String title;
@@ -24,28 +26,21 @@ class CategoryScreen extends StatelessWidget {
   });
 
   Widget _buildHeaderSection(BuildContext context) {
-    return Container( // This is the card container
+    return Container(
       width: double.infinity,
-      // NO internal padding here; padding for the card itself is handled by the parent Padding widget in CategoryScreen.build
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(Sizes.borderRadius),
-        border: Border.all(
-          color: AppColors.primary.withOpacity(0.5),
-          width: 1.0,
-        ),
-      ),
-      clipBehavior: Clip.antiAlias, // Ensures children are clipped to the borderRadius
+      decoration: AppDecorations.mainBannerCardDecoration(context: context), // <--- ӨЗГӨРТҮЛДҮ
+      clipBehavior: Clip.antiAlias,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Banner Image
           SizedBox(
-            height: 150, // Adjust height as needed
-            width: double.infinity, // Takes full width of the card
+            height: 150, // Фигмадагы баннердин бийиктиги
+            width: double.infinity,
             child: bannerImagePath.toLowerCase().endsWith('.svg')
                 ? SvgPicture.asset(
                     bannerImagePath,
-                    fit: BoxFit.cover,
+                    fit: BoxFit.cover, // Фигмадагыдай
                     placeholderBuilder: (BuildContext context) => Container(
                       color: Colors.grey[300],
                       child: const Center(child: CircularProgressIndicator()),
@@ -53,7 +48,7 @@ class CategoryScreen extends StatelessWidget {
                   )
                 : Image.asset(
                     bannerImagePath,
-                    fit: BoxFit.cover,
+                    fit: BoxFit.cover, // Фигмадагыдай
                     cacheHeight: (150 * MediaQuery.of(context).devicePixelRatio).round(),
                     errorBuilder: (context, error, stackTrace) => Container(
                       color: Colors.grey[300],
@@ -64,15 +59,31 @@ class CategoryScreen extends StatelessWidget {
           // Banner Description Text (if it exists)
           if (bannerDescription != null && bannerDescription!.isNotEmpty) ...[
             Padding(
-              padding: const EdgeInsets.all(Sizes.paddingM), // Padding for the text within the card
+              // Фигмадагы баннер текстинин ички боштуктары
+              padding: const EdgeInsets.all(Sizes.paddingM), // Же Sizes.paddingL, Фигмага жараша
               child: Text(
                 bannerDescription!,
-                style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textPrimary),
+                style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textPrimary), // Фигмадагыдай стиль
               ),
             ),
           ],
         ],
       ),
+    );
+  }
+
+  // Бул CategoryScreen классынын ичинде же өзүнчө функция болушу мүмкүн
+  Widget _buildTopicListItem(BuildContext context, TopicListItemModel topic) {
+    return CustomTopicItem( // Бул жер өзгөрүүсүз, CustomTopicItem өзү оңдолду
+      imagePath: topic.imagePath,
+      title: topic.title,
+      description: topic.description,
+      onTap: () {
+        GoRouter.of(context).pushNamed(
+          RouteNames.topicDetail,
+          extra: {'topic': topic, 'currentIndex': 0},
+        );
+      },
     );
   }
 
@@ -85,7 +96,7 @@ class CategoryScreen extends StatelessWidget {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: AppColors.primary),
-          onPressed: () => context.go(RouteNames.menu), // Navigate to main menu
+          onPressed: () => GoRouter.of(context).pop(), // Navigate to main menu
         ),
         title: Text(
           title, // Category title
@@ -110,12 +121,7 @@ class CategoryScreen extends StatelessWidget {
               itemCount: topics.length,
               itemBuilder: (context, index) {
                 final topic = topics[index];
-                return _TopicListItem(
-                  topic: topic,
-                  // Pass the current menu index for the bottom bar when navigating to topic detail
-                  // Assuming 'Menu' tab is index 1
-                  currentBottomBarIndexForDetail: 1,
-                );
+                return _buildTopicListItem(context, topic);
               },
             ),
           ),
@@ -124,94 +130,6 @@ class CategoryScreen extends StatelessWidget {
       // bottomNavigationBar: const BottomBar( // Removed as MainLayout provides it
       //   currentIndex: 1,
       // ),
-    );
-  }
-}
-
-class _TopicListItem extends StatelessWidget {
-  final TopicListItemModel topic;
-  final int currentBottomBarIndexForDetail;
-
-  const _TopicListItem({
-    required this.topic,
-    required this.currentBottomBarIndexForDetail,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      color: Colors.white, // Ensure card background is white
-      margin: const EdgeInsets.only(bottom: Sizes.spacingM),
-      elevation: 0, // Remove shadow, rely on border
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(Sizes.borderRadius),
-        side: BorderSide(color: AppColors.primary.withOpacity(0.5), width: 1.0), // Add border
-      ),
-      child: InkWell(
-        onTap: () {
-          context.pushNamed(
-            RouteNames.topicDetail,
-            extra: {
-              'topic': topic,
-              'currentIndex': currentBottomBarIndexForDetail,
-            },
-          );
-        },
-        borderRadius: BorderRadius.circular(Sizes.borderRadius),
-        child: Padding(
-          padding: const EdgeInsets.all(Sizes.paddingM),
-          child: Row(
-            children: [
-              SizedBox(
-                width: 80,
-                height: 80,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(Sizes.borderRadiusS),
-                  child: topic.imagePath.toLowerCase().endsWith('.svg')
-                      ? SvgPicture.asset(
-                          topic.imagePath,
-                          fit: BoxFit.cover,
-                          placeholderBuilder: (BuildContext context) => Container(
-                            color: Colors.grey[200],
-                            child: const Icon(Icons.image, color: Colors.grey),
-                          ),
-                        )
-                      : Image.asset(
-                          topic.imagePath,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) => Container(
-                            color: Colors.grey[200],
-                            child: const Icon(Icons.error, color: Colors.grey),
-                          ),
-                        ),
-                ),
-              ),
-              const SizedBox(width: Sizes.spacingM),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      topic.title,
-                      style: AppTextStyles.titleSmall.copyWith(color: AppColors.textPrimary),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: Sizes.spacingS),
-                    Text(
-                      topic.description,
-                      style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textSecondary),
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
-              ),
-              const Icon(Icons.arrow_forward_ios, color: AppColors.primary, size: 16),
-            ],
-          ),
-        ),
-      ),
     );
   }
 }

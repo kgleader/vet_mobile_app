@@ -10,6 +10,8 @@ import 'package:vet_mobile_app/screens/auth/register_screen.dart';
 import 'package:vet_mobile_app/screens/auth/forgot_password_screen.dart';
 import 'package:vet_mobile_app/screens/auth/reset_password_screen.dart';
 import 'package:vet_mobile_app/screens/menu/about_us.dart';
+import 'package:vet_mobile_app/screens/menu/cattle_diseases_screen.dart';
+import 'package:vet_mobile_app/screens/menu/cattle_insemination_screen.dart';
 import 'package:vet_mobile_app/screens/menu/feed_screen.dart';
 import 'package:vet_mobile_app/screens/menu/menu_screen.dart';
 import 'package:vet_mobile_app/screens/menu/news_screen.dart';
@@ -185,17 +187,39 @@ final GoRouter router = GoRouter(
           builder: (context, state) => const ChickenScreen(),
           routes: [
             GoRoute(
-              path: 'feeding', 
+              path: 'feeding', // Бул /chicken/feeding жолун түзөт
               name: RouteNames.chickenFeeding,
               builder: (context, state) => const ChickenFeedingScreen(),
             ),
             GoRoute(
-              path: 'diseases', 
-              name: RouteNames.chickenDiseases,
-              builder: (context, state) => const ChickenDiseasesScreen(), 
+              path: 'diseases', // Бул /chicken/diseases жолун түзөт
+              name: RouteNames.chickenDiseases, // Аталышын текшериңиз
+              builder: (context, state) => const ChickenDiseasesScreen(), // Жаңы экран
             ),
           ]
         ),
+        GoRoute(
+          path: '/cattle_feed', // Мурунку
+          name: RouteNames.cattleFeed,
+          builder: (context, state) => const FeedScreen(),
+        ),
+        GoRoute(
+          path: '/cattle_diseases', // Жаңы URL дареги
+          name: RouteNames.cattleDiseases,
+          builder: (context, state) => const CattleDiseasesScreen(), // Жаңы экран
+        ),
+        GoRoute(
+          path: '/cattle_insemination', // Мурунку
+          name: RouteNames.cattleInsemination,
+          builder: (context, state) => const CattleInseminationScreen(),
+        ),
+        // ТӨМӨНКҮ БӨЛҮКТҮ ӨЧҮРҮҢҮЗ -----
+        // GoRoute(
+        //   path: '/chicken_feeding', // Жаңы URL дареги
+        //   name: RouteNames.chickenFeeding,
+        //   builder: (context, state) => const ChickenFeedingScreen(), // Жаңы экран
+        // ),
+        // ----- ӨЧҮРҮЛҮҮЧҮ БӨЛҮКТҮН АЯГЫ
       ],
     ),
     

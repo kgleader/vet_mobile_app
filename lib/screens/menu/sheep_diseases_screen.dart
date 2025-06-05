@@ -1,193 +1,58 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:vet_mobile_app/config/constants/sizes.dart';
-import 'package:vet_mobile_app/config/router/route_names.dart';
-import 'package:vet_mobile_app/data/models/topic_list_item_model.dart';
 import 'package:vet_mobile_app/core/app_logo.dart';
+import 'package:vet_mobile_app/data/models/topic_list_item_model.dart';
+import 'package:vet_mobile_app/screens/menu/category_screen.dart';
 
-class SheepDiseasesScreen extends StatefulWidget {
+class SheepDiseasesScreen extends StatelessWidget {
   final int bottomBarCurrentIndex;
 
   const SheepDiseasesScreen({super.key, this.bottomBarCurrentIndex = 0});
 
   @override
-  State<SheepDiseasesScreen> createState() => _SheepDiseasesScreenState();
-}
-
-class _SheepDiseasesScreenState extends State<SheepDiseasesScreen> {
-  @override
   Widget build(BuildContext context) {
-    const String categoryTitle = "Дарылоо";
+    const String categoryTitle = "Дарылоо"; // Экрандын аталышы Фигмадагыдай
+
+    // Фигмадагы баннер сүрөтү жана сүрөттөмөсү
+    final String bannerImagePath = 'assets/images/sheep_drug_banner.png'; // Фигмадагы дары-дармектердин сүрөтүнүн жолу
+    final String bannerDescription = "Lorem Ipsum is simply dummy text of the printing"; // Фигмадагы баннердин астындагы текст
 
     final List<TopicListItemModel> diseaseTopics = [
       TopicListItemModel(
-        id: 'disease_topic_1',
-        imagePath: 'assets/images/drug_topic_image1.png',
-        title: 'Жугуштуу оорулар',
-        description: 'Койлордун негизги жугуштуу оорулары жана аларды дарылоо ыкмалары.',
-        fullDescription: 'Койлор арасында кеңири таралган жугуштуу оорулар, алардын белгилери, диагностикасы жана заманбап дарылоо ыкмалары жөнүндө маалымат.'
+        id: 'daryloo_topic_1',
+        imagePath: 'assets/images/sheep_topic1.png', // Фигмадагы биринчи теманын сүрөтү (эки кой)
+        title: 'Дарылоо', // Фигмадагы теманын аталышы
+        description: 'Lorem Ipsum is simply dummy text of the', // Фигмадагы теманын кыскача сүрөттөмөсү
+        fullDescription: 'Бул жерде биринчи теманын толук сүрөттөмөсү жайгашат. ${'Бул текст жылдырууну текшерүү үчүн атайын узартылды. ' * 15} Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
       ),
       TopicListItemModel(
-        id: 'disease_topic_2',
-        imagePath: 'assets/images/drug_topic_image2.png',
-        title: 'Мите курттар',
-        description: 'Койлордун мите курт оорулары жана алар менен күрөшүү.',
-        fullDescription: 'Ички жана сырткы мите курттардан келип чыгуучу оорулар, алардын алдын алуу жана дарылоо боюнча сунуштар.'
+        id: 'daryloo_topic_2',
+        imagePath: 'assets/images/sheep_topic2.png', // Фигмадагы экинчи теманын сүрөтү (ноутбук)
+        title: 'Дарылоо', // Фигмадагы теманын аталышы
+        description: 'Lorem Ipsum is simply dummy text of the', // Фигмадагы теманын кыскача сүрөттөмөсү
+        fullDescription: 'Экинчи теманын толук сүрөттөмөсү. ${'Бул текст жылдырууну текшерүү үчүн атайын узартылды. ' * 18} Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.'
       ),
       TopicListItemModel(
-        id: 'disease_topic_3',
-        imagePath: 'assets/images/drug_topic_image3.png',
-        title: 'Алдын алуу чаралары',
-        description: 'Койлордун ооруларын алдын алуу боюнча негизги чаралар.',
-        fullDescription: 'Вакцинация, дезинфекция, туура багуу жана тоюттандыруу аркылуу койлордун ооруларын алдын алуунун маанилүүлүгү.'
+        id: 'daryloo_topic_3',
+        imagePath: 'assets/images/sheep_topic3.png', // Фигмадагы үчүнчү теманын сүрөтү (лаборатория)
+        title: 'Дарылоо', // Фигмадагы теманын аталышы
+        description: 'Lorem Ipsum is simply dummy text of the', // Фигмадагы теманын кыскача сүрөттөмөсү
+        fullDescription: 'Үчүнчү тема боюнча кеңири маалымат. ${'Бул текст жылдырууну текшерүү үчүн атайын узартылды. ' * 20} At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus.'
       ),
+      // Керек болсо, дагы темаларды кошсоңуз болот
     ];
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black),
-          onPressed: () => GoRouter.of(context).go(RouteNames.goats),
+    return CategoryScreen(
+      title: categoryTitle,
+      bannerImagePath: bannerImagePath,
+      bannerDescription: bannerDescription,
+      topics: diseaseTopics,
+      actions: const [
+        Padding(
+          padding: EdgeInsets.only(right: Sizes.paddingL),
+          child: AppLogo(),
         ),
-        title: Text(
-          categoryTitle,
-          style: const TextStyle(
-            color: Colors.black,
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        centerTitle: true,
-        actions: const [
-          Padding(
-            padding: EdgeInsets.only(right: Sizes.paddingL),
-            child: AppLogo(),
-          ),
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: Sizes.paddingL),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 24),
-            SizedBox(
-              width: double.infinity,
-              height: 180,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(12.0),
-                child: Image.asset(
-                  'assets/images/sheep_drug_banner.png',
-                  fit: BoxFit.cover,
-                  errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
-                    return Container(
-                      color: Colors.grey[300],
-                      child: const Center(child: Text('Баннер жүктөлбөдү', textAlign: TextAlign.center,))
-                    );
-                  },
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
-            const Padding(
-              padding: EdgeInsets.only(left: 4.0, bottom: 8.0),
-              child: Text(
-                "Тема",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-            ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: diseaseTopics.length,
-                itemBuilder: (context, index) {
-                  return _buildTopicCard(
-                    context: context,
-                    topic: diseaseTopics[index],
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTopicCard({
-    required BuildContext context,
-    required TopicListItemModel topic,
-  }) {
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: 8.0),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12.0),
-      ),
-      elevation: 2,
-      child: InkWell(
-        onTap: () => _navigateToTopic(context, topic),
-        borderRadius: BorderRadius.circular(12.0),
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Row(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8.0),
-                child: Image.asset(
-                  topic.imagePath,
-                  width: 80,
-                  height: 80,
-                  fit: BoxFit.cover,
-                   errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
-                    return Container(
-                      width: 80, height: 80, color: Colors.grey[200],
-                      child: Icon(Icons.broken_image, color: Colors.grey[400])
-                    );
-                  },
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      topic.title,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      topic.description,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey[700],
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  void _navigateToTopic(BuildContext context, TopicListItemModel topic) {
-    GoRouter.of(context).pushNamed(
-      RouteNames.topicDetail,
-      extra: {'topic': topic, 'currentIndex': widget.bottomBarCurrentIndex},
+      ],
     );
   }
 }

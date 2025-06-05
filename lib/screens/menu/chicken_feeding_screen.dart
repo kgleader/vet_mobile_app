@@ -1,224 +1,65 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:vet_mobile_app/config/constants/sizes.dart';
-import 'package:vet_mobile_app/config/router/route_names.dart';
+import 'package:vet_mobile_app/config/constants/sizes.dart'; // Керек болушу мүмкүн, эгер CategoryScreen колдонбосоңуз
+import 'package:vet_mobile_app/core/app_logo.dart'; // AppBar'дагы actions үчүн
 import 'package:vet_mobile_app/data/models/topic_list_item_model.dart';
-import 'package:vet_mobile_app/core/app_logo.dart';
+import 'package:vet_mobile_app/screens/menu/category_screen.dart';
 
-class ChickenFeedingScreen extends StatefulWidget {
-  final int bottomBarCurrentIndex;
+class ChickenFeedingScreen extends StatelessWidget {
+  const ChickenFeedingScreen({super.key});
 
-  const ChickenFeedingScreen({super.key, this.bottomBarCurrentIndex = 0});
-
-  @override
-  State<ChickenFeedingScreen> createState() => _ChickenFeedingScreenState();
-}
-
-class _ChickenFeedingScreenState extends State<ChickenFeedingScreen> {
   @override
   Widget build(BuildContext context) {
-    const String categoryTitle = "Тоют";
+    final String categoryTitle = "Тоют";
+    final String bannerImagePath = "assets/images/chicken_feed_banner.png"; // Туура жолду коюңуз
+    final String bannerDescription = "Тоокторду туура тоюттандыруу боюнча негизги маалыматтар жана кеңештер."; // Маанилүү сүрөттөмө
 
     final List<TopicListItemModel> feedingTopics = [
-      TopicListItemModel( 
-        id: 'chicken_feed_banner_topic',
-        imagePath: 'assets/images/chicken_feeding_banner.png', 
-        title: '', 
-        description: 'Тоокторду туура тоюттандыруунун негиздери.', 
-        fullDescription: 'Тооктор үчүн негизги тоюттар, рацион түзүү жана кошумча азыктар жөнүндө толук маалымат.'
+      TopicListItemModel(
+        id: 'chicken_feed_topic_1',
+        title: "Негизги тоюттар",
+        description: "Тооктор үчүн негизги тоюттардын түрлөрү жана өзгөчөлүктөрү.",
+        imagePath: "assets/images/chicken_topic1.png", // ӨЗГӨРТҮҢҮЗ
+        fullDescription: "Биринчи тоют темасы боюнча абдан кенен маалымат. Бул жерде тоокторду тоюттандыруунун негизги принциптери, керектүү азык заттар, витаминдер жана минералдар жөнүндө сөз болот. "
+                       "Ошондой эле, ар кандай курактагы тооктор үчүн рацион түзүүнүн өзгөчөлүктөрү каралат. "
+                       + "Бул текст жылдырууну текшерүү үчүн атайын узартылды. " * 10 // Кайталоону азайтсаңыз болот, эгер TopicDetailScreen'де мазмун жетиштүү болсо
+                       + "\n\nЖаңы абзац.\n\nДагы бир узун текст бул жерде. "
+                       + "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard. " * 8
       ),
       TopicListItemModel(
-        id: 'chicken_feeding_topic_1',
-        imagePath: 'assets/images/chicken_feed_topic1.png', 
-        title: 'Негизги тоюттар',
-        description: 'Дан, жашылча жана башка негизги тоюттар.',
-        fullDescription: 'Тооктор үчүн негизги тоют түрлөрү, алардын курамы жана пайдасы.'
+        id: 'chicken_feed_topic_2',
+        title: "Кошумча тоюттар",
+        description: "Витаминдер, минералдар жана башка кошумчалар.",
+        imagePath: "assets/images/chicken_topic2.png", // ӨЗГӨРТҮҢҮЗ
+        fullDescription: "Экинчи тоют темасы: тооктор үчүн даяр тоюттар жана алардын түрлөрү. Бул бөлүмдө базардагы ар кандай даяр тоюттардын курамы, артыкчылыктары жана кемчиликтери талкууланат. "
+                       "Туура тоютту кантип тандоо керектиги боюнча кеңештер берилет. "
+                       + "Бул текст дагы жылдырууну камсыз кылуу максатында узартылды. " * 11
+                       + "\n\nКошумча маалыматтар үчүн дагы бир абзац. "
+                       + "The quick brown fox jumps over the lazy dog. " * 9
       ),
       TopicListItemModel(
-        id: 'chicken_feeding_topic_2',
-        imagePath: 'assets/images/chicken_feed_topic2.png', 
-        title: 'Кошумча азыктар',
-        description: 'Витаминдер, минералдар жана башка кошумчалар.',
-        fullDescription: 'Тооктордун жумуртка туушун жана ден соолугун жакшыртуу үчүн кошумча азыктар.'
+        id: 'chicken_feed_topic_3',
+        title: "Үй шартында тоют даярдоо",
+        description: "Өз алдынча тоют аралашмаларын даярдоо ыкмалары.",
+        imagePath: "assets/images/chicken_topic3.png", // ӨЗГӨРТҮҢҮЗ
+        fullDescription: "Үчүнчү тоют темасы: үй шартында тоют даярдоо. Бул жерде өз алдынча тоют аралашмаларын даярдоонун рецепттери жана ыкмалары келтирилет. "
+                       "Кайсы ингредиенттерди колдонуу керектиги жана алардын пропорциялары жөнүндө маалымат берилет. "
+                       + "Экранга батпай, жылдырууга мүмкүнчүлүк түзүү үчүн бул текст да атайылап узартылды. " * 10
+                       + "\n\nАкыркы абзац, дагы бир аз текст. "
+                       + "Many hands make light work. " * 8
       ),
     ];
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black),
-          onPressed: () => GoRouter.of(context).go(RouteNames.chicken), 
+    return CategoryScreen(
+      title: categoryTitle,
+      bannerImagePath: bannerImagePath,
+      bannerDescription: bannerDescription,
+      topics: feedingTopics,
+      actions: const [ // AppBar'га AppLogo кошуу
+        Padding(
+          padding: EdgeInsets.only(right: Sizes.paddingL),
+          child: AppLogo(),
         ),
-        title: Text(
-          categoryTitle,
-          style: const TextStyle(
-            color: Colors.black,
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        centerTitle: true,
-        actions: const [
-          Padding(
-            padding: EdgeInsets.only(right: Sizes.paddingL),
-            child: AppLogo(),
-          ),
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: Sizes.paddingL),
-        child: ListView( 
-          children: [
-            const SizedBox(height: 24),
-            const Align( 
-              alignment: Alignment.centerLeft,
-              child: Text(
-                "Тема",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-            ),
-            const SizedBox(height: 12),
-            if (feedingTopics.isNotEmpty)
-              _buildLargeTopicCard(context, feedingTopics.first),
-            
-            const SizedBox(height: 16), 
-            
-            if (feedingTopics.length > 1)
-              ...feedingTopics.skip(1).map((topic) { 
-                return _buildSmallTopicCard(
-                  context: context,
-                  topic: topic,
-                );
-              }),
-            const SizedBox(height: 20), 
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildLargeTopicCard(BuildContext context, TopicListItemModel topic) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20.0),
-      ),
-      elevation: 2,
-      margin: const EdgeInsets.only(bottom: 0),
-      child: InkWell(
-        onTap: () => _navigateToTopic(context, topic),
-        borderRadius: BorderRadius.circular(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ClipRRect(
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(20.0),
-                topRight: Radius.circular(20.0),
-              ),
-              child: Image.asset(
-                topic.imagePath,
-                width: double.infinity,
-                height: 180,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) => Container(
-                  height: 180,
-                  color: Colors.grey[200],
-                  child: const Center(child: Icon(Icons.broken_image, size: 50, color: Colors.grey)),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Text(
-                topic.description,
-                style: TextStyle(fontSize: 14, color: Colors.grey[700]),
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSmallTopicCard({
-    required BuildContext context,
-    required TopicListItemModel topic,
-  }) {
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: 8.0),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20.0),
-      ),
-      elevation: 2,
-      child: InkWell(
-        onTap: () => _navigateToTopic(context, topic),
-        borderRadius: BorderRadius.circular(20.0),
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Row(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(12.0),
-                child: Image.asset( 
-                  topic.imagePath,
-                  width: 60,
-                  height: 60,
-                  fit: BoxFit.cover,
-                   errorBuilder: (context, error, stackTrace) => Container(
-                    width: 60, height: 60,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      borderRadius: BorderRadius.circular(12.0),
-                    ),
-                    child: Icon(Icons.broken_image, color: Colors.grey[400], size: 30)
-                  ),
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      topic.title,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      topic.description,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey[700],
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  void _navigateToTopic(BuildContext context, TopicListItemModel topic) {
-    GoRouter.of(context).pushNamed(
-      RouteNames.topicDetail,
-      extra: {'topic': topic, 'currentIndex': widget.bottomBarCurrentIndex},
+      ],
     );
   }
 }

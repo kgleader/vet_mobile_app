@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vet_mobile_app/config/constants/sizes.dart';
 import 'package:vet_mobile_app/config/router/route_names.dart';
+import 'package:vet_mobile_app/core/app_colors.dart';
 import 'package:vet_mobile_app/data/models/topic_list_item_model.dart';
 import 'package:vet_mobile_app/core/app_logo.dart';
 
@@ -45,7 +46,7 @@ class _ChickenScreenState extends State<ChickenScreen> {
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black),
+          icon: const Icon(Icons.arrow_back, color: AppColors.primary),
           onPressed: () => GoRouter.of(context).go(RouteNames.menu),
         ),
         title: Text(
@@ -85,8 +86,8 @@ class _ChickenScreenState extends State<ChickenScreen> {
                     borderRadius: BorderRadius.circular(100), 
                     child: Image.asset(
                       'assets/images/chicken_banner.png', 
-                      width: 180, 
-                      height: 180,
+                      width: 160, 
+                      height: 160,
                       fit: BoxFit.cover,
                        errorBuilder: (context, error, stackTrace) => Container(
                         width: 180, height: 180, color: Colors.grey[200],
@@ -103,7 +104,7 @@ class _ChickenScreenState extends State<ChickenScreen> {
               int idx = entry.key;
               TopicListItemModel topic = entry.value;
               return Padding(
-                padding: const EdgeInsets.only(bottom: 12.0), 
+                padding: const EdgeInsets.only(bottom: 12.0),
                 child: Center(
                   child: _buildTopicButton(
                     context: context,
@@ -115,11 +116,13 @@ class _ChickenScreenState extends State<ChickenScreen> {
                       setState(() {
                         selectedButtonIndex = idx;
                       });
+                      // НАВИГАЦИЯ ЛОГИКАСЫ
                       if (topic.id == 'chicken_feeding') {
                         GoRouter.of(context).pushNamed(RouteNames.chickenFeeding);
                       } else if (topic.id == 'chicken_diseases') {
                         GoRouter.of(context).pushNamed(RouteNames.chickenDiseases);
                       }
+                      // Башка темалар үчүн да ушундай шарттарды кошсоңуз болот
                     },
                   ),
                 ),

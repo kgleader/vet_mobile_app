@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vet_mobile_app/config/constants/sizes.dart';
 import 'package:vet_mobile_app/config/router/route_names.dart';
+import 'package:vet_mobile_app/core/app_colors.dart';
 import 'package:vet_mobile_app/data/models/topic_list_item_model.dart';
 import 'package:vet_mobile_app/core/app_logo.dart';
 
@@ -52,7 +53,7 @@ class _SheepGoatsScreenState extends State<SheepGoatsScreen> {
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black),
+          icon: const Icon(Icons.arrow_back, color: AppColors.primary),
           onPressed: () => GoRouter.of(context).go(RouteNames.menu),
         ),
         title: Text(

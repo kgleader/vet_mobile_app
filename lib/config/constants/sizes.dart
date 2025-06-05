@@ -25,7 +25,7 @@ class Sizes {
   //
   static const double loaderSize = 24.0;
   static const double loaderWidth = 2.0;
-  static const double borderRadius = 30.0;
+  static const double borderRadius = 35.0;
   static const double borderRadiusS = 4.0;
 
 
@@ -48,6 +48,7 @@ class Sizes {
   static const double paddingL = 24.0;
   static const double paddingXL = 32.0;
   static const double padding = 24.0;
+  static const double paddingXS = 4.0; // Define "extra small" padding
 
   static const double cardRadius = 20.0;
   static const double cardPadding = 16.0;
@@ -55,4 +56,10 @@ class Sizes {
   static const double bottomBarHeight = 100;
   static const double bottomBarIconSize = 28;
 
+  // Additional border radius
+  static const double borderRadiusM = 12.0;
+
+  // Additional icon sizes
+  static const double iconSizeS = 16.0;
+  static const double iconSizeM = 24.0;
 }

@@ -20,8 +20,6 @@ class RouteNames {
   static const String horseInsemination = '/horse-insemination';
 
   static const String chickenScreen = '/menu/chicken';
-  static const String chickenFeeding = '/chicken/feeding';
-  static const String chickenDiseases = '/chicken/diseases';
 
   static const String profile = '/profile';
   static const String resetPassword = '/resetPassword';
@@ -35,4 +33,9 @@ class RouteNames {
   static const String vetInfo = '/vetInfo';
   static const String vetMessageSuccess = '/vet-message-success';
   static const String vetMessageFailure = '/vet-message-failure';
+  static const String cattleFeed = 'cattle_feed'; // Мурунку
+  static const String cattleDiseases = 'cattle_diseases'; // Мурунку
+  static const String cattleInsemination = 'cattle_insemination'; // Мурунку
+  static const String chickenFeeding = 'chicken_feeding';
+  static const String chickenDiseases = 'chicken_diseases'; // Эгер мурунтан жок болсо, кошуңуз
 }
