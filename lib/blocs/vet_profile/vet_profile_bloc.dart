@@ -13,7 +13,7 @@ class VetProfileBloc extends Bloc<VetProfileEvent, VetProfileState> {
     name: 'Dr. Асанов Асан',
     specialty: 'Ветеринар',
     phone: '+996 500 112233',
-    imagePath: 'assets/images/vet_profile_man_figma.jpg', // Сиздин чыныгы сүрөт жолуңуз
+    imagePath: 'assets/images/vet_profile.png', // Сиздин чыныгы сүрөт жолуңуз
     experience: '7 жыл',
     rating: 4.9,
     about: 'Dr. Асанов Асан көп жылдан бери мал доктур болуп эмгектенет. Анын негизги адистиги - ири жана майда мүйүздүү малдарды дарылоо. Оорулардын алдын алуу жана дарылоо боюнча тажрыйбасы мол.',

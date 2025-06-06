@@ -19,7 +19,6 @@ class SplashScreen extends StatelessWidget {
       backgroundColor: Colors.white,
       body: Stack(
         children: [
-          // Волнистый фон
           Positioned(
             bottom: 0,
             left: 0,
@@ -29,7 +28,6 @@ class SplashScreen extends StatelessWidget {
               size: Size(width, height * 0.6),
             ),
           ),
-          // Картинка коровы (большая, выходит за фон)
           Positioned(
             bottom: 0,
             left: 0,
@@ -49,7 +47,6 @@ class SplashScreen extends StatelessWidget {
               children: [
                 SizedBox(height: height * 0.05),
                 SizedBox(height: height * 0.04),
-                // Кош келдиңиз текст
                 Center(
                   child: Text(
                     AppStrings.splashWelcome,
@@ -59,8 +56,7 @@ class SplashScreen extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                 ),
-                SizedBox(height: height * 0.02),
-                // Описание
+                SizedBox(height: height * 0.03),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: width * 0.1),
                   child: Text(
@@ -71,19 +67,16 @@ class SplashScreen extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                 ),
-                // Заменяем Spacer на SizedBox
-                SizedBox(height: height * 0.04),
-                // Баштоо кнопкасы
+                SizedBox(height: height * 0.05),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: Sizes.paddingXL),
                   child: CustomButton(
                     text: 'Баштоо',
                     onPressed: () => context.go(RouteNames.login),
-                    type: ButtonType.primary, // Указываем тип кнопки
+                    type: ButtonType.primary,
                     isLoading: false,
                   ),
                 ),
-
                 SizedBox(height: height * 0.09),
               ],
             ),
@@ -94,7 +87,6 @@ class SplashScreen extends StatelessWidget {
   }
 }
 
-// Волнистый фон
 class _SplashScreenPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {

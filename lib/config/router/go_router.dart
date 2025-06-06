@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vet_mobile_app/blocs/navigation/navigation_bloc.dart';
+import 'package:vet_mobile_app/blocs/news/news_bloc.dart';
+import 'package:vet_mobile_app/blocs/news/news_event.dart';
 import 'package:vet_mobile_app/blocs/vet_profile/vet_profile_bloc.dart';
 import 'package:vet_mobile_app/layouts/main_layout.dart';
 import 'package:vet_mobile_app/data/models/topic_list_item_model.dart';
@@ -145,8 +147,14 @@ final GoRouter router = GoRouter(
           ],
         ),
         GoRoute(
-          path: RouteNames.news, 
-          builder: (context, state) => const NewsScreen(),
+          path: '/news',
+          name: 'news_screen',
+          builder: (context, state) {
+            return BlocProvider(
+              create: (context) => NewsBloc()..add(LoadNews()),
+              child: const NewsScreen(),
+            );
+          },
         ),
         GoRoute(
           path: RouteNames.vetList, 

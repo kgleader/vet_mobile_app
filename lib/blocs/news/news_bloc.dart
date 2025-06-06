@@ -1,46 +1,53 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:vet_mobile_app/blocs/news/news_event.dart';
 import 'package:vet_mobile_app/blocs/news/news_state.dart';
-import 'package:vet_mobile_app/data/models/news_item_model.dart';
+import 'package:vet_mobile_app/data/models/news_article.dart'; 
 
 class NewsBloc extends Bloc<NewsEvent, NewsState> {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
   NewsBloc() : super(NewsInitial()) {
-    on<LoadNews>(_onLoadNews);
+    on<LoadNews>(_onLoadNewsFromFirestore);
+    // Башка event'тер болсо, аларды да каттаңыз
   }
 
-  FutureOr<void> _onLoadNews(LoadNews event, Emitter<NewsState> emit) async {
+  FutureOr<void> _onLoadNewsFromFirestore(LoadNews event, Emitter<NewsState> emit) async {
+    print('[NewsBloc] _onLoadNewsFromFirestore: Event received.'); // 1. Event келдиби?
     emit(NewsLoading());
+    print('[NewsBloc] _onLoadNewsFromFirestore: Emitted NewsLoading.'); // 2. NewsLoading абалы чыктыбы?
     
     try {
-      // В будущем здесь будет вызов API или Firebase
-      // Пока используем моковые данные
-      await Future.delayed(const Duration(seconds: 1)); // Имитация задержки сети
+      print('[NewsBloc] _onLoadNewsFromFirestore: Fetching from Firestore...'); // 3. Firestore'го сурам жөнөтүлдүбү?
+      final snapshot = await _firestore
+          .collection('news')
+          .orderBy('publishedDate', descending: true)
+          .get();
       
-      final news = [
-        NewsItem(
-          title: 'Ветеринардык кызматтын жаңы багыттары',
-          summary: 'Азыркы учурда ветеринардык кызмат көрсөтүүнүн жаңы ыкмалары колдонулууда.',
-          imageUrl: 'assets/images/horse_topic1.png', // Using local image
-          date: '20.05.2023',
-        ),
-        NewsItem(
-          title: 'Малдарды эмдөө боюнча кампания башталды',
-          summary: 'Бул жылдагы эмдөө иш-чаралары башталды. Бардык фермерлерге катышуу сунушталат.',
-          imageUrl: 'assets/images/disease_topic1.jpg', // Using local image
-          date: '15.05.2023',
-        ),
-        NewsItem(
-          title: 'Жайыт чарбасын туура башкаруу',
-          summary: 'Жайыттарды туура пайдалануу боюнча жаңы сунуштар чыкты.',
-          imageUrl: 'assets/images/feed_topic1.jpg', // Using local image
-          date: '10.05.2023',
-        ),
-      ];
+      print('[NewsBloc] _onLoadNewsFromFirestore: Firestore snapshot received. Docs count: ${snapshot.docs.length}'); // 4. Канча документ келди?
+
+      if (snapshot.docs.isEmpty) {
+        print('[NewsBloc] _onLoadNewsFromFirestore: No documents found. Emitting NewsLoaded with empty list.');
+        emit(const NewsLoaded([]));
+        return;
+      }
       
-      emit(NewsLoaded(news));
-    } catch (e) {
-      emit(NewsError('Жаңылыктарды жүктөөдө ката кетти: $e'));
+      final articles = snapshot.docs.map((doc) {
+        print('[NewsBloc] _onLoadNewsFromFirestore: Mapping doc ID: ${doc.id}'); // Ар бир документти текшерүү
+        return NewsArticle.fromFirestore(doc.data() as Map<String, dynamic>, doc.id);
+      }).toList();
+      
+      print('[NewsBloc] _onLoadNewsFromFirestore: Articles mapped. Count: ${articles.length}. Emitting NewsLoaded.');
+      emit(NewsLoaded(articles)); // 5. NewsLoaded абалы маалыматтар менен чыктыбы?
+    } catch (e, stackTrace) { // stackTrace'ти да кармоо
+      print('[NewsBloc] _onLoadNewsFromFirestore: ERROR - $e'); // 6. Ката кеттиби?
+      print('[NewsBloc] _onLoadNewsFromFirestore: StackTrace - $stackTrace'); // StackTrace'ти да чыгаруу
+      if (e is FirebaseException) {
+        emit(NewsError('Firebase катасы: ${e.message} (код: ${e.code})'));
+      } else {
+        emit(NewsError('Жаңылыктарды жүктөөдө белгисиз ката кетти: $e'));
+      }
     }
   }
 }
