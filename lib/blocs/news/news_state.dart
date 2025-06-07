@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'package:vet_mobile_app/data/models/news_article.dart';
-import 'package:vet_mobile_app/data/models/news_item_model.dart';
 
 abstract class NewsState extends Equatable {
   const NewsState(); // Add const here

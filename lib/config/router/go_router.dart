@@ -47,24 +47,22 @@ final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
 final GlobalKey<NavigatorState> _shellNavigatorKey = GlobalKey<NavigatorState>();
 
 final GoRouter router = GoRouter(
-  initialLocation: RouteNames.splash,
-  navigatorKey: _rootNavigatorKey,
-  debugLogDiagnostics: true,
+  initialLocation: '/splash', 
   routes: [
     GoRoute(
-      path: RouteNames.splash,
+      path: '/splash',
       builder: (context, state) => const SplashScreen(),
     ),
     GoRoute(
-      path: RouteNames.login,
+      path: '/login',
       builder: (context, state) => const LoginScreen(),
     ),
     GoRoute(
-      path: RouteNames.register,
+      path: '/register',
       builder: (context, state) => const RegisterScreen(),
     ),
     GoRoute(
-      path: RouteNames.forgotPassword,
+      path: '/forgotPassword',
       builder: (context, state) => const ForgotPasswordScreen(),
     ),
     
@@ -76,7 +74,7 @@ final GoRouter router = GoRouter(
       ),
       routes: [
         GoRoute(
-          path: RouteNames.menu, 
+          path: '/menu', 
           builder: (context, state) => const MenuScreen(),
           routes: [
             GoRoute(
@@ -148,11 +146,17 @@ final GoRouter router = GoRouter(
         ),
         GoRoute(
           path: '/news',
-          name: 'news_screen',
+          name: 'news_screen', // Же RouteNames.newsScreen
           builder: (context, state) {
+            // БУЛ PRINT ЧЫГЫШЫ КЕРЕK
+            print('[GoRouter] >>> Building /news route with BlocProvider.'); 
             return BlocProvider(
-              create: (context) => NewsBloc()..add(LoadNews()),
-              child: const NewsScreen(),
+              create: (context) {
+                // БУЛ PRINT ДА ЧЫГЫШЫ КЕРЕК
+                print('[GoRouter] >>> Creating NewsBloc instance and adding LoadNews event.'); 
+                return NewsBloc()..add(LoadNews());
+              },
+              child: const NewsScreen(), // Бул /lib/screens/menu/news_screen.dart'ка шилтеме кылышы керек
             );
           },
         ),
@@ -291,4 +295,5 @@ final GoRouter router = GoRouter(
       builder: (context, state) => const VetMessageFailureScreen(),
     ),
   ],
+  // errorBuilder: (context, state) => ErrorScreen(error: state.error), // Ката экраны
 );
