@@ -75,9 +75,12 @@ class _NewsScreenState extends State<NewsScreen> {
                       context,
                       article: featuredArticle, // NewsArticle объектисин берүү
                       onReadMore: () {
-                        print("Кеңирирээк басылды - негизги жаңылык: ${featuredArticle.title}");
-                        // TODO: Жаңылыктын толук бетине өтүү
-                        // context.push('${RouteNames.newsDetail}/${featuredArticle.id}');
+                        // Жаңылыктын толук бетине өтүү
+                        if (featuredArticle.id.isNotEmpty) { // ID бар экенин текшерүү
+                          context.push('/news/${featuredArticle.id}'); 
+                        } else {
+                          print("Error: featuredArticle.id is empty, cannot navigate.");
+                        }
                       },
                     ),
                   const SizedBox(height: 24),
@@ -91,9 +94,12 @@ class _NewsScreenState extends State<NewsScreen> {
                           context,
                           article: article, // NewsArticle объектисин берүү
                           onTap: () {
-                            print("Блог басылды: ${article.title}");
-                            // TODO: Блогдун толук бетине өтүү
-                            // context.push('${RouteNames.blogDetail}/${article.id}');
+                            // Блогдун толук бетине өтүү
+                            if (article.id.isNotEmpty) { // ID бар экенин текшерүү
+                              context.push('/news/${article.id}');
+                            } else {
+                              print("Error: article.id is empty, cannot navigate.");
+                            }
                           },
                         )).toList(),
                   ]
@@ -232,7 +238,7 @@ class _NewsScreenState extends State<NewsScreen> {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(8.0),
                   child: Image.asset( // Жергиликтүү демейки сүрөт
-                    'assets/images/news_topic1.png', // Мисал, бул сүрөт бар болушу керек
+                    'assets/images/news_topic2.png', // Мисал, бул сүрөт бар болушу керек
                     width: 80, height: 80, fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) => Container(width: 80, height: 80, color: Colors.grey[200], child: const Icon(Icons.image_not_supported, size: 30, color: Colors.grey)),
                   ),

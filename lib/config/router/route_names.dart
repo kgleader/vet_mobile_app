@@ -1,3 +1,4 @@
+// Бул файл колдонмодогу бардык каттамдардын (routes) аталыштарын туруктуу саптар (constants) катары аныктайт.
 class RouteNames {
   static const String splash = '/splash';
   static const String login = '/login';
@@ -26,6 +27,7 @@ class RouteNames {
   static const String settings = '/settings';
   static const String editProfileScreen = '/editProfile';
   static const String news = '/news';
+  static const String newsDetail = 'newsDetail'; // Added for the news detail route name
   static const String topicDetail = '/topicDetail';
   static const String home = '/menu';  
   static const String vetList = '/vetList';
@@ -37,5 +39,5 @@ class RouteNames {
   static const String cattleDiseases = 'cattle_diseases'; // Мурунку
   static const String cattleInsemination = 'cattle_insemination'; // Мурунку
   static const String chickenFeeding = 'chicken_feeding';
-  static const String chickenDiseases = 'chicken_diseases'; // Эгер мурунтан жок болсо, кошуңуз
+  static const String chickenDiseases = 'chicken_diseases'; 
 }

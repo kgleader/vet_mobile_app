@@ -1,3 +1,4 @@
+// Бул файл "Кой эчкилер" категориясына тиешелүү маалыматты (тоюттандыруу, оорулар, уруктандыруу) көрсөтүүчү экранды аныктайт.
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
@@ -161,7 +162,7 @@ class _SheepGoatsScreenState extends State<SheepGoatsScreen> {
               GoRouter.of(context).pushNamed(RouteNames.sheepFeeding);
             } else if (topic.id == 'goats_diseases') {
               GoRouter.of(context).pushNamed(RouteNames.sheepDiseases);
-            } else if (topic.id == 'goats_insemination') { // "Уруктандыруу" үчүн шарт
+            } else if (topic.id == 'goats_insemination') { 
               GoRouter.of(context).pushNamed(RouteNames.sheepInsemination);
             } else {
               _navigateToTopic(context, topic);
@@ -232,7 +233,7 @@ class _SheepGoatsScreenState extends State<SheepGoatsScreen> {
   void _navigateToTopic(BuildContext context, TopicListItemModel topic) {
     GoRouter.of(context).pushNamed(
       RouteNames.topicDetail,
-      extra: {'topic': topic, 'currentIndex': widget.bottomBarCurrentIndex}, // widget.bottomBarCurrentIndex колдонуу
+      extra: {'topic': topic, 'currentIndex': widget.bottomBarCurrentIndex}, 
     );
   }
 }

@@ -1,3 +1,4 @@
+// This file is the main entry point of the application. It initializes Firebase, sets up the main app widget, and configures routing, theming, and localization.
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';

@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:vet_mobile_app/core/app_colors.dart';
 import 'package:vet_mobile_app/config/router/route_names.dart'; // Бул импорт бар экенин текшериңиз
 import 'package:vet_mobile_app/data/firebase/auth_service.dart'; // AuthService импорту
+import 'dart:convert'; // Base64 декоддоо үчүн
 
 // For date formatting and age calculation
 class ProfileScreen extends StatefulWidget {
@@ -141,16 +142,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         padding: const EdgeInsets.all(0), // Removed default ListView padding
                         children: [
                           const SizedBox(height: 24), // Space from AppBar
-                          CircleAvatar(
-                            radius: 50,
-                            backgroundColor: Colors.grey.shade200, // Placeholder background
-                            backgroundImage: avatarUrl != null && avatarUrl.isNotEmpty
-                                ? NetworkImage(avatarUrl)
-                                : null,
-                            child: avatarUrl == null || avatarUrl.isEmpty
-                                ? const Icon(Icons.person, size: 60, color: AppColors.primary) // Placeholder icon
-                                : null,
-                          ),
+                          _buildAvatar(), // Avatar
                           const SizedBox(height: 16),
                           Text(
                             _userData!['fullName'] ?? 'Аты-жөнү жок',
@@ -240,6 +232,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ],
                       ),
                     ),
+    );
+  }
+
+  // profile_screen.dart ичиндеги _buildAvatar() методун өзгөртүү
+  Widget _buildAvatar() {
+    if (_userData != null) {
+      if (_userData!['avatarBase64'] != null && _userData!['avatarBase64'].isNotEmpty) {
+        try {
+          final bytes = base64Decode(_userData!['avatarBase64']);
+          return CircleAvatar(
+            radius: 40,
+            backgroundImage: MemoryImage(bytes),
+          );
+        } catch (e) {
+          print('Base64 image decode error: $e');
+        }
+      } else if (_userData!['avatarUrl'] != null && _userData!['avatarUrl'].isNotEmpty) {
+        return CircleAvatar(
+          radius: 40,
+          backgroundImage: NetworkImage(_userData!['avatarUrl']),
+        );
+      }
+    }
+
+    // Default avatar
+    return CircleAvatar(
+      radius: 40,
+      backgroundColor: Colors.grey.shade200,
+      child: const Icon(Icons.person, size: 40, color: AppColors.primary),
     );
   }
 

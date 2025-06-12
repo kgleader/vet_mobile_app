@@ -1,25 +1,28 @@
+// Бул файл GoRouter пакетин колдонуп, колдонмонун навигация логикасын жана каттамдарын (routes) аныктайт.
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:vet_mobile_app/blocs/navigation/navigation_bloc.dart';
-import 'package:vet_mobile_app/blocs/news/news_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vet_mobile_app/blocs/news/news_event.dart';
 import 'package:vet_mobile_app/blocs/vet_profile/vet_profile_bloc.dart';
 import 'package:vet_mobile_app/layouts/main_layout.dart';
-import 'package:vet_mobile_app/data/models/topic_list_item_model.dart';
+import 'package:vet_mobile_app/screens/auth/forgot_password_screen.dart';
 import 'package:vet_mobile_app/screens/auth/login_screen.dart';
 import 'package:vet_mobile_app/screens/auth/register_screen.dart';
-import 'package:vet_mobile_app/screens/auth/forgot_password_screen.dart';
+import 'package:vet_mobile_app/screens/menu/chicken_diseases_screen.dart';
+import 'package:vet_mobile_app/screens/menu/chicken_feeding_screen.dart';
+import 'package:vet_mobile_app/screens/menu/horse_diseases_screen.dart';
+import 'package:vet_mobile_app/screens/menu/horse_feeding_screen.dart';
+import 'package:vet_mobile_app/screens/news/news_detail.dart';
+import 'package:vet_mobile_app/screens/splash/splash_screen.dart';
 import 'package:vet_mobile_app/screens/auth/reset_password_screen.dart';
 import 'package:vet_mobile_app/screens/menu/about_us.dart';
 import 'package:vet_mobile_app/screens/menu/cattle_diseases_screen.dart';
 import 'package:vet_mobile_app/screens/menu/cattle_insemination_screen.dart';
 import 'package:vet_mobile_app/screens/menu/feed_screen.dart';
 import 'package:vet_mobile_app/screens/menu/menu_screen.dart';
-import 'package:vet_mobile_app/screens/menu/news_screen.dart';
+import 'package:vet_mobile_app/screens/news/news_screen.dart';
 import 'package:vet_mobile_app/screens/profile/edit_profile_screen.dart';
 import 'package:vet_mobile_app/screens/settings_screen.dart';
-import 'package:vet_mobile_app/screens/splash/splash_screen.dart';
 import 'package:vet_mobile_app/screens/profile/profile_screen.dart' as profile;
 import 'package:vet_mobile_app/config/router/route_names.dart';
 import 'package:vet_mobile_app/screens/menu/topic_detail_screen.dart';
@@ -36,14 +39,12 @@ import 'package:vet_mobile_app/screens/vet/veterinar_screen.dart';
 import 'package:vet_mobile_app/screens/vet/vet_message.dart';
 import 'package:vet_mobile_app/screens/vet/vet_message_success_screen.dart';
 import 'package:vet_mobile_app/screens/vet/vet_message_failure_screen.dart';
+import 'package:vet_mobile_app/blocs/news/news_bloc.dart';
+import 'package:vet_mobile_app/blocs/navigation/navigation_bloc.dart';
+import 'package:vet_mobile_app/data/models/topic_list_item_model.dart';
 import 'package:vet_mobile_app/data/models/vet_model.dart';
-import 'package:vet_mobile_app/screens/menu/horse_feeding_screen.dart';
-import 'package:vet_mobile_app/screens/menu/horse_diseases_screen.dart';
-import 'package:vet_mobile_app/screens/menu/chicken_feeding_screen.dart';
-import 'package:vet_mobile_app/screens/menu/chicken_diseases_screen.dart';
 
 
-final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
 final GlobalKey<NavigatorState> _shellNavigatorKey = GlobalKey<NavigatorState>();
 
 final GoRouter router = GoRouter(
@@ -294,6 +295,16 @@ final GoRouter router = GoRouter(
       path: RouteNames.vetMessageFailure,
       builder: (context, state) => const VetMessageFailureScreen(),
     ),
+    // GoRoute for news detail screen
+    GoRoute(
+  path: '/news/:articleId', // Же сиздин newsDetail үчүн жолуңуз
+  name: RouteNames.newsDetail,
+  builder: (BuildContext context, GoRouterState state) {
+    final String? articleId = state.pathParameters['articleId'];
+    // articleId'ни NewsDetail экранына өткөрүп берүү
+    return NewsDetail(articleId: articleId ?? 'default_id_or_error');
+  },
+),
   ],
   // errorBuilder: (context, state) => ErrorScreen(error: state.error), // Ката экраны
 );

@@ -1,33 +1,75 @@
+/**
+ * Firebase Authentication Service
+ * 
+ * This file contains logic for working with Firebase authentication services including:
+ * - Google Sign-In
+ * - Email/password registration and login
+ * - Password reset functionality
+ * - Profile data management
+ * - User logout
+ */
 import 'dart:io';
-
+import 'dart:async';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  // Lazy initialize GoogleSignIn only when needed
+  GoogleSignIn? _googleSignIn;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  
+  // Check if running in web mode
+  bool get _isWeb => kIsWeb;
 
   Future<UserCredential?> signInWithGoogle() async {
     try {
-      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-      
-      if (googleUser == null) {
-        return null; 
-      }
-      
-      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-      
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
+      // Initialize GoogleSignIn with web client ID if on web platform
+      _googleSignIn ??= GoogleSignIn(
+        // Optional: Specify scopes if needed
+        scopes: ['email', 'profile'],
       );
       
-      UserCredential userCredential = await _auth.signInWithCredential(credential);
-      return userCredential;
+      if (_isWeb) {
+        // Web-specific sign-in flow
+        final GoogleSignInAccount? googleUser = await _googleSignIn?.signIn();
+        
+        if (googleUser == null) {
+          return null;
+        }
+        
+        final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+        
+        final credential = GoogleAuthProvider.credential(
+          accessToken: googleAuth.accessToken,
+          idToken: googleAuth.idToken,
+        );
+        
+        UserCredential userCredential = await _auth.signInWithCredential(credential);
+        return userCredential;
+      } else {
+        // Mobile-specific sign-in flow (unchanged)
+        final GoogleSignInAccount? googleUser = await _googleSignIn?.signIn();
+        
+        if (googleUser == null) {
+          return null; 
+        }
+        
+        final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+        
+        final credential = GoogleAuthProvider.credential(
+          accessToken: googleAuth.accessToken,
+          idToken: googleAuth.idToken,
+        );
+        
+        UserCredential userCredential = await _auth.signInWithCredential(credential);
+        return userCredential;
+      }
     } catch (e) {
-      rethrow; 
+      print('Error signing in with Google: $e');
+      rethrow;
     }
   }
 
@@ -88,26 +130,10 @@ class AuthService {
   }
 
   Future<String?> uploadProfileImage({required String userId, required File imageFile}) async {
-    // Бул функция азырынча өчүрүлгөн, null кайтарат.
+    
     return null; 
 
-    /* 
-    try {
-      String fileName = 'avatar_${DateTime.now().millisecondsSinceEpoch}.${imageFile.path.split('.').last}';
-      Reference storageRef = _storage.ref().child('profile_images/$userId/$fileName');
-      
-      UploadTask uploadTask = storageRef.putFile(imageFile);
-      
-      TaskSnapshot snapshot = await uploadTask;
-      
-      String downloadUrl = await snapshot.ref.getDownloadURL();
-      return downloadUrl;
-    } on FirebaseException catch (e) {
-      throw Exception('Сүрөттү Firebase Storage\'га жүктөөдө ката: ${e.message}');
-    } catch (e) {
-      throw Exception('Сүрөт жүктөөдө күтүлбөгөн ката.');
-    }
-    */
+    
   }
 
   Future<void> updateUserProfileData(String userId, Map<String, dynamic> data) async {
@@ -122,11 +148,11 @@ class AuthService {
 
   Future<void> signOut() async {
     try {
-      await _googleSignIn.signOut(); // Google менен кирген болсо, аны да чыгаруу
+      // Use conditional invocation to avoid null errors
+      await _googleSignIn?.signOut();
       await _auth.signOut();
     } catch (e) {
-      // Ката кетсе, аны кайра ыргытуу же иштетүү
-      // Мисалы: print("Чыгууда ката: $e");
+      print('Error during sign out: $e');
       rethrow;
     }
   }

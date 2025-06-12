@@ -1,3 +1,4 @@
+// Бул файл негизги Scaffold виджетин аныктайт, ал колдонмонун көпчүлүк экрандары үчүн негизги структураны (app bar, body) камсыздайт.
 import 'package:flutter/material.dart';
 
 class MainScaffold extends StatelessWidget {
@@ -10,7 +11,7 @@ class MainScaffold extends StatelessWidget {
   const MainScaffold({
     super.key,
     required this.body,
-    required this.currentIndex, // Must accept this parameter
+    required this.currentIndex,
     this.title = '',
     this.leading,
     this.actions,
@@ -18,8 +19,6 @@ class MainScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final Color figmaGreen = const Color(0xFF38A169); // Removed as unused
-    
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -37,7 +36,6 @@ class MainScaffold extends StatelessWidget {
       ),
       body: body,
       backgroundColor: const Color(0xFFF3F0EB),
-      // bottomNavigationBar removed - MainLayout provides it
     );
   }
 }

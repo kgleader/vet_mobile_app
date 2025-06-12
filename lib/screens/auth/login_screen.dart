@@ -1,3 +1,10 @@
+/**
+ * Login Screen
+ * 
+ * This screen handles user authentication with email/password and Google Sign-In.
+ * It provides form validation, login functionality, password reset navigation,
+ * and navigation to registration screen for new users.
+ */
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -9,7 +16,7 @@ import 'package:vet_mobile_app/core/google.dart';
 import 'package:vet_mobile_app/data/firebase/auth_service.dart';
 import 'package:vet_mobile_app/screens/auth/widgets/auth_fields.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:vet_mobile_app/config/constants/sizes.dart'; // Added this import
+import 'package:vet_mobile_app/config/constants/sizes.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen( {super.key});
@@ -20,11 +27,9 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _emailController = TextEditingController(); // _phoneController ордуна
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
-  final FirebaseAuth _auth = FirebaseAuth.instance;
   final AuthService _authService = AuthService();
   
   bool _isLoading = false;
@@ -42,9 +47,8 @@ class _LoginScreenState extends State<LoginScreen> {
     if (_formKey.currentState!.validate()) {
       setState(() => _isLoading = true);
       try {
-        // Электрондук почта жана сыр сөз менен кирүү
         final userCredential = await _authService.signInWithEmailPassword(
-          email: _emailController.text.trim(), // _phoneController ордуна _emailController
+          email: _emailController.text.trim(),
           password: _passwordController.text.trim(),
         );
 

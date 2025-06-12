@@ -1,3 +1,6 @@
+// Бул файл "Бодо мал" категориясына тиешелүү экранды аныктайт. Экранда бодо малдын сүрөтү (баннер) жана бодо малга байланыштуу
+// негизги темалар (Тоюттануусу, Оорусу, Уруктандыруу) баскычтар түрүндө көрсөтүлөт. Колдонуучу ар бир баскычты басуу менен
+// тиешелүү деталдуу маалымат баракчасына өтө алат.
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
@@ -17,7 +20,6 @@ class CattleScreen extends StatefulWidget {
 }
 
 class _CattleScreenState extends State<CattleScreen> {
-  // Индекс выбранной кнопки, -1 означает, что ни одна кнопка не выбрана
   int selectedButtonIndex = -1;
   
   @override

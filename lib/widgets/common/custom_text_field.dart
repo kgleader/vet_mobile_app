@@ -1,3 +1,4 @@
+// Бул файл жалпы колдонулуучу, кайра колдонууга ыңгайлуу текст киргизүү талаасынын (CustomTextField) виджетин аныктайт.
 import 'package:flutter/material.dart';
 import 'package:vet_mobile_app/config/constants/sizes.dart';
 import 'package:vet_mobile_app/core/app_colors.dart';

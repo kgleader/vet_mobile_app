@@ -1,8 +1,10 @@
+// Бул файл уруктандыруу боюнча жалпы экранды аныктайт. Экранда ар түрдүү малдарды (уй, кой, жылкы) 
+// уруктандыруу боюнча темалар топтому көрсөтүлөт. CategoryScreen виджетин колдонуп, контентти стандартташтырылган түрдө чагылдырат.
 import 'package:flutter/material.dart';
-import 'package:vet_mobile_app/config/constants/sizes.dart'; // AppBar actions үчүн
-import 'package:vet_mobile_app/core/app_logo.dart';      // AppBar actions үчүн
+import 'package:vet_mobile_app/config/constants/sizes.dart';
+import 'package:vet_mobile_app/core/app_logo.dart';
 import 'package:vet_mobile_app/data/models/topic_list_item_model.dart';
-import 'package:vet_mobile_app/screens/menu/category_screen.dart'; // CategoryScreen'ди импорттойбуз
+import 'package:vet_mobile_app/screens/menu/category_screen.dart';
 
 class InseminationScreen extends StatelessWidget {
   const InseminationScreen({super.key});

@@ -1,3 +1,4 @@
+// Бул файл ар кандай категориялардагы темаларды (мисалы, оорулар, тоюттандыруу) бирдиктүү стилде көрсөтүү үчүн жалпыланган экранды (CategoryScreen) аныктайт.
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';

@@ -1,7 +1,16 @@
+/**
+ * Vet Message Screen
+ * 
+ * This screen allows users to send a message to a veterinarian along with an optional
+ * image attachment. Users must provide their name, phone number and message text.
+ * The form includes validation for all fields before submission to Firestore.
+ */
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:vet_mobile_app/core/app_colors.dart';
 import 'package:vet_mobile_app/core/app_text_styles.dart';
 import 'package:vet_mobile_app/data/models/vet_model.dart';
@@ -9,6 +18,7 @@ import 'package:go_router/go_router.dart';
 import 'package:vet_mobile_app/config/router/route_names.dart';
 import 'package:vet_mobile_app/core/app_logo.dart';
 import 'package:vet_mobile_app/screens/error/four_o_four_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class VetMessage extends StatefulWidget {
   final String? vetId;
@@ -25,9 +35,13 @@ class _VetMessageState extends State<VetMessage> {
   final TextEditingController _messageController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
-  File? _image;
-  bool _isLoading = false;
   
+  // Variables to handle both web and mobile platforms
+  File? _imageFile;
+  Uint8List? _webImage;
+  bool get _hasImage => _imageFile != null || _webImage != null;
+  
+  bool _isLoading = false;
   bool _isPhoneValid = false;
   final _formKey = GlobalKey<FormState>();
 
@@ -88,7 +102,19 @@ class _VetMessageState extends State<VetMessage> {
 
     if (image != null) {
       setState(() {
-        _image = File(image.path);
+        if (kIsWeb) {
+          // Handle web platform
+          image.readAsBytes().then((value) {
+            setState(() {
+              _webImage = value;
+              _imageFile = null;
+            });
+          });
+        } else {
+          // Handle mobile platforms
+          _imageFile = File(image.path);
+          _webImage = null;
+        }
       });
     }
   }
@@ -107,6 +133,14 @@ class _VetMessageState extends State<VetMessage> {
     setState(() => _isLoading = true);
 
     try {
+      await FirebaseFirestore.instance.collection('messages').add({
+        'vetId': widget.vetId,
+        'name': _nameController.text,
+        'phone': _phoneController.text,
+        'message': _messageController.text,
+        'createdAt': FieldValue.serverTimestamp(),
+      });
+
       await Future.delayed(const Duration(seconds: 1));
 
       if (mounted) {
@@ -131,6 +165,39 @@ class _VetMessageState extends State<VetMessage> {
           )
         );
       }
+    }
+  }
+
+  // Cross-platform image display method
+  Widget _buildImageWidget() {
+    if (kIsWeb && _webImage != null) {
+      // Display image in web mode
+      return Image.memory(
+        _webImage!,
+        height: 150,
+        width: double.infinity,
+        fit: BoxFit.cover,
+      );
+    } else if (!kIsWeb && _imageFile != null) {
+      // Display image on mobile platforms
+      return Image.file(
+        _imageFile!,
+        height: 150,
+        width: double.infinity,
+        fit: BoxFit.cover,
+      );
+    } else {
+      // Fallback for any platform if there are issues
+      return Container(
+        height: 150,
+        width: double.infinity,
+        color: Colors.grey.shade200,
+        alignment: Alignment.center,
+        child: const Text(
+          'Image preview not available',
+          style: TextStyle(color: AppColors.primary),
+        ),
+      );
     }
   }
 
@@ -320,17 +387,12 @@ class _VetMessageState extends State<VetMessage> {
               ],
             ),
             
-            if (_image != null) 
+            if (_imageFile != null || _webImage != null) 
               Padding(
                 padding: const EdgeInsets.only(top: 16.0),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(12),
-                  child: Image.file(
-                    _image!,
-                    height: 150,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                  ),
+                  child: _buildImageWidget(),
                 ),
               ),
               const SizedBox(height: 32),

@@ -1,3 +1,10 @@
+/**
+ * Registration Screen
+ * 
+ * This screen handles user registration with email/password and Google Sign-In.
+ * It includes form validation for all fields including name, phone, email,
+ * and password with confirmation. Successful registration navigates to the menu screen.
+ */
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vet_mobile_app/config/constants/sizes.dart';
@@ -5,10 +12,10 @@ import 'package:vet_mobile_app/config/router/route_names.dart';
 import 'package:vet_mobile_app/core/app_colors.dart';
 import 'package:vet_mobile_app/core/app_text_styles.dart';
 import 'package:vet_mobile_app/core/custom_button.dart';
-import 'package:vet_mobile_app/core/google.dart'; // Added import for GoogleSignInButton
-import 'package:vet_mobile_app/data/firebase/auth_service.dart'; // Added import for AuthService
-import 'package:firebase_auth/firebase_auth.dart'; // Added import for FirebaseAuth
-import 'package:flutter/gestures.dart'; // Бул сапты кошуңуз
+import 'package:vet_mobile_app/core/google.dart';
+import 'package:vet_mobile_app/data/firebase/auth_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/gestures.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -21,14 +28,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
   final _fullNameController = TextEditingController();
   final _phoneController = TextEditingController();
-  final _emailController = TextEditingController(); // Кошулду
+  final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
   bool _isLoading = false;
-  bool _isGoogleLoading = false; // Added for Google Sign-In loading state
-  final AuthService _authService = AuthService(); // Added AuthService instance
+  bool _isGoogleLoading = false;
+  final AuthService _authService = AuthService();
 
   @override
   void dispose() {

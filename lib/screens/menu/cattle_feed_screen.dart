@@ -1,4 +1,6 @@
-// filepath: lib/screens/menu/cattle_feed_screen.dart
+// Бул файл бодо малдын тоюттануусу боюнча маалыматты көрсөтүүчү экранды аныктайт.
+// Экранда тоют боюнча жалпы маалымат (баннер, сүрөттөмө) жана тиешелүү темалардын тизмеси көрсөтүлөт.
+// CategoryScreen виджетин колдонуп, контентти стандартташтырылган түрдө чагылдырат.
 import 'package:flutter/material.dart';
 import 'package:vet_mobile_app/config/constants/sizes.dart';
 import 'package:vet_mobile_app/core/app_logo.dart';

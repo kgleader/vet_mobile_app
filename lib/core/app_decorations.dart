@@ -1,3 +1,4 @@
+// Бул файл колдонмо үчүн жалпы декорация (BoxDecoration, BorderRadius) функцияларын камтыйт жана темалык карточкаларды куруу методдорун аныктайт.
 import 'package:flutter/material.dart';
 import 'package:vet_mobile_app/core/app_colors.dart';
 import 'package:vet_mobile_app/data/models/topic_list_item_model.dart';
@@ -12,35 +13,33 @@ class AppDecorations {
 
   static BoxDecoration topicItemCardDecoration({required BuildContext context}) {
     return BoxDecoration(
-      color: Colors.white, // Фигмада картанын фону ак
-      borderRadius: cardBorderRadius, // Бурчтары тегеректелген бойдон калсын
+      color: Colors.white,
+      borderRadius: cardBorderRadius,
       boxShadow: [
         BoxShadow(
-          color: Colors.black.withOpacity(0.25), // 0.25 - бул 25% тунуктук. Керек болсо көбөйтүңүз.
-          spreadRadius: 0, // Көлөкөнүн жайылышы
-          blurRadius: 10,  // Көлөкөнүн бүдөмүктүгү
-          offset: const Offset(0, 4), // Көлөкөнүн жылышы (X, Y)
+          color: Colors.black.withOpacity(0.25),
+          spreadRadius: 0,
+          blurRadius: 10,
+          offset: const Offset(0, 4),
         ),
       ],
-      // border: Border.all(...), // <-- ЧЕК АЛЫНЫП САЛЫНДЫ же КОММЕНТАРИЙГЕ АЛЫНДЫ
     );
   }
 
-  // Чоң карта үчүн жасалгалоо (mainBannerCardDecoration ордуна же ага кошумча)
   static BoxDecoration largeTopicCardDecoration({required BuildContext context}) {
     return BoxDecoration(
       color: Colors.white,
-      borderRadius: cardBorderRadius, // Жалпы cardBorderRadius колдонобуз
+      borderRadius: cardBorderRadius,
       boxShadow: [
         BoxShadow(
-          color: AppColors.grey.withOpacity(0.15), // 0.25 - бул 25% тунуктук.
+          color: AppColors.grey.withOpacity(0.15),
           spreadRadius: 1,
-          blurRadius: 4, // Бир аз башкача көлөкө
+          blurRadius: 4,
           offset: const Offset(0, 2),
         ),
       ],
-      border: Border.all( // Чоң картанын чеги (мисалы, башка түс же калыңдык)
-        color: Colors.green.shade600, // Мисалы, бир аз кочкулураак жашыл
+      border: Border.all(
+        color: Colors.green.shade600,
         width: 1.5,
       ),
     );
@@ -48,17 +47,16 @@ class AppDecorations {
 
   static BoxDecoration mainBannerCardDecoration({required BuildContext context}) {
     return BoxDecoration(
-      color: Colors.white, // Темадан алгандын ордуна түз ак түс
-      borderRadius: cardBorderRadius, // Же BorderRadius.circular(12.0)
+      color: Colors.white,
+      borderRadius: cardBorderRadius,
       boxShadow: [
         BoxShadow(
-          color: Colors.black.withOpacity(0.08), // Башка карталардагыдай көлөкө
+          color: Colors.black.withOpacity(0.08),
           spreadRadius: 0,
           blurRadius: 10,
           offset: const Offset(0, 4),
         ),
       ],
-      // border: Border.all(...), // Эгер чек болсо, алып салыңыз
     );
   }
 
@@ -79,7 +77,7 @@ class AppDecorations {
           child: Row(
             children: [
               ClipRRect(
-                borderRadius: BorderRadius.circular(11.0), // Кичине сүрөттүн бурчу
+                borderRadius: BorderRadius.circular(11.0),
                 child: Image.asset(
                   topic.imagePath,
                   width: 60,
@@ -98,13 +96,13 @@ class AppDecorations {
                   children: [
                     Text(
                       topic.title,
-                      style: textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold), // Темадан стиль
+                      style: textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 4),
                     if (topic.description.isNotEmpty)
                       Text(
                         topic.description,
-                        style: textTheme.bodySmall?.copyWith(color: AppColors.grey), // Темадан стиль
+                        style: textTheme.bodySmall?.copyWith(color: AppColors.grey),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -118,7 +116,6 @@ class AppDecorations {
     );
   }
 
-  // ЖАҢЫ: Чоң картаны куруучу функция
   static Widget buildLargeTopicCard({
     required BuildContext context,
     required TopicListItemModel topic,
@@ -127,15 +124,15 @@ class AppDecorations {
     final textTheme = Theme.of(context).textTheme;
     return Container(
       margin: const EdgeInsets.only(bottom: 16.0),
-      decoration: AppDecorations.largeTopicCardDecoration(context: context), // Чоң карта үчүн жасалгалоо
+      decoration: AppDecorations.largeTopicCardDecoration(context: context),
       child: InkWell(
         onTap: onTap,
-        borderRadius: AppDecorations.cardBorderRadius, // Жалпы cardBorderRadius
+        borderRadius: AppDecorations.cardBorderRadius,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ClipRRect(
-              borderRadius: AppDecorations.largeCardImageBorderRadius, // Чоң сүрөттүн бурчу
+              borderRadius: AppDecorations.largeCardImageBorderRadius,
               child: Image.asset(
                 topic.imagePath,
                 width: double.infinity,
@@ -154,7 +151,7 @@ class AppDecorations {
                 padding: const EdgeInsets.all(12.0),
                 child: Text(
                   topic.description,
-                  style: textTheme.bodyMedium?.copyWith(color: AppColors.grey), // Темадан стиль
+                  style: textTheme.bodyMedium?.copyWith(color: AppColors.grey),
                   maxLines: 3,
                   overflow: TextOverflow.ellipsis,
                 ),

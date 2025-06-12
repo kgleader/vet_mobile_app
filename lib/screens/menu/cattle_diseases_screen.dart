@@ -1,4 +1,6 @@
-// filepath: lib/screens/menu/cattle_diseases_screen.dart
+// Бул файл бодо малдын оорулары жана дарылоо маалыматын көрсөтүүчү экранды аныктайт.
+// Экранда оорулар боюнча жалпы маалымат (баннер, сүрөттөмө) жана конкреттүү оору темаларынын тизмеси көрсөтүлөт.
+// CategoryScreen виджетин колдонуп, контентти стандартташтырылган түрдө чагылдырат.
 import 'package:flutter/material.dart';
 import 'package:vet_mobile_app/config/constants/sizes.dart';
 import 'package:vet_mobile_app/core/app_logo.dart';

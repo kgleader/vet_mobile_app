@@ -1,3 +1,4 @@
+// Бул файл аутентификация формаларында колдонулуучу текст киргизүү талааларын (телефон, сыр сөз, email, сыр сөздү ырастоо) аныктайт.
 import 'package:flutter/material.dart';
 import 'package:vet_mobile_app/config/constants/sizes.dart';
 import 'package:vet_mobile_app/core/app_colors.dart';

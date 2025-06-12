@@ -1,3 +1,4 @@
+// Бул файл "Кой эчкилердин оорулары" категориясына тиешелүү маалыматты көрсөтүүчү экранды аныктайт. Ал CategoryScreen виджетин колдонуп, темалардын тизмесин, баннерди жана башка элементтерди көрсөтөт.
 import 'package:flutter/material.dart';
 import 'package:vet_mobile_app/config/constants/sizes.dart';
 import 'package:vet_mobile_app/core/app_logo.dart';

@@ -1,9 +1,14 @@
+// This file contains the Settings screen for the Veterinary Mobile App.
+// It allows users to navigate to edit profile, change password, and sign out.
+// The screen provides a clean and consistent interface for managing user settings.
+
 import 'package:flutter/material.dart';
 import 'package:vet_mobile_app/core/app_colors.dart';
 import 'package:vet_mobile_app/core/app_text_styles.dart';
 import 'package:vet_mobile_app/config/constants/sizes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vet_mobile_app/config/router/route_names.dart';
+import 'package:vet_mobile_app/data/firebase/auth_service.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -29,13 +34,6 @@ class SettingsScreen extends StatelessWidget {
         children: [
           _buildSettingItem(
             context,
-            icon: Icons.language,
-            title: 'Тил',
-            subtitle: 'Кыргыз тили',
-            onTap: () {}, // TODO: реализовать выбор языка
-          ),
-          _buildSettingItem(
-            context,
             icon: Icons.edit_outlined,
             title: 'Профилди оңдоо',
             onTap: () => context.go(RouteNames.editProfileScreen),          ),
@@ -43,22 +41,28 @@ class SettingsScreen extends StatelessWidget {
             context,
             icon: Icons.lock_outline,
             title: 'Сыр сөздү өзгөртүү',
-            onTap: () {}, // TODO: реализовать смену пароля
+            onTap: () => context.go(RouteNames.forgotPassword),
           ),
-          _buildSettingItem(
-            context,
-            icon: Icons.info_outline,
-            title: 'Тиркеме жөнүндө',
-            onTap: () {}, // TODO: реализовать инфо о приложении
-          ),
+          
           _buildSettingItem(
             context,
             icon: Icons.exit_to_app,
             title: 'Чыгуу',
             color: Colors.red,
-            onTap: () {
-              // TODO: реализовать выход из аккаунта
-              // AuthService().signOut().then((_) => context.go(RouteNames.login));
+            onTap: () async {
+              try {
+                final authService = AuthService();
+                await authService.signOut();
+                if (context.mounted) {
+                  context.go(RouteNames.login);
+                }
+              } catch (e) {
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Чыгууда ката кетти: $e')),
+                  );
+                }
+              }
             },
           ),
         ],

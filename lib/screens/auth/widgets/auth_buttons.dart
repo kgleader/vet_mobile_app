@@ -1,3 +1,6 @@
+// Бул файл аутентификацияга байланыштуу баскычтарды 
+//(кирүү, катталуу, сыр сөздү калыбына келтирүү) 
+//түзүү үчүн жардамчы классты камтыйт.
 import 'package:flutter/material.dart';
 import 'package:vet_mobile_app/core/custom_button.dart';
 

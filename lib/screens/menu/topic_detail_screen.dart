@@ -1,3 +1,14 @@
+// Бул файл тандалган теманын (мисалы, оору, тоют ж.б.) толук маалыматын көрсөтүүчү экранды аныктайт.
+// Экранда теманын аталышы, сүрөтү (эгер бар болсо) жана толук сүрөттөмөсү көрсөтүлөт.
+// Колдонуучу артка кайтуу баскычы аркылуу мурунку экранга кайта алат.
+//
+// Негизги колдонулган элементтер:
+// - Виджеттер: TopicDetailScreen (StatelessWidget).
+// - UI куруу: build() методу Scaffold, AppBar, теманын сүрөтү (Image.asset), аталышы (Text) жана толук сүрөттөмөсүн (Text) камтыйт.
+// - Маалымат өткөрүү: Конструктор аркылуу TopicListItemModel объектиси жана bottomBarCurrentIndex кабыл алынат.
+// - Навигация: GoRouter.of(context).pop() аркылуу артка кайтуу.
+// - Макет виджеттери: Scaffold, AppBar, SingleChildScrollView, Padding, Column, ClipRRect, Image.asset, SizedBox, Text.
+// - Стилдештирүү: Theme.of(context).textTheme (headlineSmall, bodyLarge), TextStyle, AppColors.
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vet_mobile_app/config/constants/sizes.dart';

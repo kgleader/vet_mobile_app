@@ -1,14 +1,10 @@
+// Бул файл "Кой эчкилерди уруктандыруу" категориясына тиешелүү маалыматты көрсөтүүчү экранды аныктайт. Ал CategoryScreen виджетин колдонуп, темалардын тизмесин, баннерди жана башка элементтерди көрсөтөт.
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart'; // Бул эми _navigateToTopic үчүн керек болбой калышы мүмкүн
 import 'package:vet_mobile_app/config/constants/sizes.dart';
-import 'package:vet_mobile_app/config/router/route_names.dart'; // Бул эми _navigateToTopic үчүн керек болбой калышы мүмкүн
-import 'package:vet_mobile_app/core/app_colors.dart'; // Артка кайтуу баскычы үчүн керек болбой калышы мүмкүн
-import 'package:vet_mobile_app/core/app_decorations.dart'; // Түздөн-түз бул экранда колдонулбайт
 import 'package:vet_mobile_app/data/models/topic_list_item_model.dart';
 import 'package:vet_mobile_app/core/app_logo.dart';
-import 'package:vet_mobile_app/screens/menu/category_screen.dart'; // CategoryScreen импорту
+import 'package:vet_mobile_app/screens/menu/category_screen.dart';
 
-// _inseminationTopics тизмеси өзгөрүүсүз калат
 final List<TopicListItemModel> _inseminationTopics = [
   TopicListItemModel(
     id: 'insemination_large_topic',
@@ -63,7 +59,7 @@ final List<TopicListItemModel> _inseminationTopics = [
     id: 'insemination_small_topic_3',
     imagePath: 'assets/images/sheep_topic3.png',
     title: 'Бооз мезгили',
-    description: 'Кой эчкилердин уруктануусу', // Бул description мурда бош болчу, эми мааниси бар
+    description: 'Кой эчкилердин уруктануусу', 
     fullDescription: '''
 Койлордун бооз мезгили, адатта, 145 күндөн 155 күнгө чейин созулат. Бул мөөнөт койдун породасына, жашына жана физиологиялык өзгөчөлүктөрүнө жараша бир аз өзгөрүшү мүмкүн. Бул мезгил койдун жашоосундагы эң маанилүү жана жоопкерчиликтүү этаптардын бири болуп саналат, андыктан аларга өзгөчө кылдаттык менен мамиле кылуу жана тийиштүү шарттарды түзүү зарыл.
 
@@ -88,13 +84,6 @@ class SheepInseminationScreen extends StatefulWidget {
 }
 
 class _SheepInseminationScreenState extends State<SheepInseminationScreen> {
-  void _navigateToTopic(BuildContext context, TopicListItemModel topic) {
-    GoRouter.of(context).pushNamed(
-      RouteNames.topicDetail,
-      extra: {'topic': topic, 'currentIndex': widget.bottomBarCurrentIndex},
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     if (_inseminationTopics.isEmpty) {

@@ -1,4 +1,5 @@
-// filepath: /Users/meerimakmatova/vet_mobile_app/lib/screens/menu/menu_screen.dart
+// Бул файл колдонмонун негизги меню экранын түзөт. Экранда категориялар (тоют, оорулар, ж.б.) карточкалар түрүндө көрсөтүлөт.
+// Колдонуучу карточканы басып, тиешелүү экранга өтө алат.
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';

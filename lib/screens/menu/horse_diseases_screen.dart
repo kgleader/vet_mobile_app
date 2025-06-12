@@ -1,3 +1,4 @@
+// Бул файл жылкылардын оорулары жана аларды дарылоо боюнча маалыматты көрсөтүүчү экранды аныктайт.
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vet_mobile_app/config/constants/sizes.dart';

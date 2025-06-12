@@ -1,3 +1,11 @@
+// Бул виджет теманын сүрөтү, аталышы жана кыскача сүрөттөмөсү менен карточка түрүндө көрсөтөт.
+// Колдонуучу карточканы басканда onTap функциясы иштейт.
+//
+// Негизги колдонулган элементтер:
+// - Виджеттер: CustomTopicItem (StatelessWidget).
+// - UI куруу: build() методу Container, InkWell, Row, ClipRRect, Image.asset, Text, Expanded, Icon колдонулат.
+// - Декорация жана стиль: AppDecorations, AppColors, AppTextStyles.
+// - Error handling: Image.asset'те errorBuilder колдонулат.
 import 'package:flutter/material.dart';
 import 'package:vet_mobile_app/config/constants/sizes.dart';
 import 'package:vet_mobile_app/core/app_colors.dart';

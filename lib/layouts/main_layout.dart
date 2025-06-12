@@ -1,3 +1,5 @@
+// Бул файл негизги макетти (layout) аныктайт, ал туруктуу навигация
+// тилкесин (bottom navigation bar) камтыйт жана ар кандай экрандарды көрсөтүү үчүн колдонулат.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';

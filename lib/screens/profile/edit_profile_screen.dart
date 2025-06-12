@@ -1,4 +1,5 @@
-import 'dart:io'; // Import for File
+import 'dart:io';
+import 'package:flutter/foundation.dart' show kIsWeb, Uint8List;
 import 'package:flutter/material.dart';
 import 'package:vet_mobile_app/core/app_colors.dart';
 import 'package:vet_mobile_app/core/app_text_styles.dart';
@@ -16,13 +17,30 @@ import 'package:vet_mobile_app/core/app_back_button.dart'; // AppBackButton'ду
 class _EditableAvatarWidget extends StatelessWidget {
   final String? avatarUrl;
   final VoidCallback onEditPressed;
-  final File? imageFile; // Add this to display picked image
+  final File? imageFile;
+  final Uint8List? webImage; // Add this for web images
 
   const _EditableAvatarWidget({
     this.avatarUrl,
     required this.onEditPressed,
-    this.imageFile, // Add this
+    this.imageFile,
+    this.webImage, // Add this
   });
+
+  // Платформага карап, туура ImageProvider кайтаруу
+  ImageProvider? _getImageProvider() {
+    if (webImage != null) {
+      return MemoryImage(webImage!);
+    } else if (avatarUrl != null && avatarUrl!.isNotEmpty) {
+      return NetworkImage(avatarUrl!);
+    }
+    return null;
+  }
+
+  // Демейки иконканы көрсөтүү керекпи
+  bool _shouldShowDefaultIcon() {
+    return webImage == null && (avatarUrl == null || avatarUrl!.isEmpty);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,15 +58,28 @@ class _EditableAvatarWidget extends StatelessWidget {
                 width: 1,
               ),
             ),
-            child: CircleAvatar(
-              radius: 50,
-              backgroundColor: Colors.grey.shade200,
-              backgroundImage: imageFile != null
-                  ? FileImage(imageFile!) // Бул жер туура
-                  : (avatarUrl != null && avatarUrl!.isNotEmpty ? NetworkImage(avatarUrl!) : null) as ImageProvider?,
-              child: imageFile == null && (avatarUrl == null || avatarUrl!.isEmpty)
-                  ? const Icon(Icons.person, size: 50, color: AppColors.primary)
-                  : null,
+            child: ClipOval( // CircleAvatar'дын ордуна ClipOval + Container колдонуу
+              child: webImage != null 
+                ? Image.memory(
+                    webImage!, 
+                    width: 100,
+                    height: 100,
+                    fit: BoxFit.cover, // Маанилүү: cover колдонуу
+                  )
+                : avatarUrl != null && avatarUrl!.isNotEmpty
+                    ? Image.network(
+                        avatarUrl!,
+                        width: 100,
+                        height: 100,
+                        fit: BoxFit.cover, // Маанилүү: cover колдонуу
+                        errorBuilder: (context, error, stackTrace) {
+                          return const Icon(Icons.person, size: 50, color: AppColors.primary);
+                        },
+                      )
+                    : Container(
+                        color: Colors.grey.shade200,
+                        child: const Icon(Icons.person, size: 50, color: AppColors.primary),
+                      ),
             ),
           ),
           Positioned(
@@ -151,6 +182,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final FirebaseStorage _storage = FirebaseStorage.instance; // Firebase Storage instance
   User? _currentUser;
 
+  // Бул өзгөртүү коддун структурасын бузбайт, фреймворк ката берген жерди гана оңдойт
+  Uint8List? _webImage;
+  String? _imageUrl;
+  File? _imageFile;
+
   @override
   void initState() {
     super.initState();
@@ -181,7 +217,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
       if (userDoc.exists) {
         final userData = userDoc.data()!;
-        if (!mounted) return; // Add mounted check
         _nameController.text = userData['fullName'] ?? '';
         
         if (userData['dateOfBirth'] != null && userData['dateOfBirth'] is Timestamp) {
@@ -192,8 +227,17 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         } else {
           _dateController.text = '';
         }
-        _avatarUrl = userData['avatarUrl']; 
-        
+        // БУРЧТУК: Сүрөт URL текшерүү
+        if (userData['avatarUrl'] != null && userData['avatarUrl'].isNotEmpty) {
+          setState(() {
+            _avatarUrl = userData['avatarUrl'];
+          });
+        } else {
+          // Default URL колдонуу же null калтыруу
+          setState(() {
+            _avatarUrl = null;
+          });
+        }
       } else {
         if (!mounted) return; // Add mounted check
         _errorMessage = "Колдонуучунун маалыматтары табылган жок.";
@@ -215,17 +259,40 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       final XFile? pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
       if (pickedFile != null) {
-        if (!mounted) return;
-        setState(() {
-          _pickedImageFile = File(pickedFile.path);
-          // _avatarUrl = null; // Эски URL'ди тазалоо, жаңы сүрөт тандалганда
-        });
+        if (kIsWeb) {
+          // Веб үчүн сүрөт тандоо коду
+          _webImage = await pickedFile.readAsBytes();
+          setState(() {});
+        } else {
+          // Мобилдик версияда
+          setState(() {
+            _pickedImageFile = File(pickedFile.path);
+          });
+        }
       }
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Сүрөт тандоодо ката кетти: $e")),
       );
+    }
+  }
+
+  // Сүрөт көрсөтүү виджети
+  Widget _buildImageWidget() {
+    // Веб жана мобилдик режимде бирдей иштөө үчүн
+    if (_webImage != null) {
+      return Image.memory(_webImage!);
+    } else if ((_avatarUrl != null && _avatarUrl!.isNotEmpty)) {
+      return Image.network(
+        _avatarUrl!,
+        errorBuilder: (context, error, stackTrace) {
+          print('Network image error: $error');
+          return Image.asset('assets/icons/common/logo.png');
+        },
+      );
+    } else {
+      return Image.asset('assets/icons/common/logo.png'); // Стандарт сүрөт
     }
   }
 
@@ -433,7 +500,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       const SizedBox(height: 30),
                       _EditableAvatarWidget(
                         avatarUrl: _avatarUrl,
-                        imageFile: _pickedImageFile,
+                        imageFile: kIsWeb ? null : _pickedImageFile,  // Only use on mobile
+                        webImage: _webImage,  // Use for web
                         onEditPressed: _pickImage,
                       ),
                       const SizedBox(height: 16),

@@ -1,12 +1,20 @@
-// /Users/meerimakmatova/vet_mobile_app/lib/screens/menu/diseases_screen.dart
+// Бул файл "Оорулар" категориясына тиешелүү жалпы экранды аныктайт.
+// Экранда малдын оорулары боюнча жалпы маалымат (баннер, сүрөттөмө) жана негизги оорулардын топтору (мисалы, жугуштуу, мите курт, зат алмашуу) темалар тизмеси түрүндө көрсөтүлөт.
+// Бул экран CategoryScreen виджетин колдонуп, контентти стандартташтырылган түрдө чагылдырат.
+//
+// Негизги колдонулган элементтер:
+// - Виджеттер: DiseasesScreen (StatelessWidget).
+// - UI куруу: build() методу CategoryScreen виджетине керектүү маалыматтарды (аталышы, баннердин сүрөтү, сүрөттөмөсү, темалар тизмеси) өткөрүп берет.
+// - Маалымат модели: TopicListItemModel ар бир оору темасы үчүн колдонулат.
+// - Жалпы виджеттер: CategoryScreen (кайра колдонулуучу), AppLogo.
 import 'package:flutter/material.dart';
 import 'package:vet_mobile_app/config/constants/sizes.dart';
 import 'package:vet_mobile_app/core/app_logo.dart';
 import 'package:vet_mobile_app/data/models/topic_list_item_model.dart';
-import 'package:vet_mobile_app/screens/menu/category_screen.dart'; // CategoryScreen'ди импорттойбуз
+import 'package:vet_mobile_app/screens/menu/category_screen.dart'; 
 
 class DiseasesScreen extends StatelessWidget {
-  final int bottomBarCurrentIndex; // Бул параметр CategoryScreen'ге берилбейт, эгер BottomBar'ды MainLayout башкарса
+  final int bottomBarCurrentIndex; 
 
   const DiseasesScreen({super.key, this.bottomBarCurrentIndex = 0});
 

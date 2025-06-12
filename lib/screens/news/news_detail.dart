@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
-import 'package:vet_mobile_app/data/models/news_article.dart'; // NewsArticle моделин импорттоо
+import 'package:vet_mobile_app/data/models/news_article.dart';
 
 class NewsDetail extends StatelessWidget {
   final String articleId; // Жаңылыктын ID'син кабыл алуу

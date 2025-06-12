@@ -26,13 +26,13 @@ class FourOFourScreen extends StatelessWidget {
     final displayMessage = message ??
         (error != null
             // GoRouter'дан келген катаны көрсөтүү (мисалы, 404 үчүн)
-            ? "The page you are looking for at '${GoRouterState.of(context).location}' doesn't exist or another error occurred.\nDetails: ${error.toString()}"
+            ? "The page you are looking for at '${GoRouterState.of(context).uri.toString()}' doesn't exist or another error occurred.\nDetails: ${error.toString()}"
             : "Something went wrong. Please try again later.");
     final displayButtonText = buttonText ?? 'Go back';
 
     // Дебаг үчүн катаны консолго чыгаруу
     if (error != null) {
-      print("Error displayed on FourOFourScreen: $error. URI: ${GoRouterState.of(context).location}");
+      print("Error displayed on FourOFourScreen: $error. URI: ${GoRouterState.of(context).uri.toString()}");
     }
     
     return Scaffold(

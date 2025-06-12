@@ -1,3 +1,16 @@
+// Бул файл "Жылкы" категориясына тиешелүү экранды аныктайт.
+// Экранда жылкынын сүрөтү (баннер) жана жылкыларга байланыштуу негизги темалар (Тоюттануусу, Оорусу, Уруктандыруу) баскычтар түрүндө көрсөтүлөт.
+// Колдонуучу ар бир баскычты басуу менен тиешелүү деталдуу маалымат баракчасына өтө алат.
+//
+// Негизги колдонулган элементтер:
+// - Виджеттер: HorsesScreen (StatefulWidget), _HorsesScreenState.
+// - UI куруу: build() методу Scaffold, AppBar, борбордук сүрөт жана тема баскычтарын камтыйт.
+// - Жардамчы метод: _buildTopicButton() ар бир тема үчүн ElevatedButton түзөт, SVG иконкаларын SvgPicture.asset аркылуу көрсөтөт.
+// - Абал башкаруу: selectedButtonIndex өзгөрмөсү тандалган баскычты көзөмөлдөйт.
+// - Навигация: GoRouter (RouteNames.menu, RouteNames.horseFeeding, RouteNames.horseDiseases, RouteNames.horseInsemination).
+// - Маалымат модели: TopicListItemModel.
+// - Макет виджеттери: Scaffold, AppBar, Padding, Column, SizedBox, Stack, Image.asset, ClipRRect, Center, Row, Spacer, Container.
+// - Стилдештирүү: TextStyle, Color, BorderSide, BoxDecoration, ElevatedButton.styleFrom, RoundedRectangleBorder.
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
@@ -16,7 +29,6 @@ class HorsesScreen extends StatefulWidget {
 }
 
 class _HorsesScreenState extends State<HorsesScreen> {
-  // Демейки боюнча эч бир баскыч тандалбайт
   int selectedButtonIndex = -1; 
 
   @override

@@ -1,3 +1,4 @@
+// Бул файл "Жылкылардын тоюту" категориясына тиешелүү маалыматты (негизги тоюттар, кошумча тоюттар ж.б.) көрсөтүүчү экранды аныктайт.
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vet_mobile_app/config/constants/sizes.dart';
@@ -17,36 +18,36 @@ class HorseFeedingScreen extends StatefulWidget {
 class _HorseFeedingScreenState extends State<HorseFeedingScreen> {
   @override
   Widget build(BuildContext context) {
-    const String categoryTitle = "Тоют"; // Экрандын аталышы Figma'дагыдай
+    const String categoryTitle = "Тоют"; 
 
-    // "Жылкылардын тоюттануусу" экраны үчүн темалар
+    
     final List<TopicListItemModel> feedingTopics = [
-      TopicListItemModel( // Бул чоң баннер-карта үчүн
+      TopicListItemModel( 
         id: 'horse__feed_banner',
-        imagePath: 'assets/images/horse_toyut_banner.png', // Сиз берген баннер
-        title: '', // Чоң картада аталыш жок, сүрөттөмө сүрөттүн астында
-        description: 'Lorem Ipsum is simply dummy text of the printing', // Figma'дагыдай текст
+        imagePath: 'assets/images/horse_toyut_banner.png', 
+        title: '', 
+        description: 'Lorem Ipsum is simply dummy text of the printing', 
         fullDescription: 'Жылкылардын негизги тоюттары жана алардын мааниси жөнүндө толук маалымат.'
       ),
       TopicListItemModel(
         id: 'horse_feeding_topic_1',
-        imagePath: 'assets/images/horse_topic1.png', // Сиз берген сүрөт
-        title: 'Тоют', // Figma'дагыдай аталыш
-        description: 'Lorem Ipsum is simply dummy text of the', // Figma'дагыдай текст
+        imagePath: 'assets/images/horse_topic1.png', 
+        title: 'Тоют', 
+        description: 'Lorem Ipsum is simply dummy text of the', 
         fullDescription: 'Жылкылар үчүн биринчи теманын толук сүрөттөмөсү.'
       ),
       TopicListItemModel(
         id: 'horse_feeding_topic_2',
-        imagePath: 'assets/images/horse_topic2.png', // Сиз берген сүрөт
-        title: 'Тоют', // Figma'дагыдай аталыш
-        description: 'Lorem Ipsum is simply dummy text of the', // Figma'дагыдай текст
+        imagePath: 'assets/images/horse_topic2.png', 
+        title: 'Тоют', 
+        description: 'Lorem Ipsum is simply dummy text of the', 
         fullDescription: 'Жылкылар үчүн экинчи теманын толук сүрөттөмөсү.'
       ),
-      TopicListItemModel( // Үчүнчү тема кошулду
+      TopicListItemModel( 
         id: 'horse_feeding_topic_3',
-        imagePath: 'assets/images/horse_topic3.png', // Сиз берген сүрөт
-        title: 'Тоют', // Figma'дагыдай аталыш
-        description: 'Lorem Ipsum is simply dummy text of the', // Figma'дагыдай текст
+        imagePath: 'assets/images/horse_topic3.png', 
+        title: 'Тоют', 
+        description: 'Lorem Ipsum is simply dummy text of the', 
         fullDescription: 'Жылкылар үчүн үчүнчү теманын толук сүрөттөмөсү.'
       ),
     ];
@@ -57,8 +58,8 @@ class _HorseFeedingScreenState extends State<HorseFeedingScreen> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black),
-          // Артка кайтууну "Жылкы" негизги экранына багыттоо
-          onPressed: () => GoRouter.of(context).go(RouteNames.horses), // RouteNames.horses бул /menu/horses
+          
+          onPressed: () => GoRouter.of(context).go(RouteNames.horses), 
         ),
         title: Text(
           categoryTitle,
@@ -78,10 +79,10 @@ class _HorseFeedingScreenState extends State<HorseFeedingScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: Sizes.paddingL),
-        child: ListView( // Column ордуна ListView, эгер контент көп болсо scroll үчүн
+        child: ListView( 
           children: [
             const SizedBox(height: 24),
-            const Align( // "Тема" текстин солго жайгаштыруу
+            const Align( 
               alignment: Alignment.centerLeft,
               child: Text(
                 "Тема",
@@ -93,48 +94,48 @@ class _HorseFeedingScreenState extends State<HorseFeedingScreen> {
               ),
             ),
             const SizedBox(height: 12),
-            // Чоң баннер-карта
+            
             if (feedingTopics.isNotEmpty)
               _buildLargeTopicCard(context, feedingTopics.first),
             
-            const SizedBox(height: 16), // Карталардын ортосундагы аралык
+            const SizedBox(height: 16), 
             
-            // Калган темалар үчүн кичине карталар
+            
             if (feedingTopics.length > 1)
-              ...feedingTopics.skip(1).map((topic) { // feedingTopics.first (чоң карта) өткөрүлүп жиберилет
+              ...feedingTopics.skip(1).map((topic) { 
                 return _buildSmallTopicCard(
                   context: context,
                   topic: topic,
                 );
               }),
-            const SizedBox(height: 20), // Төмөндөгү боштук
+            const SizedBox(height: 20), 
           ],
         ),
       ),
     );
   }
 
-  // Чоң баннер-картаны куруучу метод
+  
   Widget _buildLargeTopicCard(BuildContext context, TopicListItemModel topic) {
     return Card(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20.0), // Figma'дагыдай, анча тегерек эмес
+        borderRadius: BorderRadius.circular(20.0), 
       ),
       elevation: 2,
       margin: const EdgeInsets.only(bottom: 0), 
       child: InkWell(
         onTap: () => _navigateToTopic(context, topic),
-        borderRadius: BorderRadius.circular(20.0), // InkWell үчүн да өзгөртүү
+        borderRadius: BorderRadius.circular(20.0), 
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ClipRRect(
               borderRadius: const BorderRadius.only( 
-                topLeft: Radius.circular(20.0), // Сүрөттүн жогорку четтери
+                topLeft: Radius.circular(20.0), 
                 topRight: Radius.circular(20.0),
               ),
               child: Image.asset( 
-                topic.imagePath, // Бул жерде 'assets/images/horses_toyut_banner.png'
+                topic.imagePath, 
                 width: double.infinity,
                 height: 180, 
                 fit: BoxFit.cover,
@@ -160,7 +161,7 @@ class _HorseFeedingScreenState extends State<HorseFeedingScreen> {
     );
   }
 
-  // Кичине тема карталарын куруучу метод
+  
   Widget _buildSmallTopicCard({
     required BuildContext context,
     required TopicListItemModel topic,
@@ -168,18 +169,18 @@ class _HorseFeedingScreenState extends State<HorseFeedingScreen> {
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 8.0),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20.0), // Figma'дагыдай, анча тегерек эмес
+        borderRadius: BorderRadius.circular(20.0), 
       ),
       elevation: 2,
       child: InkWell(
         onTap: () => _navigateToTopic(context, topic),
-        borderRadius: BorderRadius.circular(20.0), // InkWell үчүн да өзгөртүү
+        borderRadius: BorderRadius.circular(20.0), 
         child: Padding(
           padding: const EdgeInsets.all(12.0), 
           child: Row(
             children: [
               ClipRRect(
-                borderRadius: BorderRadius.circular(12.0), // Сүрөттүн четтерин бир аз тегеректөө (мисалы, 12.0)
+                borderRadius: BorderRadius.circular(12.0), 
                 child: Image.asset( 
                   topic.imagePath,
                   width: 60, 
@@ -189,7 +190,7 @@ class _HorseFeedingScreenState extends State<HorseFeedingScreen> {
                     width: 60, height: 60, 
                     decoration: BoxDecoration(
                       color: Colors.grey[200],
-                      borderRadius: BorderRadius.circular(12.0), // errorBuilder үчүн да өзгөртүү
+                      borderRadius: BorderRadius.circular(12.0), 
                     ),
                     child: Icon(Icons.broken_image, color: Colors.grey[400], size: 30)
                   ),

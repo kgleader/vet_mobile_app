@@ -1,3 +1,5 @@
+// Бул файл колдонмонун баштапкы экранын (splash screen) көрсөтөт. 
+//Ал колдонуучуну тосуп алып, негизги интерфейске өтүү үчүн баскычты камтыйт.
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vet_mobile_app/config/constants/sizes.dart';

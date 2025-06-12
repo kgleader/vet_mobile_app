@@ -1,3 +1,10 @@
+/**
+ * Forgot Password Screen
+ * 
+ * This screen provides password reset functionality by sending a password reset email.
+ * Users enter their email address and submit the form, which triggers the Firebase
+ * password reset flow. Success and error messages are displayed as SnackBars.
+ */
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vet_mobile_app/config/constants/sizes.dart';
@@ -5,8 +12,8 @@ import 'package:vet_mobile_app/config/router/route_names.dart';
 import 'package:vet_mobile_app/core/app_colors.dart';
 import 'package:vet_mobile_app/core/app_text_styles.dart';
 import 'package:vet_mobile_app/core/custom_button.dart';
-import 'package:vet_mobile_app/data/firebase/auth_service.dart'; // AuthService'ти импорттоо
-import 'package:firebase_auth/firebase_auth.dart'; // FirebaseAuthException үчүн
+import 'package:vet_mobile_app/data/firebase/auth_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});
@@ -19,7 +26,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   bool _isLoading = false;
-  final AuthService _authService = AuthService(); // AuthService инстанциясы
+  final AuthService _authService = AuthService();
 
   @override
   void dispose() {
@@ -32,7 +39,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       setState(() => _isLoading = true);
       try {
         await _authService.sendPasswordResetEmail(email: _emailController.text.trim());
-        // Бул жерге, кат ийгиликтүү жөнөтүлгөндөн кийинки логика жылдырылат
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -58,7 +64,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         } else if (e.code == 'too-many-requests') {
           errorMessage = 'Өтө көп аракет жасалды. Бир аздан кийин кайра аракет кылыңыз.';
         }
-        // Башка FirebaseAuthException коддорун да ушул жерден кармасаңыз болот
+        // Башка FirebaseAuthException коддорун да ушул жерден кармаса болот
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(errorMessage), backgroundColor: Colors.red),
