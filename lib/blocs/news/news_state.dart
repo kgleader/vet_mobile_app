@@ -1,31 +1,24 @@
 import 'package:equatable/equatable.dart';
 import 'package:vet_mobile_app/data/models/news_article.dart';
 
-abstract class NewsState extends Equatable {
-  const NewsState(); // Add const here
-
-  @override
-  List<Object?> get props => [];
+abstract class NewsState {
+  const NewsState();
 }
 
-class NewsInitial extends NewsState {}
+class NewsInitial extends NewsState {
+  const NewsInitial();
+}
 
-class NewsLoading extends NewsState {}
+class NewsLoading extends NewsState {
+  const NewsLoading();
+}
 
 class NewsLoaded extends NewsState {
+  const NewsLoaded(this.articles);
   final List<NewsArticle> articles;
-
-  const NewsLoaded(this.articles); // This will now be valid
-
-  @override
-  List<Object?> get props => [articles];
 }
 
 class NewsError extends NewsState {
+  const NewsError(this.message);
   final String message;
-
-  NewsError(this.message);
-
-  @override
-  List<Object?> get props => [message];
 }

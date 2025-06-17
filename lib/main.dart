@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
+import 'data/firebase/firebase_options.dart';
 import 'config/router/go_router.dart';
 import 'config/theme/app_theme.dart';
 import 'package:vet_mobile_app/blocs/vet_profile/vet_profile_bloc.dart';

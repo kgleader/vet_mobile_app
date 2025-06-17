@@ -2,7 +2,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:vet_mobile_app/blocs/news/news_event.dart';
+import 'package:vet_mobile_app/blocs/navigation/navigation_bloc.dart';
+import 'package:vet_mobile_app/blocs/news/news_event.dart' as news_event;
+import 'package:vet_mobile_app/blocs/news/news_bloc.dart';
 import 'package:vet_mobile_app/blocs/vet_profile/vet_profile_bloc.dart';
 import 'package:vet_mobile_app/layouts/main_layout.dart';
 import 'package:vet_mobile_app/screens/auth/forgot_password_screen.dart';
@@ -39,16 +41,51 @@ import 'package:vet_mobile_app/screens/vet/veterinar_screen.dart';
 import 'package:vet_mobile_app/screens/vet/vet_message.dart';
 import 'package:vet_mobile_app/screens/vet/vet_message_success_screen.dart';
 import 'package:vet_mobile_app/screens/vet/vet_message_failure_screen.dart';
-import 'package:vet_mobile_app/blocs/news/news_bloc.dart';
-import 'package:vet_mobile_app/blocs/navigation/navigation_bloc.dart';
 import 'package:vet_mobile_app/data/models/topic_list_item_model.dart';
 import 'package:vet_mobile_app/data/models/vet_model.dart';
 
 
+class RouteNames {
+  static const String splash = '/splash';
+  static const String login = '/login';
+  static const String register = '/register';
+  static const String forgotPassword = '/forgotPassword';
+  static const String menu = '/menu';
+  static const String feed = '/menu/feed';
+  static const String about = '/menu/about';
+  static const String diseases = '/menu/diseases';
+  static const String insemination = '/menu/insemination';
+  static const String cattle = '/menu/cattle';
+  static const String goats = '/menu/goats';
+  static const String sheepFeeding = '/menu/goats/feeding';
+  static const String sheepDiseases = '/menu/goats/diseases';
+  static const String sheepInsemination = '/menu/goats/insemination';
+  static const String horses = '/menu/horses';
+  static const String horseFeeding = '/menu/horses/feeding';
+  static const String horseDiseases = '/menu/horses/diseases';
+  static const String horseInsemination = '/menu/horses/insemination';
+  static const String chicken = '/menu/chicken';
+  static const String chickenFeeding = '/menu/chicken/feeding';
+  static const String chickenDiseases = '/menu/chicken/diseases';
+  static const String cattleFeed = '/cattle_feed';
+  static const String cattleDiseases = '/cattle_diseases';
+  static const String cattleInsemination = '/cattle_insemination';
+  static const String topicDetail = '/topicDetail';
+  static const String resetPassword = '/resetPassword';
+  static const String settings = '/settings';
+  static const String editProfileScreen = '/editProfileScreen';
+  static const String profile = '/profile';
+  static const String vetList = '/vetList';
+  static const String vetMessage = '/vetList/message';
+  static const String vetMessageSuccess = '/vetMessageSuccess';
+  static const String vetMessageFailure = '/vetMessageFailure';
+  static const String newsDetail = '/news/:articleId';
+}
+
 final GlobalKey<NavigatorState> _shellNavigatorKey = GlobalKey<NavigatorState>();
 
-final GoRouter router = GoRouter(
-  initialLocation: '/splash', 
+GoRouter router = GoRouter(
+  initialLocation: '/splash',
   routes: [
     GoRoute(
       path: '/splash',
@@ -66,7 +103,7 @@ final GoRouter router = GoRouter(
       path: '/forgotPassword',
       builder: (context, state) => const ForgotPasswordScreen(),
     ),
-    
+
     ShellRoute(
       navigatorKey: _shellNavigatorKey,
       builder: (context, state, child) => BlocProvider(
@@ -75,7 +112,7 @@ final GoRouter router = GoRouter(
       ),
       routes: [
         GoRoute(
-          path: '/menu', 
+          path: '/menu',
           builder: (context, state) => const MenuScreen(),
           routes: [
             GoRoute(
@@ -95,51 +132,51 @@ final GoRouter router = GoRouter(
               builder: (context, state) => const InseminationScreen(),
             ),
             GoRoute(
-              path: 'cattle', 
+              path: 'cattle',
               name: RouteNames.cattle,
               builder: (context, state) => const CattleScreen(),
             ),
             GoRoute(
-              path: 'goats', 
+              path: 'goats',
               name: RouteNames.goats,
               builder: (context, state) => const SheepGoatsScreen(),
               routes: [
                 GoRoute(
-                  path: 'feeding', 
-                  name: RouteNames.sheepFeeding, 
+                  path: 'feeding',
+                  name: RouteNames.sheepFeeding,
                   builder: (context, state) => const SheepFeedingScreen(),
                 ),
                 GoRoute(
-                  path: 'diseases', 
-                  name: RouteNames.sheepDiseases, 
+                  path: 'diseases',
+                  name: RouteNames.sheepDiseases,
                   builder: (context, state) => const SheepDiseasesScreen(),
                 ),
                 GoRoute(
-                  path: 'insemination', 
-                  name: RouteNames.sheepInsemination, 
+                  path: 'insemination',
+                  name: RouteNames.sheepInsemination,
                   builder: (context, state) => const SheepInseminationScreen(),
                 ),
               ]
             ),
             GoRoute(
-              path: 'horses', 
-              name: RouteNames.horses, 
+              path: 'horses',
+              name: RouteNames.horses,
               builder: (context, state) => const HorsesScreen(),
-              routes: [ 
+              routes: [
                 GoRoute(
-                  path: 'feeding', 
+                  path: 'feeding',
                   name: RouteNames.horseFeeding,
-                  builder: (context, state) => const HorseFeedingScreen(), 
+                  builder: (context, state) => const HorseFeedingScreen(),
                 ),
                 GoRoute(
-                  path: 'diseases', 
+                  path: 'diseases',
                   name: RouteNames.horseDiseases,
-                  builder: (context, state) => const HorseDiseasesScreen(), 
+                  builder: (context, state) => const HorseDiseasesScreen(),
                 ),
                 GoRoute(
-                  path: 'insemination', 
+                  path: 'insemination',
                   name: RouteNames.horseInsemination,
-                  builder: (context, state) => const Scaffold(body: Center(child: Text("Horse Insemination Screen Placeholder"))), 
+                  builder: (context, state) => const Scaffold(body: Center(child: Text("Horse Insemination Screen Placeholder"))),
                 ),
               ]
             ),
@@ -147,31 +184,27 @@ final GoRouter router = GoRouter(
         ),
         GoRoute(
           path: '/news',
-          name: 'news_screen', // Же RouteNames.newsScreen
+          name: 'news_screen',
           builder: (context, state) {
-            // БУЛ PRINT ЧЫГЫШЫ КЕРЕK
-            print('[GoRouter] >>> Building /news route with BlocProvider.'); 
             return BlocProvider(
               create: (context) {
-                // БУЛ PRINT ДА ЧЫГЫШЫ КЕРЕК
-                print('[GoRouter] >>> Creating NewsBloc instance and adding LoadNews event.'); 
-                return NewsBloc()..add(LoadNews());
+                return NewsBloc()..add(news_event.LoadNewsEvent());
               },
-              child: const NewsScreen(), // Бул /lib/screens/menu/news_screen.dart'ка шилтеме кылышы керек
+              child: const NewsScreen(),
             );
           },
         ),
         GoRoute(
-          path: RouteNames.vetList, 
+          path: RouteNames.vetList,
           name: RouteNames.vetList,
           pageBuilder: (context, state) {
-            const String defaultVetId = 'vet_asanov'; 
+            const String defaultVetId = 'vet_asanov';
             return CustomTransitionPage(
               key: state.pageKey,
-              child: BlocProvider<VetProfileBloc>( 
+              child: BlocProvider<VetProfileBloc>(
                 create: (context) => VetProfileBloc(),
                 child: const VeterinarScreen(vetId: defaultVetId),
-              ), 
+              ),
               transitionsBuilder: (context, animation, secondaryAnimation, child) {
                 return FadeTransition(opacity: animation, child: child);
               },
@@ -189,13 +222,13 @@ final GoRouter router = GoRouter(
                     return VetMessage(vet: vet);
                   }
                 }
-                return const Scaffold(body: Center(child: Text("Ветеринар маалыматы жетишсиз"))); 
+                return const Scaffold(body: Center(child: Text("Ветеринар маалыматы жетишсиз")));
               },
             ),
           ],
         ),
         GoRoute(
-          path: RouteNames.chicken, 
+          path: RouteNames.chicken,
           name: RouteNames.chicken,
           builder: (context, state) => const ChickenScreen(),
           routes: [
@@ -226,16 +259,9 @@ final GoRouter router = GoRouter(
           name: RouteNames.cattleInsemination,
           builder: (context, state) => const CattleInseminationScreen(),
         ),
-        // ТӨМӨНКҮ БӨЛҮКТҮ ӨЧҮРҮҢҮЗ -----
-        // GoRoute(
-        //   path: '/chicken_feeding', // Жаңы URL дареги
-        //   name: RouteNames.chickenFeeding,
-        //   builder: (context, state) => const ChickenFeedingScreen(), // Жаңы экран
-        // ),
-        // ----- ӨЧҮРҮЛҮҮЧҮ БӨЛҮКТҮН АЯГЫ
       ],
     ),
-    
+
     GoRoute(
       path: '/topicDetail',
       name: RouteNames.topicDetail,
@@ -263,7 +289,7 @@ final GoRouter router = GoRouter(
         }
       },
     ),
-    
+
     GoRoute(
       path: RouteNames.resetPassword,
       builder: (context, state) => const ResetPasswordScreen(),
@@ -276,7 +302,7 @@ final GoRouter router = GoRouter(
       name: RouteNames.editProfileScreen,
       path: RouteNames.editProfileScreen,
       builder: (BuildContext context, GoRouterState state) {
-        return const EditProfileScreen(); 
+        return const EditProfileScreen();
       },
     ),
     GoRoute(
@@ -295,16 +321,14 @@ final GoRouter router = GoRouter(
       path: RouteNames.vetMessageFailure,
       builder: (context, state) => const VetMessageFailureScreen(),
     ),
-    // GoRoute for news detail screen
     GoRoute(
-  path: '/news/:articleId', // Же сиздин newsDetail үчүн жолуңуз
-  name: RouteNames.newsDetail,
-  builder: (BuildContext context, GoRouterState state) {
-    final String? articleId = state.pathParameters['articleId'];
-    // articleId'ни NewsDetail экранына өткөрүп берүү
-    return NewsDetail(articleId: articleId ?? 'default_id_or_error');
-  },
-),
+      path: '/news/:articleId', // Же сиздин newsDetail үчүн жолуңуз
+      name: RouteNames.newsDetail,
+      builder: (BuildContext context, GoRouterState state) {
+        final String? articleId = state.pathParameters['articleId'];
+        return NewsDetail(articleId: articleId ?? 'default_id_or_error');
+      },
+    ),
   ],
   // errorBuilder: (context, state) => ErrorScreen(error: state.error), // Ката экраны
 );
