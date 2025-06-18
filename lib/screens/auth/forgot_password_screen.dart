@@ -1,10 +1,3 @@
-/**
- * Forgot Password Screen
- * 
- * This screen provides password reset functionality by sending a password reset email.
- * Users enter their email address and submit the form, which triggers the Firebase
- * password reset flow. Success and error messages are displayed as SnackBars.
- */
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vet_mobile_app/config/constants/sizes.dart';

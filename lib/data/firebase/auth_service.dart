@@ -141,7 +141,6 @@ class AuthService {
       await _googleSignIn?.signOut();
       await _auth.signOut();
     } catch (e) {
-      print('Error during sign out: $e');
       rethrow;
     }
   }
