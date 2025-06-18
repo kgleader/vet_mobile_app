@@ -1,13 +1,3 @@
-/**
- * Firebase Authentication Service
- * 
- * This file contains logic for working with Firebase authentication services including:
- * - Google Sign-In
- * - Email/password registration and login
- * - Password reset functionality
- * - Profile data management
- * - User logout
- */
 import 'dart:io';
 import 'dart:async';
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -68,7 +58,6 @@ class AuthService {
         return userCredential;
       }
     } catch (e) {
-      print('Error signing in with Google: $e');
       rethrow;
     }
   }
