@@ -19,7 +19,6 @@ class AppLogo extends StatelessWidget {
 Widget build(BuildContext context) {
   return GestureDetector(
     onTap: onTap ?? () {
-      print('Logo tapped, navigating to ${RouteNames.profile}');
       context.go(RouteNames.profile);
     },
     child: Image.asset(
