@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:vet_mobile_app/data/models/news_article.dart';
+import 'package:vet_mobile_app/config/theme/app_theme.dart'; // Import custom theme
 
 class NewsDetail extends StatelessWidget {
-  final String articleId; // Жаңылыктын ID'син кабыл алуу
+  final String articleId;
 
-  const NewsDetail({super.key, required this.articleId});
+  const NewsDetail({Key? key, required this.articleId}) : super(key: key);
 
   Future<NewsArticle?> _fetchArticleDetails(String id) async {
     try {
@@ -22,17 +23,24 @@ class NewsDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = AppTheme.lightTheme; // Use custom theme
+
     return Scaffold(
-      // backgroundColor: const Color(0xFFF8F0E5), // NewsScreen'дегидей фон
+      backgroundColor: theme.scaffoldBackgroundColor, // Use theme's background color
       appBar: AppBar(
-        // backgroundColor: Colors.transparent,
-        // elevation: 0,
-        // leading: IconButton(
-        //   icon: const Icon(Icons.arrow_back, color: Colors.black87),
-        //   onPressed: () => Navigator.of(context).pop(),
-        // ),
-        title: const Text('Жаңылык'), // AppBar'дын аталышын өзгөртсө болот
-        // centerTitle: true,
+        backgroundColor: theme.appBarTheme.backgroundColor, // Use theme's app bar color
+        elevation: theme.appBarTheme.elevation, // Use theme's app bar elevation
+        iconTheme: theme.appBarTheme.iconTheme,
+        titleTextStyle: theme.appBarTheme.titleTextStyle,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: theme.iconTheme.color),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        title: Text(
+          'Жаңылык',
+          style: theme.textTheme.bodyMedium, // Use theme's headline style
+        ),
+        centerTitle: true,
       ),
       body: FutureBuilder<NewsArticle?>(
         future: _fetchArticleDetails(articleId),
@@ -47,7 +55,6 @@ class NewsDetail extends StatelessWidget {
           final article = snapshot.data!;
           final DateFormat formatter = DateFormat('dd MMMM yyyy, HH:mm', 'ky');
 
-
           return SingleChildScrollView(
             padding: const EdgeInsets.all(16.0),
             child: Column(
@@ -55,12 +62,12 @@ class NewsDetail extends StatelessWidget {
               children: [
                 Text(
                   article.title,
-                  style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  style: theme.textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold), // Use theme's headline style
                 ),
                 const SizedBox(height: 8),
                 Text(
                   'Жарыяланды: ${formatter.format(article.publishedDate)}',
-                  style: TextStyle(fontSize: 13, color: Colors.grey[700]),
+                  style: theme.textTheme.bodyMedium!.copyWith(color: Colors.grey[700]), // Use theme's body text style
                 ),
                 const SizedBox(height: 16),
                 if (article.imageUrl != null && article.imageUrl!.isNotEmpty)
@@ -70,16 +77,15 @@ class NewsDetail extends StatelessWidget {
                       article.imageUrl!,
                       width: double.infinity,
                       fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) =>
-                          Container(height: 200, color: Colors.grey[300], child: const Icon(Icons.broken_image, size: 50)),
+                      errorBuilder: (context, error, stackTrace) => Container(
+                          height: 200, color: Colors.grey[300], child: const Icon(Icons.broken_image, size: 50)),
                     ),
                   ),
                 const SizedBox(height: 16),
                 Text(
                   article.content,
-                  style: const TextStyle(fontSize: 16, height: 1.5), // Тексттин бийиктиги
+                  style: theme.textTheme.bodyMedium!.copyWith(height: 1.5), // Use theme's body text style
                 ),
-                // Башка маалыматтарды ушул жерге кошсоңуз болот
               ],
             ),
           );
