@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vet_mobile_app/blocs/navigation/navigation_bloc.dart';
-import 'package:vet_mobile_app/blocs/news/news_event.dart' as news_event;
+import 'package:vet_mobile_app/blocs/news/news_event.dart';
 import 'package:vet_mobile_app/blocs/news/news_bloc.dart';
 import 'package:vet_mobile_app/blocs/vet_profile/vet_profile_bloc.dart';
 import 'package:vet_mobile_app/layouts/main_layout.dart';
@@ -188,7 +188,7 @@ GoRouter router = GoRouter(
           builder: (context, state) {
             return BlocProvider(
               create: (context) {
-                return NewsBloc()..add(news_event.LoadNewsEvent());
+                return NewsBloc()..add(LoadNewsEvent());
               },
               child: const NewsScreen(),
             );
@@ -322,11 +322,16 @@ GoRouter router = GoRouter(
       builder: (context, state) => const VetMessageFailureScreen(),
     ),
     GoRoute(
-      path: '/news/:articleId', // Же сиздин newsDetail үчүн жолуңуз
+      path: '/news/:articleId',
       name: RouteNames.newsDetail,
       builder: (BuildContext context, GoRouterState state) {
         final String? articleId = state.pathParameters['articleId'];
-        return NewsDetail(articleId: articleId ?? 'default_id_or_error');
+        return BlocProvider(
+          create: (BuildContext context) {
+            return NewsBloc();
+          },
+          child: NewsDetail(articleId: articleId ?? 'default_id_or_error'),
+        );
       },
     ),
   ],

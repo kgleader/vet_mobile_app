@@ -1,21 +1,21 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:vet_mobile_app/blocs/news/news_event.dart' as news_event;
+import 'package:vet_mobile_app/blocs/news/news_event.dart';
 import 'package:vet_mobile_app/blocs/news/news_state.dart';
 import 'package:vet_mobile_app/data/models/news_article.dart';
 
-class NewsBloc extends Bloc<news_event.NewsEvent, NewsState> {
+class NewsBloc extends Bloc<NewsEvent, NewsState> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  NewsBloc() : super(const NewsInitial()) {
-    on<news_event.NewsEvent>(_onLoadNewsFromFirestore);
-    // Башка event'тер болсо, аларды да каттаңыз
+  NewsBloc() : super(NewsInitial()) {
+    on<LoadNewsEvent>(_onLoadNewsFromFirestore);
+    on<LoadNewsArticle>(_onLoadNewsArticle);
   }
 
   Future<void> _onLoadNewsFromFirestore(
-      news_event.NewsEvent event, Emitter<NewsState> emit) async {
-    emit(const NewsLoading());
+      LoadNewsEvent event, Emitter<NewsState> emit) async {
+    emit(NewsLoading());
 
     try {
       final snapshot = await _firestore
@@ -23,9 +23,8 @@ class NewsBloc extends Bloc<news_event.NewsEvent, NewsState> {
           .orderBy('publishedDate', descending: true)
           .get();
 
-
       if (snapshot.docs.isEmpty) {
-        emit(const NewsLoaded([]));
+        emit(NewsLoaded([]));
         return;
       }
 
@@ -40,6 +39,34 @@ class NewsBloc extends Bloc<news_event.NewsEvent, NewsState> {
         emit(NewsError('Firebase катасы: ${e.message} (код: ${e.code})'));
       } else {
         emit(NewsError('Жаңылыктарды жүктөөдө белгисиз ката кетти: $e'));
+      }
+    }
+  }
+  
+  Future<void> _onLoadNewsArticle(
+      LoadNewsArticle event, Emitter<NewsState> emit) async {
+    emit(NewsLoading());
+    
+    try {
+      final docSnapshot = await _firestore
+          .collection('news')
+          .doc(event.articleId)
+          .get();
+          
+      if (!docSnapshot.exists) {
+        emit(NewsError('Бул ID\'ге ээ жаңылык табылган жок: ${event.articleId}'));
+        return;
+      }
+      
+      final article = NewsArticle.fromFirestore(
+          docSnapshot.data()!, docSnapshot.id);
+          
+      emit(NewsArticleLoaded(article: article));
+    } catch (e) {
+      if (e is FirebaseException) {
+        emit(NewsError('Firebase катасы: ${e.message} (код: ${e.code})'));
+      } else {
+        emit(NewsError('Жаңылыкты жүктөөдө белгисиз ката кетти: $e'));
       }
     }
   }

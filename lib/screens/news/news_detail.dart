@@ -1,94 +1,137 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:vet_mobile_app/blocs/news/news_bloc.dart';
+import 'package:vet_mobile_app/blocs/news/news_event.dart';
+import 'package:vet_mobile_app/blocs/news/news_state.dart';
+import 'package:vet_mobile_app/core/app_colors.dart';
+import 'package:vet_mobile_app/core/app_text_styles.dart';
 import 'package:vet_mobile_app/data/models/news_article.dart';
-import 'package:vet_mobile_app/config/theme/app_theme.dart'; // Import custom theme
 
-class NewsDetail extends StatelessWidget {
+class NewsDetail extends StatefulWidget {
   final String articleId;
-
   const NewsDetail({Key? key, required this.articleId}) : super(key: key);
 
-  Future<NewsArticle?> _fetchArticleDetails(String id) async {
-    try {
-      final docSnapshot = await FirebaseFirestore.instance.collection('news').doc(id).get();
-      if (docSnapshot.exists) {
-        return NewsArticle.fromFirestore(docSnapshot.data() as Map<String, dynamic>, docSnapshot.id);
-      }
-    } catch (e) {
-      print("Error fetching article details: $e");
-    }
-    return null;
+  @override
+  State<NewsDetail> createState() => _NewsDetailState();
+}
+
+class _NewsDetailState extends State<NewsDetail> {
+  @override
+  void initState() {
+    super.initState();
+    BlocProvider.of<NewsBloc>(context).add(LoadNewsArticle(articleId: widget.articleId));
   }
 
   @override
   Widget build(BuildContext context) {
-    final theme = AppTheme.lightTheme; // Use custom theme
+    final theme = Theme.of(context);
 
     return Scaffold(
-      backgroundColor: theme.scaffoldBackgroundColor, // Use theme's background color
       appBar: AppBar(
-        backgroundColor: theme.appBarTheme.backgroundColor, // Use theme's app bar color
-        elevation: theme.appBarTheme.elevation, // Use theme's app bar elevation
-        iconTheme: theme.appBarTheme.iconTheme,
-        titleTextStyle: theme.appBarTheme.titleTextStyle,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: theme.iconTheme.color),
-          onPressed: () => Navigator.of(context).pop(),
+          icon: const Icon(Icons.arrow_back_ios, color: AppColors.primary),
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            }
+          },
         ),
-        title: Text(
-          'Жаңылык',
-          style: theme.textTheme.bodyMedium, // Use theme's headline style
+        title: Text('Жаңылык', 
+          style: AppTextStyles.heading2.copyWith(color: AppColors.textPrimary),
         ),
+        backgroundColor: Colors.white,
         centerTitle: true,
+        elevation: 0,
       ),
-      body: FutureBuilder<NewsArticle?>(
-        future: _fetchArticleDetails(articleId),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
+      body: BlocBuilder<NewsBloc, NewsState>(
+        builder: (context, state) {
+          if (state is NewsLoading) {
             return const Center(child: CircularProgressIndicator());
-          }
-          if (snapshot.hasError || !snapshot.hasData || snapshot.data == null) {
-            return const Center(child: Text('Жаңылыкты жүктөөдө ката кетти же жаңылык табылган жок.'));
-          }
+          } else if (state is NewsArticleLoaded) {
+            final NewsArticle article = state.article;
+            final DateFormat formatter = DateFormat('dd MMMM yyyy, HH:mm', 'ky');
 
-          final article = snapshot.data!;
-          final DateFormat formatter = DateFormat('dd MMMM yyyy, HH:mm', 'ky');
-
-          return SingleChildScrollView(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  article.title,
-                  style: theme.textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold), // Use theme's headline style
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'Жарыяланды: ${formatter.format(article.publishedDate)}',
-                  style: theme.textTheme.bodyMedium!.copyWith(color: Colors.grey[700]), // Use theme's body text style
-                ),
-                const SizedBox(height: 16),
-                if (article.imageUrl != null && article.imageUrl!.isNotEmpty)
+            return SingleChildScrollView(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    article.title,
+                    style: theme.textTheme.headlineSmall!.copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Жарыяланды: ${formatter.format(article.publishedDate)}',
+                    style: theme.textTheme.bodySmall!.copyWith(color: Colors.grey[700]),
+                  ),
+                  const SizedBox(height: 16),
                   ClipRRect(
                     borderRadius: BorderRadius.circular(12.0),
-                    child: Image.network(
-                      article.imageUrl!,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) => Container(
-                          height: 200, color: Colors.grey[300], child: const Icon(Icons.broken_image, size: 50)),
-                    ),
+                    child: (article.imageUrl != null && article.imageUrl!.isNotEmpty)
+                        ? Image.network(
+                            article.imageUrl!,
+                            width: double.infinity,
+                            height: 200,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              print('Error loading image: $error');
+                              return Container(
+                                width: double.infinity,
+                                height: 200,
+                                color: Colors.grey[300],
+                                child: const Center(
+                                  child: Icon(Icons.image_not_supported, size: 64, color: Colors.grey),
+                                ),
+                              );
+                            },
+                          )
+                        : Container(
+                            width: double.infinity,
+                            height: 200,
+                            color: Colors.grey[300],
+                            child: const Center(
+                              child: Icon(Icons.image_not_supported, size: 64, color: Colors.grey),
+                            ),
+                          ),
                   ),
-                const SizedBox(height: 16),
-                Text(
-                  article.content,
-                  style: theme.textTheme.bodyMedium!.copyWith(height: 1.5), // Use theme's body text style
-                ),
-              ],
-            ),
-          );
+                  const SizedBox(height: 16),
+                  Text(
+                    article.content,
+                    style: theme.textTheme.bodyMedium!.copyWith(height: 1.5),
+                  ),
+                ],
+              ),
+            );
+          } else if (state is NewsError) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.error_outline, size: 48, color: Colors.red),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Жаңылыкты жүктөөдө ката кетти:',
+                    style: AppTextStyles.bodyMedium.copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(state.message, style: AppTextStyles.bodyMedium),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () {
+                      BlocProvider.of<NewsBloc>(context).add(LoadNewsArticle(articleId: widget.articleId));
+                    },
+                    style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary),
+                    child: const Text('Кайрадан аракет кылуу'),
+                  ),
+                ],
+              ),
+            );
+          } else {
+            return const Center(child: Text('Белгисиз абал.'));
+          }
         },
       ),
     );
