@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 import 'package:vet_mobile_app/blocs/news/news_bloc.dart';
 import 'package:vet_mobile_app/blocs/news/news_event.dart';
 import 'package:vet_mobile_app/blocs/news/news_state.dart';
 import 'package:vet_mobile_app/core/app_colors.dart';
 import 'package:vet_mobile_app/core/app_text_styles.dart';
 import 'package:vet_mobile_app/data/models/news_article.dart';
+import 'package:vet_mobile_app/utils/date_formatter.dart';
 
 class NewsDetail extends StatefulWidget {
   final String articleId;
@@ -18,23 +18,32 @@ class NewsDetail extends StatefulWidget {
 }
 
 class _NewsDetailState extends State<NewsDetail> {
+  // Using the DateFormatter utility class instead of local method
+
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<NewsBloc>(context).add(LoadNewsArticle(articleId: widget.articleId));
+    // Add a small delay to ensure that the BlocProvider is fully initialized
+    Future.microtask(() {
+      if (mounted) {
+        BlocProvider.of<NewsBloc>(context).add(LoadNewsArticle(articleId: widget.articleId));
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios, color: AppColors.primary),
           onPressed: () {
+            // Use a more robust approach to handle navigation
             if (context.canPop()) {
               context.pop();
+            } else {
+              // If can't pop, navigate to the news screen
+              context.go('/news');
             }
           },
         ),
@@ -51,7 +60,6 @@ class _NewsDetailState extends State<NewsDetail> {
             return const Center(child: CircularProgressIndicator());
           } else if (state is NewsArticleLoaded) {
             final NewsArticle article = state.article;
-            final DateFormat formatter = DateFormat('dd MMMM yyyy, HH:mm', 'ky');
 
             return SingleChildScrollView(
               padding: const EdgeInsets.all(16.0),
@@ -59,13 +67,21 @@ class _NewsDetailState extends State<NewsDetail> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    article.title,
-                    style: theme.textTheme.headlineSmall!.copyWith(fontWeight: FontWeight.bold),
+                    'Тема',
+                    style: AppTextStyles.bodyMedium.copyWith(
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.textPrimary,
+                    ),
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Жарыяланды: ${formatter.format(article.publishedDate)}',
-                    style: theme.textTheme.bodySmall!.copyWith(color: Colors.grey[700]),
+                    article.title,
+                    style: AppTextStyles.heading3,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    DateFormatter.formatWithPrefix(article.publishedDate, 'Жарыяланды:'),
+                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.primary),
                   ),
                   const SizedBox(height: 16),
                   ClipRRect(
@@ -77,30 +93,26 @@ class _NewsDetailState extends State<NewsDetail> {
                             height: 200,
                             fit: BoxFit.cover,
                             errorBuilder: (context, error, stackTrace) {
-                              print('Error loading image: $error');
-                              return Container(
+                              // Fallback to local asset if network image fails
+                              return Image.asset(
+                                'assets/images/news_banner.png',
                                 width: double.infinity,
                                 height: 200,
-                                color: Colors.grey[300],
-                                child: const Center(
-                                  child: Icon(Icons.image_not_supported, size: 64, color: Colors.grey),
-                                ),
+                                fit: BoxFit.cover,
                               );
                             },
                           )
-                        : Container(
+                        : Image.asset(
+                            'assets/images/news_banner.png',
                             width: double.infinity,
                             height: 200,
-                            color: Colors.grey[300],
-                            child: const Center(
-                              child: Icon(Icons.image_not_supported, size: 64, color: Colors.grey),
-                            ),
+                            fit: BoxFit.cover,
                           ),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 24),
                   Text(
                     article.content,
-                    style: theme.textTheme.bodyMedium!.copyWith(height: 1.5),
+                    style: AppTextStyles.bodyMedium,
                   ),
                 ],
               ),

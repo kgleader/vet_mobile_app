@@ -7,6 +7,7 @@ import 'config/router/go_router.dart';
 import 'config/theme/app_theme.dart';
 import 'package:vet_mobile_app/blocs/vet_profile/vet_profile_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:vet_mobile_app/utils/date_helper.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,6 +17,9 @@ Future<void> main() async {
       options: DefaultFirebaseOptions.currentPlatform,
     );
   }
+  
+  // Initialize date formatting
+  await DateHelper.initialize();
   
   runApp(const VetMobileApp());
 }

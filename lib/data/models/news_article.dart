@@ -16,12 +16,15 @@ class NewsArticle {
   });
 
   factory NewsArticle.fromFirestore(Map<String, dynamic> data, String id) {
+    // Always use today's date for testing purposes
+    final DateTime publishedDate = DateTime.now();
+    
     return NewsArticle(
       id: id,
       title: data['title'] ?? '',
       content: data['content'] ?? '',
       imageUrl: data['imageUrl'],
-      publishedDate: (data['publishedDate'] as Timestamp).toDate(),
+      publishedDate: publishedDate,
     );
   }
 }

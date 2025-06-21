@@ -70,4 +70,21 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
       }
     }
   }
+
+  // Method to create a new article with current date
+  Future<void> createNewsArticle(String title, String content, String? imageUrl) async {
+    try {
+      await _firestore.collection('news').add({
+        'title': title,
+        'content': content,
+        'imageUrl': imageUrl,
+        'publishedDate': FieldValue.serverTimestamp(), // Always use server timestamp for consistency
+      });
+      // After adding, reload the news list
+      add(LoadNewsEvent());
+    } catch (e) {
+      // Handle errors
+      print('Error creating news article: $e');
+    }
+  }
 }

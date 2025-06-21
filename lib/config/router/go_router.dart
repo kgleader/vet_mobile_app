@@ -79,7 +79,7 @@ class RouteNames {
   static const String vetMessage = '/vetList/message';
   static const String vetMessageSuccess = '/vetMessageSuccess';
   static const String vetMessageFailure = '/vetMessageFailure';
-  static const String newsDetail = '/news/:articleId';
+  static const String newsDetail = 'news_detail';
 }
 
 final GlobalKey<NavigatorState> _shellNavigatorKey = GlobalKey<NavigatorState>();
@@ -193,6 +193,20 @@ GoRouter router = GoRouter(
               child: const NewsScreen(),
             );
           },
+          routes: [
+            GoRoute(
+              path: ':articleId',
+              name: 'news_detail',
+              builder: (BuildContext context, GoRouterState state) {
+                final String? articleId = state.pathParameters['articleId'];
+                // Create a new instance of NewsBloc
+                return BlocProvider(
+                  create: (context) => NewsBloc(),
+                  child: NewsDetail(articleId: articleId ?? 'default_id_or_error'),
+                );
+              },
+            ),
+          ],
         ),
         GoRoute(
           path: RouteNames.vetList,
@@ -321,19 +335,7 @@ GoRouter router = GoRouter(
       path: RouteNames.vetMessageFailure,
       builder: (context, state) => const VetMessageFailureScreen(),
     ),
-    GoRoute(
-      path: '/news/:articleId',
-      name: RouteNames.newsDetail,
-      builder: (BuildContext context, GoRouterState state) {
-        final String? articleId = state.pathParameters['articleId'];
-        return BlocProvider(
-          create: (BuildContext context) {
-            return NewsBloc();
-          },
-          child: NewsDetail(articleId: articleId ?? 'default_id_or_error'),
-        );
-      },
-    ),
+    // Removed standalone news detail route as it's now a child route of the news route
   ],
   // errorBuilder: (context, state) => ErrorScreen(error: state.error), // Ката экраны
 );
