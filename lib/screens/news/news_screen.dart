@@ -4,7 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:vet_mobile_app/blocs/news/news_bloc.dart';
 import 'package:vet_mobile_app/blocs/news/news_event.dart';
 import 'package:vet_mobile_app/blocs/news/news_state.dart';
-import 'package:vet_mobile_app/config/router/go_router.dart';
+import 'package:vet_mobile_app/config/router/route_names.dart'; // Fixed import to use correct RouteNames
+import 'package:vet_mobile_app/core/app_back_button.dart';
 import 'package:vet_mobile_app/core/app_colors.dart';
 import 'package:vet_mobile_app/core/app_logo.dart';
 import 'package:vet_mobile_app/core/app_text_styles.dart';
@@ -35,8 +36,7 @@ class NewsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: AppColors.primary),
+        leading: AppBackButton(
           onPressed: () {
             if (context.canPop()) {
               context.pop();
@@ -164,9 +164,9 @@ class NewsScreen extends StatelessWidget {
                                     Text(
                                       formattedDate,
                                       style: const TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                        color: AppColors.primary,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.normal,
+                                        color: AppColors.textPrimary,
                                       ),
                                     ),
                                   ],

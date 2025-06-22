@@ -195,7 +195,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   trailing: const Icon(Icons.arrow_forward_ios, size: 18, color: AppColors.primary),
                                   onTap: () async { // Make the onTap async
                                     // Navigate to EditProfileScreen and wait for it to pop
-                                    await context.pushNamed(RouteNames.editProfileScreen);
+                                    await context.pushNamed('editProfileScreen');
                                     // After returning from EditProfileScreen, reload user data
                                     if (mounted) { // Check if the widget is still in the tree
                                       _loadUserData();

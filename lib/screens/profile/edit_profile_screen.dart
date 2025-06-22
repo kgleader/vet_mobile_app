@@ -11,7 +11,8 @@ import 'package:intl/intl.dart'; // For date formatting
 import 'package:go_router/go_router.dart'; // For navigation
 import 'package:image_picker/image_picker.dart'; // Import image_picker
 import 'package:firebase_storage/firebase_storage.dart'; // Import Firebase Storage
-import 'package:vet_mobile_app/core/app_back_button.dart'; // AppBackButton'ду импорттоо (эгер жолу ушундай болсо)
+import 'package:vet_mobile_app/core/app_back_button.dart'; // AppBackButton
+import 'package:vet_mobile_app/config/router/route_names.dart'; // Route names
 
 // Helper widget for editable avatar
 class _EditableAvatarWidget extends StatelessWidget {
@@ -453,19 +454,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: AppBackButton( // IconButton'дун ордуна AppBackButton
-          onPressed: () { // AppBackButton'га onPressed функциясын берүү
+        leading: AppBackButton(
+          onPressed: () {
             if (context.canPop()) {
               context.pop();
             } else {
-              // Эгер артка кайтуу мүмкүн болбосо, мисалы, профиль экранына өтүү
-              // GoRouter.of(context).go(RouteNames.profile); // Же тиешелүү башка жол
+              // If can't pop, navigate to profile screen
+              context.go(RouteNames.profile);
             }
           },
-          // Эгер AppBackButton'дун ичинде демейки иконка болсо,
-          // icon параметрин берүүнүн кажети жок.
-          // Эгер иконканы өзгөрткүңүз келсе, жана AppBackButton icon параметрин алса:
-          // icon: const Icon(Icons.arrow_back_ios, color: AppColors.primary), 
         ),
         title: const Text(
           'Профилди оңдоо',

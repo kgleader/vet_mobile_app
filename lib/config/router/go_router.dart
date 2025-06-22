@@ -14,6 +14,7 @@ import 'package:vet_mobile_app/screens/menu/chicken_diseases_screen.dart';
 import 'package:vet_mobile_app/screens/menu/chicken_feeding_screen.dart';
 import 'package:vet_mobile_app/screens/menu/horse_diseases_screen.dart';
 import 'package:vet_mobile_app/screens/menu/horse_feeding_screen.dart';
+import 'package:vet_mobile_app/screens/menu/horse_insemination_screen.dart';
 import 'package:vet_mobile_app/screens/news/news_detail.dart';
 import 'package:vet_mobile_app/screens/splash/splash_screen.dart';
 import 'package:vet_mobile_app/screens/auth/reset_password_screen.dart';
@@ -45,42 +46,7 @@ import 'package:vet_mobile_app/data/models/topic_list_item_model.dart';
 import 'package:vet_mobile_app/data/models/vet_model.dart';
 
 
-class RouteNames {
-  static const String splash = '/splash';
-  static const String login = '/login';
-  static const String register = '/register';
-  static const String forgotPassword = '/forgotPassword';
-  static const String menu = '/menu';
-  static const String feed = '/menu/feed';
-  static const String about = '/menu/about';
-  static const String diseases = '/menu/diseases';
-  static const String insemination = '/menu/insemination';
-  static const String cattle = '/menu/cattle';
-  static const String goats = '/menu/goats';
-  static const String sheepFeeding = '/menu/goats/feeding';
-  static const String sheepDiseases = '/menu/goats/diseases';
-  static const String sheepInsemination = '/menu/goats/insemination';
-  static const String horses = '/menu/horses';
-  static const String horseFeeding = '/menu/horses/feeding';
-  static const String horseDiseases = '/menu/horses/diseases';
-  static const String horseInsemination = '/menu/horses/insemination';
-  static const String chicken = '/menu/chicken';
-  static const String chickenFeeding = '/menu/chicken/feeding';
-  static const String chickenDiseases = '/menu/chicken/diseases';
-  static const String cattleFeed = '/cattle_feed';
-  static const String cattleDiseases = '/cattle_diseases';
-  static const String cattleInsemination = '/cattle_insemination';
-  static const String topicDetail = '/topicDetail';
-  static const String resetPassword = '/resetPassword';
-  static const String settings = '/settings';
-  static const String editProfileScreen = '/editProfileScreen';
-  static const String profile = '/profile';
-  static const String vetList = '/vetList';
-  static const String vetMessage = '/vetList/message';
-  static const String vetMessageSuccess = '/vetMessageSuccess';
-  static const String vetMessageFailure = '/vetMessageFailure';
-  static const String newsDetail = 'news_detail';
-}
+// Removed duplicate RouteNames class - now using only the one from route_names.dart
 
 final GlobalKey<NavigatorState> _shellNavigatorKey = GlobalKey<NavigatorState>();
 
@@ -176,7 +142,7 @@ GoRouter router = GoRouter(
                 GoRoute(
                   path: 'insemination',
                   name: RouteNames.horseInsemination,
-                  builder: (context, state) => const Scaffold(body: Center(child: Text("Horse Insemination Screen Placeholder"))),
+                  builder: (context, state) => const HorseInseminationScreen(),
                 ),
               ]
             ),
@@ -248,29 +214,29 @@ GoRouter router = GoRouter(
           routes: [
             GoRoute(
               path: 'feeding', // Бул /chicken/feeding жолун түзөт
-              name: RouteNames.chickenFeeding,
+              name: 'chicken_feeding', // Use string literal to match what's used in the app
               builder: (context, state) => const ChickenFeedingScreen(),
             ),
             GoRoute(
               path: 'diseases', // Бул /chicken/diseases жолун түзөт
-              name: RouteNames.chickenDiseases, // Аталышын текшериңиз
+              name: 'chicken_diseases', // Use string literal to match what's used in the app
               builder: (context, state) => const ChickenDiseasesScreen(), // Жаңы экран
             ),
           ]
         ),
         GoRoute(
-          path: '/cattle_feed', // Мурунку
-          name: RouteNames.cattleFeed,
+          path: RouteNames.cattleFeed, // Use the same constant for path and name
+          name: RouteNames.cattleFeed, // Using the constant for consistency
           builder: (context, state) => const FeedScreen(),
         ),
         GoRoute(
-          path: '/cattle_diseases', // Жаңы URL дареги
-          name: RouteNames.cattleDiseases,
+          path: RouteNames.cattleDiseases, // Use the same constant for path and name
+          name: RouteNames.cattleDiseases, // Using the constant for consistency
           builder: (context, state) => const CattleDiseasesScreen(), // Жаңы экран
         ),
         GoRoute(
-          path: '/cattle_insemination', // Мурунку
-          name: RouteNames.cattleInsemination,
+          path: RouteNames.cattleInsemination, // Use the same constant for path and name
+          name: RouteNames.cattleInsemination, // Using the constant for consistency
           builder: (context, state) => const CattleInseminationScreen(),
         ),
       ],

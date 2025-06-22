@@ -159,11 +159,12 @@ class _SheepGoatsScreenState extends State<SheepGoatsScreen> {
         child: ElevatedButton(
           onPressed: () {
             if (topic.id == 'goats_feeding') {
-              GoRouter.of(context).pushNamed(RouteNames.sheepFeeding);
+              // Using the correct route name as defined in the router
+              GoRouter.of(context).goNamed(RouteNames.sheepFeeding);
             } else if (topic.id == 'goats_diseases') {
-              GoRouter.of(context).pushNamed(RouteNames.sheepDiseases);
+              GoRouter.of(context).goNamed(RouteNames.sheepDiseases);
             } else if (topic.id == 'goats_insemination') { 
-              GoRouter.of(context).pushNamed(RouteNames.sheepInsemination);
+              GoRouter.of(context).goNamed(RouteNames.sheepInsemination);
             } else {
               _navigateToTopic(context, topic);
             }
