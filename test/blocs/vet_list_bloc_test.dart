@@ -47,9 +47,9 @@ void main() {
       expect: () => <VetProfileState>[
         const VetProfileState(status: VetProfileStatus.loading, vet: null, errorMessage: null),
         const VetProfileState(
-          status: VetProfileStatus.failure, 
-          vet: null, 
-          errorMessage: 'Ветеринар (ID: non_existent_id) табылган жок. Азыркы учурда бир гана "vet_асанова" ID\'си боюнча маалымат бар.',
+          status: VetProfileStatus.failure,
+          vet: null,
+          errorMessage: 'Ветеринар (ID: non_existent_id) табылган жок. Азыркы учурда бир гана "vet_asanov" ID\'си боюнча маалымат бар.',
         ),
       ],
     );
